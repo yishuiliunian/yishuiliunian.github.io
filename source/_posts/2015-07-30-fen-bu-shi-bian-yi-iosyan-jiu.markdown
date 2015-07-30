@@ -57,7 +57,7 @@ distccd  --daemon --allow 127.0.0.1 --allow 10.64.68.102 -j 8 --stats --log-leve
 
 在server启动后，可以访问其3633端口获取统计信息，如本机运行作为server后访问http://127.0.0.1:3633/ 可查看到当前统计情况
 
-![](2334BAE1-5683-4368-907B-6509705F0775.jpg)
+![](http://ww4.sinaimg.cn/large/7df22103jw1eukst35hq8j209m0dytbl.jpg)
 
 ###客户端配置
 1. 在~/.distcc/hosts或/usr/local/etc/distcc/hosts添加sever的服务器地址

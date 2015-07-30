@@ -71,6 +71,9 @@ github_skip_forks: true
 
 
 
+# duoshuo
+duoshuo_comment: true
+
 
 # Pinboard
 pinboard_user:
