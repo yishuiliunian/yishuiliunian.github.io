@@ -1,0 +1,363 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>一、接入流程</title>
+
+</head>
+<body>
+<p>红点系统是手Q内部进行营销和用户提醒的重要途径。在5.4版本中，为了简化接入过程中代码侧的工作量，同时优化接入逻辑，保证业务能够稳定的接入红点系统，对客户端侧的代码进行了大规模改造。该文档为改造后业务侧在客户端接入红点系统的参考文档。</p>
+
+<h1>一、接入流程</h1>
+
+<ol>
+<li>申请红点路径，具体找产品lilianliu。</li>
+<li>对客户端进行代码层接入。</li>
+</ol>
+
+
+<h1>二、代码层接入流程</h1>
+
+<blockquote><p>RPConfigCenter为红点主要配置类，绝大部分配置相关的工作将会在此类中进行。</p></blockquote>
+
+<h2>客户端中登记所申请的红点的信息</h2>
+
+<p>对于<strong>动态Tab</strong>中的插件，进行接入无需填写该信息。<strong>动态Tab之外</strong>的则需要登记相关信息。<br/>
+    在<code>defaultAppInfos</code>函数中使用宏<code>RPDefaultAppInfo</code>增加你申请到红点的信息，</p>
+
+<pre><code>```
+/**
+ *  需要在客户端配置的红点信息
+ *
+ *  @param appset  改红点所属的页面的Tab归类
+ *  @param appid   申请到的红点系统的业务ID
+ *  @param appPath 需要下发的红点的路径信息
+ *  @param desp 红点描述性信息
+ *
+ */
+#define RPDefaultAppInfo(appset, appid, appPath , desp)  [[ValueAddedServiceAppInfo alloc] initWithAppId:appid path:@""#appPath appSet:appset]
+```
+
+例如增加群与活动的红点：
+
+```
+- (NSArray*) defaultAppInfos
+{
+    NSArray* appInfo =
+  @[
+    RPDefaultAppInfo(1, 887, 887, 群与活动),
+    ...
+    ];
+
+   return appInfo;
+}
+```
+</code></pre>
+
+<h2>业务代码处添加展示代码</h2>
+
+<p>此次改造的重点就是UI层接入简化。现在基本上使用较少的代码就可以将红点展示出来。</p>
+
+<h3>TableView相关业务的红点展示</h3>
+
+<p>在TableViewController的<code>viewDidLoad</code>函数中，使用函数<code>void QQExtendTableViewControllerRedPoint(id&lt;QQRedPointTableViewControllerDelegate&gt; origin);</code>对当前的ViewController进行红点展示逻辑的扩展。该函数接受一个实现了QQRedPointTableViewControllerDelegate的对象</p>
+
+<pre><code>@protocol QQRedPointTableViewControllerDelegate &lt;NSObject&gt;
+@required
+/**
+ *  获取需要扩展的UITableView
+ *
+ *  @return 需要扩展的UITableView
+ */
+- (UITableView*) redPointTableView;
+@required
+/**
+ *  获取在对应IndexPath处要展示的红点的路径信息
+ *
+ *  @param tableView 被扩展的UITableView
+ *  @param indexPath 要展示红点的indexPath
+ *
+ *  @return 在对应IndexPath处要展示的红点的路径信息
+ */
+- (NSString*) tableView:(UITableView*)tableView redPointPathForIndex:(NSIndexPath*)indexPath;
+@end
+</code></pre>
+
+<p>例如对于“QQRecommendViewController”扩展红点功能：</p>
+
+<pre><code>@interface QQRecommendViewController()&lt;QQRedPointTableViewControllerDelegate&gt;
+        ....
+@end
+....
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+
+    QQExtendTableViewControllerRedPoint(self);
+}
+...
+- (UITableView*) redPointTableView {
+    return self.tableView;
+}
+
+- (NSString*) tableView:(UITableView*)tableView redPointPathForIndex:(NSIndexPath*)indexPath
+{
+
+    NSMutableArray * subGroups = [_dataSources objectAtIndex:[indexPath section]];
+    if ([indexPath row] &gt;= [subGroups count])
+        return nil;
+    if (indexPath.section == 0) {
+        return nil;
+    }
+    QQTableCellItem * item = [subGroups objectAtIndex:[indexPath row]];
+
+    return [NSString stringWithFormat:@"%d", item.resID];
+}
+</code></pre>
+
+<h3>UIView及其子类进行红点扩展</h3>
+
+<p>使用<code>QQExtendViewRedPoint</code>对需要进行红点展示的View进行扩展，（切结此处的View必须是不会被多个界面复用的view，否则会产生混乱）</p>
+
+<pre><code>   /**
+    *  对一般不服用的View进行红点扩展
+    *
+    *  @param origin               需要进行红点扩展的View
+    *  @param path                 对应红点的路径
+    *  @param layoutBlock          对红点进行布局的BLock
+    *  @param usingDefaultTapLgoic 是否是使用默认的，点击逻辑，对红点进行点灭和上报操作
+    */
+   void QQExtendViewRedPoint(UIView* origin,
+                             NSString* path,
+                             QQRedPointLayoutBlock layoutBlock,
+                             BOOL usingDefaultTapLgoic);
+</code></pre>
+
+<p>例如扩展动态上面三个横向布局的Button:</p>
+
+<pre><code>QQExtendViewRedPoint(button, [NSString stringWithFormat:@"%d", item.resID], ^(UIView *originView, NSArray* layoutViews) {
+
+    DynamicTopEnterButton* btn = (DynamicTopEnterButton*)originView;
+    RPItemView* item = layoutViews.lastObject;
+    CGSize itemSize = [item layoutSize];
+    CGFloat middleX = CGRectGetMidX(btn.imageView.frame);
+    CGRect rect =  CGRectMake(middleX, CGRectGetMinY(btn.imageView.frame), itemSize.width, itemSize.height);
+    item.frame = rect;
+}, YES);
+</code></pre>
+
+<h1>业务自定义逻辑扩展</h1>
+
+<p>在某些特殊情况下，对于红点是否请求，以及红点是否展示，各个业务可能会加入一些自己的判断逻辑在里面。为了应对这种变动，特意在RPConfigCenter里面做了逻辑绑定的接口。在几个特殊的环境，给业务进行逻辑扩展的能力。
+下图是整个红点的时序图：
+<img src="%E7%BA%A2%E7%82%B9%E6%97%B6%E5%BA%8F%E5%9B%BE_mark.png" alt="" /></p>
+
+<h2>是否请求红点信息 (上图逻辑绑定一)</h2>
+
+<p>在某些情况下，某个业务可能会要求红点系统不必要向服务器请求红点的数据，遇到该类问题可以在RPConfigCenter里面添加业务的逻辑。
+在函数<code>defaultBindingCheckCanRequest</code>,使用函数<code>- (void) bindingCheckCanRequestBlock:(RPCheckPathCanRequestBlock )block toPath:(NSString *)path</code>进行逻辑绑定。例如：</p>
+
+<pre><code>- (void) defaultBindingCheckCanRequest
+{
+    [self bindingCheckCanRequestBlock:^BOOL(NSString *path) {
+        TeleEntryModel *teleEntry = [[serviceFactoryInstance() getTeleHallService] getTeleEntryModel];
+            if ([(NSNumber*)path intValue] == ValueAddedServicePluginIDMyTeleHall &amp;&amp; !teleEntry.showEntry) {
+                QQ_EVENT("红点系统:营业厅入口不展示，所以不需要显示营业厅的红点");
+                return NO;
+            }
+        return YES;
+    } toPath:[@(ValueAddedServicePluginIDMyTeleHall) stringValue]];
+
+}
+</code></pre>
+
+<h2>是否展示数据（上图逻辑绑定二）</h2>
+
+<p>在某些情况下，业务可能希望及时拉到了红点的数据，也不需要进行展示。那么可以在<code>defaultBindingCheckCanShow</code>使用函数<code>- (void) bindingCheckCanRequestBlock:(RPCheckPathCanRequestBlock )block toPath:(NSString *)path</code>进行逻辑绑定。</p>
+
+<p>其中<code>RPCheckPathCanRequestBlock</code>闭包返回类型为BOOL类型。</p>
+
+<blockquote><p>如果需要在其他红点的整个流程中进行逻辑绑定扩张，请联系stonedong，切记不要随意在红点流程中添加业务逻辑。</p></blockquote>
+
+<hr />
+
+<h1>UI层实现技术细节</h1>
+
+<h2>类功能扩展，实现红点的展示逻辑和业务逻辑</h2>
+
+<p>参考<a href="http://km.oa.com/group/21772/articles/show/196667">红点UI层技术改造预研</a></p>
+
+<h2>可扩展的展示与布局系统</h2>
+
+<p>为了支持可扩展的运营能力，让客户端的提醒能力不止局限于红点。可以是简单的</p>
+
+<ol>
+<li><img src="red_2.png" alt="image" /></li>
+<li><img src="red_3.png" alt="image" /></li>
+<li>...</li>
+</ol>
+
+
+<p>这种单个红点，也可以是多种类型的复合型红点</p>
+
+<p><img src="red_1.png" alt="image" /></p>
+
+<p>我们使用了一个简单可扩展的布局系统，类图如下：</p>
+
+<p><img src="classes.png" alt="" /></p>
+
+<p>主要有两种类型组成定长的RPFixSpaceItemView和不定长的RPUnFixSpaceItemView。在展示红点的时候，会获取一个用来展示红点的区域（CGRect），然后按照填满的策略，将上述两种类型布局在这段区域内。</p>
+
+<p><img src="details.png" alt="" /></p>
+</body>
+</html>
