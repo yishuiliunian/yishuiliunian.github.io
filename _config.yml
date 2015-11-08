@@ -3,11 +3,11 @@
 # ----------------------- #
 
 url: http://yishuiliunian.github.io
-title: 一水
+title: 一水的技术博客
 subtitle: 走走停停，敲敲打打
-author: 一水
+author: dzpqzb
 simple_search: https://www.google.com/search
-description:
+description: iOS，Objective-C，swift
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -65,6 +65,7 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 
 # Github repositories
 github_user: yishuiliunian
+github_repo: yishuiliunian.github.io
 github_repo_count: 0
 github_show_profile_link: true
 github_skip_forks: true
@@ -92,3 +93,4 @@ google_analytics_tracking_id:
 
 # Facebook Like
 facebook_like: false
+lsi: true
