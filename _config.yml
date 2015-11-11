@@ -1,23 +1,32 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
-
-# Site settings
-title: 一水的技术博客
-email: yishuiliunian@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
-  iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips。
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://dzpqzb.com" # the base hostname & protocol for your site
-github_username:  yishuiliunian 
-
-# Build settings
-excerpt_link: "Read on &rarr;"
-
-highlighter: pygments
+permalink: /:year/:month/:day/:title.html
 markdown: kramdown
-kramdown:
-  input: GFM
+highlighter: pygments
+#kramdown:
+#  input: GFM
+
+# 作者信息
+author:
+  name: 董朝
+  email: yishuiliunian@gmail.com
+  link: http://dzpqzb.com
+  weibo: http://weibo.com/yishuiliunian
+  github: http://github.com/yishuiliunian
+
+# 站点信息
+title: 一水的技术博客
+description: 一水的技术博客
+url: http://dzpqzb.com
+rss_url: /pages/atom.xml
+
+# avatar头像及Favicon
+avatar: http://7u2ho6.com1.z0.glb.clouddn.com/site-avatar.png
+favicon: http://7u2ho6.com1.z0.glb.clouddn.com/site-favicon.ico
+
+# google analytics 设置
+ga:
+  id: UA-54767140-1
+  url: yansu.org
+
+# disqus 设置
+disqus:
+  shortname: yishuiliunian

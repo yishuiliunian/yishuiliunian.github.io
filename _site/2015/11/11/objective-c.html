@@ -1,95 +1,95 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
 
-  <title>Objective-C编码建议</title>
-  <meta name="description" content="#Objective-C 编码建议">
-
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://dzpqzb.com/2015/11/11/objective-c.html">
-  <link rel="alternate" type="application/rss+xml" title="一水的技术博客" href="http://dzpqzb.com/feed.xml">
-</head>
-<!-- MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<script type="text/javascript"
-   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+<title>Objective-C编码建议 | 一水的技术博客</title>
+<meta name="author" content="董朝">
 
 
+
+
+<link rel="shortcut icon" href="http://7u2ho6.com1.z0.glb.clouddn.com/site-favicon.ico" />
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+
+<link href="/pages/rss.xml" rel="alternate" title="一水的技术博客" type="application/atom+xml">
+  </head>
   <body>
+    <aside id="sidebar">
+  <nav id="tags">
+    <a href="/index.html" id="avatar" style="background-image:url(http://7u2ho6.com1.z0.glb.clouddn.com/site-avatar.png)"></a>
 
-    <header class="site-header">
+    <ul id="tags__ul">
+      <li id="pl__all" class="tags__li tags-btn active">全部</li>
+       
+        <li id="iOS" class="tags__li tags-btn">iOS</li>
+       
+        <li id="SDK" class="tags__li tags-btn">SDK</li>
+      
+    </ul>
 
-  <div class="wrapper">
+    <div id="tags__bottom">
+      <a href="mailto:yishuiliunian@gmail.com" id="icon-email" class="tags-btn fontello"></a>
+      <a href="/pages/rss.xml" id="icon-feed" class="tags-btn fontello"></a>
+    </div>
+  </nav> <!-- end #tags -->
 
-    <a class="site-title" href="/">一水的技术博客</a>
+  <div id="posts-list">
+    <form action="" id="search-form">
+      <a href="/index.html" id="mobile-avatar" style="background-image:url(http://7u2ho6.com1.z0.glb.clouddn.com/site-avatar.png)"></a>
+      <!-- NOTE: input field is disabled by default -->
+      <input id="search-input" type="text" placeholder="Search..." disabled >
+    </form>
 
-    <nav class="site-nav">
-      <a href="#" class="menu-icon">
-        <svg viewBox="0 0 18 15">
-          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
-          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
-          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
-        </svg>
-      </a>
-
-      <div class="trigger">
-        
-          
-          <a class="page-link" href="/about/">About</a>
-          
-        
-          
-        
-          
-        
-          
-        
-      </div>
+    <nav id="pl__container">
+    
+      <a class=" pl__all" href="/2015/11/11/shejimoshizhiguanchazhemoshi.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式之观察者模式</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/11/11/fansi.html"><span class="pl__circle"></span><span class="pl__title">一个程序员的读书笔记：程序设计的反思</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/11/11/make-bugs-correct.html"><span class="pl__circle"></span><span class="pl__title">如何合理的制造BUG</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK pl__all" href="/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/11/06/quan-ju-bian-liang-man-tan.html"><span class="pl__circle"></span><span class="pl__title">全局变量漫谈</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/10/24/ji-zhi-yu-ce-lue-fen-chi.html"><span class="pl__circle"></span><span class="pl__title">机制与策略分离</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/10/24/ios.html"><span class="pl__circle"></span><span class="pl__title">IOS设计模式反思——六大原则</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/10/24/strage-animation.html"><span class="pl__circle"></span><span class="pl__title">奇怪的动画</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html"><span class="pl__circle"></span><span class="pl__title">由Runtime想到的几个问题</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/07/30/you-xu-gou-jian-zhi-ji-ben-fang-fa-pian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之基本方法篇</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/07/30/fen-bu-shi-bian-yi-iosyan-jiu.html"><span class="pl__circle"></span><span class="pl__title">分布式编译ios研究</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class=" pl__all" href="/2015/07/30/test.html"><span class="pl__circle"></span><span class="pl__title">Test</span><span class="pl__date">Jul 2015</span></a>
+    
     </nav>
-
-  </div>
-
-</header>
-
-
-    <div class="page-content">
-      <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-
-  <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Objective-C编码建议</h1>
-    <p class="post-meta"><time datetime="2015-11-11T01:11:44+08:00" itemprop="datePublished">Nov 11, 2015</time></p>
-  </header>
-
-  <div class="post-content" itemprop="articleBody">
-    <p>#Objective-C 编码建议</p>
+  </div> <!-- end #posts-list -->
+</aside> <!-- end #sidebar -->
+    <div id="post">
+      <div id="pjax">
+        <article id="post__content">
+  <h1 id="post__title" data-identifier="20151111">Objective-C编码建议</h1>
+  <h1 id="objective-c-">Objective-C 编码建议</h1>
 
 <blockquote>
   <p>神在细节之中</p>
@@ -105,7 +105,7 @@
 
 <p>下面我们将围绕一些基本的准则展开讨论，目的是让我们写出一手漂亮的代码，更好的用代码与其他同事沟通，也为了提高我们代码的可维护性和可修改性，也是为了让我们自己工作的地方有一个愉悦的代码环境。</p>
 
-<p>（PS：当你真的按照这些看似偏执的规则去做的时候，你就真的能够发现“伟大来自细节”，而且会受益匪浅。保剑锋自磨砺出，梅花香自苦寒来。）<br />
+<p>（PS：当你真的按照这些看似偏执的规则去做的时候，你就真的能够发现“伟大来自细节”，而且会受益匪浅。保剑锋自磨砺出，梅花香自苦寒来。）
 ##总则</p>
 
 <ol>
@@ -116,43 +116,51 @@
   <li>借用美国童子军军规：让营地比你来时更干净。</li>
 </ol>
 
-<p>##格式<br />
-1. 任意函数长度不得超过50行。<br />
-2. 任意行代码不得超过80字符。可以在设置中设置超过80个字符的提醒。  <br />
-   <img src="http://ww4.sinaimg.cn/large/7df22103jw1exwdqpzlbgj20ky0fdtci.jpg" alt="" /><br />
-3. 在定义函数的行前留白一行<br />
-4. 功能相近的代码要放在一起。<br />
-5. 使用#pragma来切分不同功能区域的代码。<br />
-6. 二元运算符和参数之间需要放置一个空格，一元运算符、强制类型转换和参数之间不放置空格。关键字之后圆括号之前需要放置一个空格.</p>
+<h2 id="section">格式</h2>
+<ol>
+  <li>任意函数长度不得超过50行。</li>
+  <li>任意行代码不得超过80字符。可以在设置中设置超过80个字符的提醒。<br />
+<img src="http://ww4.sinaimg.cn/large/7df22103jw1exwdqpzlbgj20ky0fdtci.jpg" alt="" /></li>
+  <li>在定义函数的行前留白一行</li>
+  <li>功能相近的代码要放在一起。</li>
+  <li>使用#pragma来切分不同功能区域的代码。</li>
+  <li>
+    <p>二元运算符和参数之间需要放置一个空格，一元运算符、强制类型转换和参数之间不放置空格。关键字之后圆括号之前需要放置一个空格.</p>
 
-<pre><code>    ```
-    void *ptr = &amp;value + 10 * 3;
-    NewType a = (NewType)b;
-    for (int i = 0; i &lt; 10; i++) {
-        doCoolThings();
-    }
-    ``` 7. 长的字面值应被拆分为多行。
-
-    ```
-    NSArray *theShit = @[
-            @"Got some long string objects in here.",
-            [AndSomeModelObjects too],
-            @"Moar strings."
-    ];
-    
-    NSDictionary *keyedShit = @{
-    @"this.key": @"corresponds to this value",
-    @"otherKey": @"remoteData.payload",
-    @"some": @"more",
-    @"JSON": @"keys",
-    @"and": @"stuff",
-    };
-    ``` 8.
+    <pre><code> ```
+ void *ptr = &amp;value + 10 * 3;
+ NewType a = (NewType)b;
+ for (int i = 0; i &lt; 10; i++) {
+     doCoolThings();
+ }
+ ```
 </code></pre>
+  </li>
+  <li>
+    <p>长的字面值应被拆分为多行。</p>
 
-<p>##命名<br />
-命名是编程中最基本的技能，我们给变量、函数、类、包等等命名。给他们以名字，让他们有意义，既能表示他们到底是做什么的，也能将其与其他变量区别开来。而通过，语言的发展史，我们也能够看到“方便编程人员理解和使用”一直都是编程语言发展的动力之一，而命名则是其最最核心的环节。像人一样娶一个好名字至关重要，“丁当”总比“狗蛋”来的好听。<br />
-为什么要命名？命名代表着抽象，我们使用名字将一些没必要关系的细节隐去，减少我们自己的记忆成本，也更加方便我们理解。用过C语言的人都知道，一个变量名最终会转化成类似于<code>0x11111111</code>之类的地址，相比去理解和记忆这些地址，用一个更加抽象的变量名来代表这些地址。无论从理解还是记忆上都要方便的。<br />
+    <pre><code> ```
+ NSArray *theShit = @[
+         @"Got some long string objects in here.",
+         [AndSomeModelObjects too],
+         @"Moar strings."
+ ];
+    
+ NSDictionary *keyedShit = @{
+ @"this.key": @"corresponds to this value",
+ @"otherKey": @"remoteData.payload",
+ @"some": @"more",
+ @"JSON": @"keys",
+ @"and": @"stuff",
+ };
+ ``` 8.
+</code></pre>
+  </li>
+</ol>
+
+<h2 id="section-1">命名</h2>
+<p>命名是编程中最基本的技能，我们给变量、函数、类、包等等命名。给他们以名字，让他们有意义，既能表示他们到底是做什么的，也能将其与其他变量区别开来。而通过，语言的发展史，我们也能够看到“方便编程人员理解和使用”一直都是编程语言发展的动力之一，而命名则是其最最核心的环节。像人一样娶一个好名字至关重要，“丁当”总比“狗蛋”来的好听。
+为什么要命名？命名代表着抽象，我们使用名字将一些没必要关系的细节隐去，减少我们自己的记忆成本，也更加方便我们理解。用过C语言的人都知道，一个变量名最终会转化成类似于<code>0x11111111</code>之类的地址，相比去理解和记忆这些地址，用一个更加抽象的变量名来代表这些地址。无论从理解还是记忆上都要方便的。
 ###命名一定要“名副其实”，尽可能使用有意的名称，而且这个意义和指称的变量真实意义相关。</p>
 
 <p>尽量不要出现没有任何意义的命名类似于下述形式的命名：</p>
@@ -170,27 +178,29 @@
     ```
 </code></pre>
 
-<p>###命名首字母大写，其他命名首字母小写。并且采用驼峰格式分割单词。<br />
-例如：<code>BWTest</code></p>
+<h3 id="section-2">命名首字母大写，其他命名首字母小写。并且采用驼峰格式分割单词。</h3>
+<p>例如：<code>BWTest</code></p>
 
-<p>###使用能够读出来的名称<br />
-人类长于记忆和使用单词。大脑中的相当一部分就是用来容纳和处理单词的。单词如果能够读的出来，则非常方便我们阅读和理解。</p>
+<h3 id="section-3">使用能够读出来的名称</h3>
+<p>人类长于记忆和使用单词。大脑中的相当一部分就是用来容纳和处理单词的。单词如果能够读的出来，则非常方便我们阅读和理解。</p>
 
-<p>错误的示例：<br />
+<p>错误的示例：
 <code>
 genymdhms （生成日期,年、月、日、时、分、秒）
 </code></p>
 
-<p>正确的实例：<br />
+<p>正确的实例：
 <code>
 generationTimeStamp
 </code></p>
 
-<p>###使用可搜索的名称。<br />
-单字母名称和数字常量有一个问题，就是很难在一大篇文字中找出来。试想一下，你找<code>MAX_CLASSES_PER_STUDENT</code>容易还是找数字7容易。</p>
+<h3 id="section-4">使用可搜索的名称。</h3>
+<p>单字母名称和数字常量有一个问题，就是很难在一大篇文字中找出来。试想一下，你找<code>MAX_CLASSES_PER_STUDENT</code>容易还是找数字7容易。</p>
 
-<p>###文件名<br />
-&gt; 文件名反映出了其实现了什么类（包括大小写），你需要遵循所参与醒目的约定。</p>
+<h3 id="section-5">文件名</h3>
+<blockquote>
+  <p>文件名反映出了其实现了什么类（包括大小写），你需要遵循所参与醒目的约定。</p>
+</blockquote>
 
 <p>文件的扩展名及其意义如下：</p>
 
@@ -225,11 +235,11 @@ generationTimeStamp
   </tbody>
 </table>
 
-<p>####类别的扩展名以“被扩展的类名+自定义命名部分组成”<br />
-例如：<br />
+<h4 id="section-6">类别的扩展名以“被扩展的类名+自定义命名部分组成”</h4>
+<p>例如：
 <code>
 NSSstring+Utils.h
-</code><br />
+</code>
 ###缩略词</p>
 
 <p>虽然方法命名不应使用缩略词，然而有些缩略词在过去被反复的使用，所以使用这些缩略词能更好的的表达代码的含义。下表列出了Cocoa可接受的缩略词。</p>
@@ -315,162 +325,185 @@ NSSstring+Utils.h
 
 <p>以下是一些常用的首字母缩略词：<code>ASCII,PDF,XML,HTML,URL,RTF,HTTP,TIFF,JPG,PNG,GIF,LZW,ROM,RGB,CMYK,MIDI,FTP...</code></p>
 
-<p>###宏定义全部字母大写，例如:<code>#define BW_DEBUG 1</code><br />
-###常量定义，字符串定义以小写字母<code>k</code>开头，随后首字母大写</p>
+<h3 id="define-bwdebug-1">宏定义全部字母大写，例如:<code>#define BW_DEBUG 1</code></h3>
+<p>###常量定义，字符串定义以小写字母<code>k</code>开头，随后首字母大写</p>
 
-<pre><code>static NSString* const kBWBarTitle = @"动态";
-</code></pre>
+<p><code>
+static NSString* const kBWBarTitle = @"动态";
+</code></p>
 
-<p>###如果要定义常量使用static const优于宏定义，前者会进行类型检查</p>
+<h3 id="static-const">如果要定义常量使用static const优于宏定义，前者会进行类型检查</h3>
 
-<p>###因为OC没有命名空间的概念，所以使用前两个或者多个字母来表示命名空间，例如”NSObject中的NS”，我们也使用自己的命名空间。比如</p>
+<h3 id="ocnsobjectns">因为OC没有命名空间的概念，所以使用前两个或者多个字母来表示命名空间，例如”NSObject中的NS”，我们也使用自己的命名空间。比如</h3>
 
-<pre><code>红点中使用了VAS:VASAddValueInfo...
+<p><code>
+红点中使用了VAS:VASAddValueInfo...
 钱包中使用了QW:QWApplication....
-</code></pre>
+</code></p>
 
-<p>##注释<br />
-###让代码自注释，不要依赖注释来解释自己的设计或者编码意图。除了特殊情况外，代码中不要有多余的注释。</p>
+<h2 id="section-7">注释</h2>
+<p>###让代码自注释，不要依赖注释来解释自己的设计或者编码意图。除了特殊情况外，代码中不要有多余的注释。</p>
 
-<p>##函数<br />
-###函数长度不要超过50行，小函数要比大函数可阅读性和可复用性强。<br />
+<h2 id="section-8">函数</h2>
+<p>###函数长度不要超过50行，小函数要比大函数可阅读性和可复用性强。
 ###零元函数最好，一元函数也不错，二元函数担心了，三元函数有风险，高于三元需重构。函数的参数越多，引起其变化的因素就越多。越不利于以后的修改。</p>
 
 <p>不知道当你看到如下形式的函数的时候，是什么想法：</p>
 
-<pre><code>- (void)RequestGetLocation:(int)lat lon:(int)lon alt:(int)alt isMars:(BOOL)yn bJiejingSOSO:(BOOL)bJiejingSOSO;
-</code></pre>
-<p>###尽量少的写有副作用的函数<br />
-###尽量不要出现火车链式的命名，如果可以尽量使用过程变量替代。<br />
+<p><code>
+- (void)RequestGetLocation:(int)lat lon:(int)lon alt:(int)alt isMars:(BOOL)yn bJiejingSOSO:(BOOL)bJiejingSOSO;
+</code>
+###尽量少的写有副作用的函数
+###尽量不要出现火车链式的命名，如果可以尽量使用过程变量替代。
 反例例如：</p>
 
-<pre><code>_needLogoutAccount = [[[[BWAppSetting GetInstance] appSetting] valueForKey:NeedLogoutAccounts] retain];
-</code></pre>
-<p>考虑如果改成下述模样，是不是可读性一下子提高了很多：</p>
+<p><code>
+_needLogoutAccount = [[[[BWAppSetting GetInstance] appSetting] valueForKey:NeedLogoutAccounts] retain];
+</code>
+考虑如果改成下述模样，是不是可读性一下子提高了很多：</p>
 
-<pre><code>BWAppSetting* shareSetting = [BWAppSetting GetInstance];
+<p><code>
+BWAppSetting* shareSetting = [BWAppSetting GetInstance];
 BWLockDictionary* defaultSettings = [shareSetting appSetting];
 _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retain];
-</code></pre>
+</code></p>
 
-<p>###调用时所有参数应该在同一行</p>
+<h3 id="section-9">调用时所有参数应该在同一行</h3>
 
-<pre><code>[myObject doFooWith:arg1 name:arg2 error:arg3];
-</code></pre>
-<p>或者每行一个参数，以冒号对齐：</p>
+<p><code>
+[myObject doFooWith:arg1 name:arg2 error:arg3];
+</code>
+或者每行一个参数，以冒号对齐：</p>
 
-<pre><code>[myObject doFooWith:arg1
+<p><code>
+[myObject doFooWith:arg1
                name:arg2
               error:arg3];
-</code></pre>
-<p>对于参数过多的函数，尽量使用后面一种对其方式。</p>
+</code>
+对于参数过多的函数，尽量使用后面一种对其方式。</p>
 
 <p>不要使用下面的缩进风格：</p>
 
-<pre><code>[myObject doFooWith:arg1 name:arg2  // some lines with &gt;1 arg
-              error:arg3];
+<p>```
+[myObject doFooWith:arg1 name:arg2  // some lines with &gt;1 arg
+              error:arg3];</p>
 
-[myObject doFooWith:arg1
-               name:arg2 error:arg3];
+<p>[myObject doFooWith:arg1
+               name:arg2 error:arg3];</p>
 
-[myObject doFooWith:arg1
+<p>[myObject doFooWith:arg1
           name:arg2  // aligning keywords instead of colons
           error:arg3];
-</code></pre>
+```</p>
 
-<p>###如果对传入参数进行数据保护尽量不要用<code>if(!objc)</code>,使用断言来处理。</p>
+<h3 id="ifobjc">如果对传入参数进行数据保护尽量不要用<code>if(!objc)</code>,使用断言来处理。</h3>
 
-<pre><code>- (void) sendArgs:(NSDictionary*)args {
+<p><code>
+- (void) sendArgs:(NSDictionary*)args {
         NSAssert(args, @"args is nil");
         .....   
 }
-</code></pre>
+</code></p>
 
-<p>###方法参数名前一般使用的前缀包括“the”、“an”、“new”。</p>
+<h3 id="theannew">方法参数名前一般使用的前缀包括“the”、“an”、“new”。</h3>
 
 <p>示例:</p>
 
-<pre><code>- (void)       setTitle:           (NSString *)   aTitle;
+<p>```
+- (void)       setTitle:           (NSString *)   aTitle;</p>
 
-- (void)       setName:            (NSString *)   newName;
+<ul>
+  <li>
+    <p>(void)       setName:            (NSString *)   newName;</p>
+  </li>
+  <li>
+    <p>(id)         keyForOption:       (CDCOption *)  anOption</p>
+  </li>
+  <li>
+    <p>(NSArray *)  emailsForMailbox:   (CDCMailbox *) theMailbox;</p>
+  </li>
+  <li>
+    <p>(CDCEmail *) emailForRecipients: (NSArray *)    theRecipients;
+```</p>
+  </li>
+</ul>
 
-- (id)         keyForOption:       (CDCOption *)  anOption
+<h4 id="block">Block相关</h4>
+<p>######在block中使用到self变量的时候，一定要先weak再strong.</p>
 
-- (NSArray *)  emailsForMailbox:   (CDCMailbox *) theMailbox;
-
-- (CDCEmail *) emailForRecipients: (NSArray *)    theRecipients;
-</code></pre>
-
-<p>####Block相关<br />
-######在block中使用到self变量的时候，一定要先weak再strong.</p>
-
-<pre><code>__weak typeof(self) weakSelf = self;
+<p><code>
+__weak typeof(self) weakSelf = self;
 [self doABlockOperation:^{
     __strong typeof(weakSelf) strongSelf = weakSelf;
     if (strongSelf) {
         ...
     }
 }];
-</code></pre>
+</code></p>
 
-<p>##控制结构</p>
+<h2 id="section-10">控制结构</h2>
 
-<p>###顺序结构<br />
-###分支结构<br />
-####if-else结构超过四层的时候，要考虑重构。多层的ifelse结构极其难维护。<br />
-####当需要满足一定条件时才执行某项操作时，最左边缘应该是愉快路径代码。不要将愉快路径代码内嵌到if语句中。多个return是正常合理的。<br />
+<h3 id="section-11">顺序结构</h3>
+<p>###分支结构
+####if-else结构超过四层的时候，要考虑重构。多层的ifelse结构极其难维护。
+####当需要满足一定条件时才执行某项操作时，最左边缘应该是愉快路径代码。不要将愉快路径代码内嵌到if语句中。多个return是正常合理的。
 良好的风格：</p>
 
-<pre><code>- (void) someMethod {
+<p><code>
+- (void) someMethod {
   if (![someOther boolValue]) {
       return;
   }
   //Do something important
 }
-</code></pre>
+</code></p>
 
 <p>反面教材：</p>
 
-<pre><code>- (void) someMethod {
+<p><code>
+- (void) someMethod {
   if ([someOther boolValue]) {
       //Do something important
   }
 }
-</code></pre>
+</code></p>
 
-<p>####所有的逻辑块必须使用花括号包围，即使条件体只需编写一行代码也必须使用花括号。</p>
+<h4 id="section-12">所有的逻辑块必须使用花括号包围，即使条件体只需编写一行代码也必须使用花括号。</h4>
 
 <p>良好的风格：</p>
 
-<pre><code>if (!error) {
+<p><code>
+if (!error) {
     return success;
 }
-</code></pre>
+</code></p>
 
 <p>反面教材：</p>
 
-<pre><code>if (!error)
+<p><code>
+if (!error)
     return success;
 ...
 if (!error) return success;
-</code></pre>
-<p>###循环结构<br />
+</code>
+###循环结构
 ####遍历可变容器之前，需要复制该容器，遍历该容器的Copy.</p>
 
-<pre><code>//typeof(self.cells) is NSMutableArray
+<p><code>
+//typeof(self.cells) is NSMutableArray
 NSArray* cellArrays = [self.cells copy];
 for(UITableViewCell* cell in cellArrays) {
         ...
 }
-</code></pre>
+</code></p>
 
-<p>###尽量不要使用异常，尤其是不要将异常做为业务逻辑的一部分，在异常中尝试进行灾难恢复。</p>
+<h3 id="section-13">尽量不要使用异常，尤其是不要将异常做为业务逻辑的一部分，在异常中尝试进行灾难恢复。</h3>
 
-<p>##类与对象<br />
-###明确指定构造函数<br />
+<h2 id="section-14">类与对象</h2>
+<p>###明确指定构造函数
 &gt; 注释并且明确指定你的类的构造函数。</p>
 
-<p>对于需要继承你的类的人来说，明确指定构造函数十分重要。这样他们就可以只重写一个构造函数（可能是几个）来保证他们的子类的构造函数会被调用。这也有助于将来别人调试你的类时，理解初始化代码的工作流程。<br />
+<p>对于需要继承你的类的人来说，明确指定构造函数十分重要。这样他们就可以只重写一个构造函数（可能是几个）来保证他们的子类的构造函数会被调用。这也有助于将来别人调试你的类时，理解初始化代码的工作流程。
 ###重载指定构造函数</p>
 
 <blockquote>
@@ -479,69 +512,78 @@ for(UITableViewCell* cell in cellArrays) {
 
 <p>如果你没有重载父类的指定构造函数，你的构造函数有时可能不会被调用，这会导致非常隐秘而且难以解决的 bug。</p>
 
-<p>###重载 NSObject 的方法<br />
-&gt; 如果重载了 NSObject 类的方法，强烈建议把它们放在 @implementation 内的起始处，这也是常见的操作方法。</p>
+<h3 id="nsobject-">重载 NSObject 的方法</h3>
+<blockquote>
+  <p>如果重载了 NSObject 类的方法，强烈建议把它们放在 @implementation 内的起始处，这也是常见的操作方法。</p>
+</blockquote>
 
 <p>通常适用（但不局限）于 <code>init...，copyWithZone:</code>，以及<code>dealloc</code>方法。所有 <code>init...</code>方法应该放在一起<code>，copyWithZone:</code>紧随其后，最后才是<code>dealloc</code>方法</p>
 
-<p>###初始化<br />
-####不要在 init 方法中，将成员变量初始化为 0 或者 nil；毫无必要。<br />
-现代的 Ojbective-C 代码通过调用 alloc 和 init 方法来创建并 retain 一个对象。由于类方法 new 很少使用，这使得有关内存分配的代码审查更困难。<br />
+<h3 id="section-15">初始化</h3>
+<p>####不要在 init 方法中，将成员变量初始化为 0 或者 nil；毫无必要。
+现代的 Ojbective-C 代码通过调用 alloc 和 init 方法来创建并 retain 一个对象。由于类方法 new 很少使用，这使得有关内存分配的代码审查更困难。
 ####保持init函数简洁，不要让init函数成为千行的大函数，当超过50行的时候，适当考虑分拆一下。</p>
 
 <p>良好的风格实例：</p>
 
-<pre><code>- (void) commonInit
+<p>```
+- (void) commonInit
 {
     _rightAppendImageView = [UIImageView new];
     [self.contentView addSubview:_rightAppendImageView];
-}
+}</p>
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+<ul>
+  <li>(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (!self) {
-        return self;
-    }
-    [self commonInit];
-    return self;
+  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+  if (!self) {
+      return self;
+  }
+  [self commonInit];
+  return self;
 }
-</code></pre>
+```</li>
+</ul>
 
-<p>####UIView的子类初始化的时候，不要进行任何布局操作。布局操作在LayoutSubViews里面做。<br />
-####UIView的子类布局必须在layoutSubViews里面进行，需要布局的时候调用<code>setNeedLayout</code>来告诉系统，需要重新布局该View，不要直接调用<code>layoutSubViews</code></p>
+<h4 id="uiviewlayoutsubviews">UIView的子类初始化的时候，不要进行任何布局操作。布局操作在LayoutSubViews里面做。</h4>
+<p>####UIView的子类布局必须在layoutSubViews里面进行，需要布局的时候调用<code>setNeedLayout</code>来告诉系统，需要重新布局该View，不要直接调用<code>layoutSubViews</code></p>
 
-<p>###保持公共 API 简单<br />
-&gt; 保持类简单；避免 “厨房水槽（kitchen-sink）” 式的 API。如果一个函数压根没必要公开，就不要这么做。用私有类别保证公共头文件整洁。</p>
+<h3 id="api-">保持公共 API 简单</h3>
+<blockquote>
+  <p>保持类简单；避免 “厨房水槽（kitchen-sink）” 式的 API。如果一个函数压根没必要公开，就不要这么做。用私有类别保证公共头文件整洁。</p>
+</blockquote>
 
 <p>与 C++ 不同，Objective-C 没有方法来区分公共的方法和私有的方法 – 所有的方法都是公共的（译者注：这取决于 Objective-C 运行时的方法调用的消息机制）。因此，除非客户端的代码期望使用某个方法，不要把这个方法放进公共 API 中。尽可能的避免了你你不希望被调用的方法却被调用到。这包括重载父类的方法。对于内部实现所需要的方法，在实现的文件中定义一个类别，而不是把它们放进公有的头文件中。</p>
 
-<pre><code>// GTMFoo.m
-#import "GTMFoo.h"
+<p>```
+// GTMFoo.m
+#import “GTMFoo.h”</p>
 
-@interface GTMFoo (PrivateDelegateHandling)
+<p>@interface GTMFoo (PrivateDelegateHandling)
 - (NSString *)doSomethingWithDelegate;  // Declare private method
-@end
+@end</p>
 
-@implementation GTMFoo(PrivateDelegateHandling)
-...
+<p>@implementation GTMFoo(PrivateDelegateHandling)
+…
 - (NSString *)doSomethingWithDelegate {
   // Implement this method
 }
-...
+…
 @end
-</code></pre>
+```</p>
 
 <p>在OC2.0以后，你可以在实现文件中使用，类扩展来生命你的私有类别：</p>
 
-<pre><code>@interface GMFoo () { ... }
-</code></pre>
+<p><code>
+@interface GMFoo () { ... }
+</code></p>
 
-<p>###每个文件中只创建或者实现一个类。同一个文件中不要存在多个类。<br />
-###Protocol单独用一个文件来创建。尽量不要与相关类混在一个文件中。<br />
+<h3 id="section-16">每个文件中只创建或者实现一个类。同一个文件中不要存在多个类。</h3>
+<p>###Protocol单独用一个文件来创建。尽量不要与相关类混在一个文件中。
 ###类的私有变量以”_“开头。</p>
 
-<p>创建私有变量，份两种情况。<br />
+<p>创建私有变量，份两种情况。
 第一种情况子类需要继承的，在头文件中定义：</p>
 
 <pre><code>```
@@ -553,12 +595,12 @@ for(UITableViewCell* cell in cellArrays) {
 ```
 </code></pre>
 
-<p>第二种情况，不需要子类继承的，在实现文件中以Category的方式定义：<br />
-     ```<br />
-    // BWTest.m<br />
-    @interface BWTest ()<br />
-    {<br />
-        NSString* _name;<br />
+<p>第二种情况，不需要子类继承的，在实现文件中以Category的方式定义：
+     ```
+    // BWTest.m
+    @interface BWTest ()
+    {
+        NSString* _name;
     }</p>
 
 <pre><code>@implementation BWTest
@@ -567,11 +609,11 @@ for(UITableViewCell* cell in cellArrays) {
 ``` ###公有变量在一般使用属性的方法定义```@property (....) ...```
 </code></pre>
 
-<p>####使用委托模式，设置delegate的时候，在ARC下使用<code>weak</code>;在MRC下使用<code>retain</code>,并且在dealloc中将其指针置空。<br />
-####外部引用对象，外部不会发生set操作的对象，比如在创建界面元素的时候，使用readonly属性。<br />
-    ```<br />
-    @interface BWView : UIView<br />
-    @property (nonatomic, strong, readonly) UIView* backgoundView;<br />
+<h4 id="delegatearcweakmrcretaindealloc">使用委托模式，设置delegate的时候，在ARC下使用<code>weak</code>;在MRC下使用<code>retain</code>,并且在dealloc中将其指针置空。</h4>
+<p>####外部引用对象，外部不会发生set操作的对象，比如在创建界面元素的时候，使用readonly属性。
+    ```
+    @interface BWView : UIView
+    @property (nonatomic, strong, readonly) UIView* backgoundView;
     @end</p>
 
 <pre><code>@implementation BWView
@@ -579,152 +621,161 @@ for(UITableViewCell* cell in cellArrays) {
 ```
 </code></pre>
 
-<p>###在类定义中使用到自己定义的类的时候，尽量不要在头文件中引入自己定义的类的同文件，使用<code>@class</code>替换。在实现文件中引入相应头文件。</p>
+<h3 id="class">在类定义中使用到自己定义的类的时候，尽量不要在头文件中引入自己定义的类的同文件，使用<code>@class</code>替换。在实现文件中引入相应头文件。</h3>
 
-<p>例如：<br />
-```<br />
-//BWTest.h<br />
-@class BWDataCenter;<br />
-@interface BWTest : NSObject<br />
-@property (nonatomic, strong) BWDataCenter* dataCenter;<br />
+<p>例如：
+```
+//BWTest.h
+@class BWDataCenter;
+@interface BWTest : NSObject
+@property (nonatomic, strong) BWDataCenter* dataCenter;
 @end</p>
 
 <p>//BWTest.m</p>
 
-<p>#import “BWDataCenter.h”<br />
-@implementation BWTest<br />
-@end<br />
+<h1 id="import-bwdatacenterh">import “BWDataCenter.h”</h1>
+<p>@implementation BWTest
+@end
 ```</p>
 
-<p>###如果一个类只是DTO(data transfer object)，只是作为数据传输使用，可以不用引入使用的自定义的类的头文件，只是用<code>@class</code>，表明相应的自定义的类型。</p>
+<h3 id="dtodata-transfer-objectclass">如果一个类只是DTO(data transfer object)，只是作为数据传输使用，可以不用引入使用的自定义的类的头文件，只是用<code>@class</code>，表明相应的自定义的类型。</h3>
 
-<p>###对于DTO类型的对象，在给其成员变量设置值的时候可以考虑使用KVC，实现下述函数：</p>
+<h3 id="dtokvc">对于DTO类型的对象，在给其成员变量设置值的时候可以考虑使用KVC，实现下述函数：</h3>
 
-<pre><code>- (void) setValue:(id)value forKey:(NSString *)key
+<p>```
+- (void) setValue:(id)value forKey:(NSString *)key
 {
     if ([key isEqualToString:kRedDotAppInfoPath]) {
-        ....
-    } else if ...
-    ....
-}
+        ….
+    } else if …
+    ….
+}</p>
 
-- (id) valueForKey:(NSString *)key {
-  ....
+<ul>
+  <li>(id) valueForKey:(NSString *)key {
+….
 }
-</code></pre>
-<p>###点标记语法<br />
-属性和幂等方法（多次调用和一次调用返回的结果相同）使用点标记语法访问，其他的情况使用方括号标记语法。<br />
-良好的风格：</p>
+```
+###点标记语法
+属性和幂等方法（多次调用和一次调用返回的结果相同）使用点标记语法访问，其他的情况使用方括号标记语法。
+良好的风格：</li>
+</ul>
 
-<pre><code>view.backgroundColor = [UIColor orangeColor];
+<p><code>
+view.backgroundColor = [UIColor orangeColor];
 [UIApplication sharedApplication].delegate;
-</code></pre>
+</code></p>
 
 <p>反面实例：</p>
 
-<pre><code>[view setBackgroundColor:[UIColor orangeColor]];
+<p><code>
+[view setBackgroundColor:[UIColor orangeColor]];
 UIApplication.sharedApplication.delegate;
-</code></pre>
+</code></p>
 
-<p>##Cocoa相关<br />
-###每个NSObject都有其生命周期，要在其生命周期的合适的时机做合适的事情。<br />
+<h2 id="cocoa">Cocoa相关</h2>
+<p>###每个NSObject都有其生命周期，要在其生命周期的合适的时机做合适的事情。
 例如：在初始化的时候，进行变量初始化，在销毁的时候，销毁变量等等。</p>
 
-<p>###尽量不要在界面布局的写任何死数字<br />
-错误的示范：</p>
+<h3 id="section-17">尽量不要在界面布局的写任何死数字</h3>
+<p>错误的示范：</p>
 
-<pre><code> CGFloat delta = SYSTEM_VERSION &gt;= 7.0 ? 0.0f : -14.0f;
+<p>```
+ CGFloat delta = SYSTEM_VERSION &gt;= 7.0 ? 0.0f : -14.0f;
  newFrame = CGRectMake(245 + delta,
                               (self.frame.size.height - tipNewSize.height)/2,
                               tipNewSize.width,
-                              tipNewSize.height);
-        
-        dotFrame = CGRectMake(258.0 + delta,  (self.frame.size.height - tipDotSize.height)/2,
-                              tipDotSize.width,
-                              tipDotSize.height);
-        
-        iconFrame = CGRectMake(245 + delta,
-                               (self.frame.size.height - tipIconSize.height)/2,
-                               tipIconSize.width,
-                               tipIconSize.height);
-        numFrame = CGRectMake(245+delta, (self.frame.size.height - tipNumSize.height)/2, tipNumSize.width, tipNumSize.height);
-</code></pre>
-<p>正确的示范：</p>
+                              tipNewSize.height);</p>
 
-<pre><code>CGFloat cellHeight = CGRectGetHeight(self.frame);
+<pre><code>    dotFrame = CGRectMake(258.0 + delta,  (self.frame.size.height - tipDotSize.height)/2,
+                          tipDotSize.width,
+                          tipDotSize.height);
+    
+    iconFrame = CGRectMake(245 + delta,
+                           (self.frame.size.height - tipIconSize.height)/2,
+                           tipIconSize.width,
+                           tipIconSize.height);
+    numFrame = CGRectMake(245+delta, (self.frame.size.height - tipNumSize.height)/2, tipNumSize.width, tipNumSize.height); ``` 正确的示范：
+</code></pre>
+
+<p><code>
+CGFloat cellHeight = CGRectGetHeight(self.frame);
 CGFloat cellWidth = CGRectGetWidth(self.frame);
 CGRect numFrame = CGRectZero;
 numFrame.size = CGSizeMake(cellWidth,cellHeight);
 ...
-</code></pre>
-<p>###布局时尽量使用相对布局，比如使用子View在父View中的相对位置。</p>
+</code>
+###布局时尽量使用相对布局，比如使用子View在父View中的相对位置。</p>
 
-<p>###在使用UITableView和UITableViewCell的时候一定要考虑到cell被复用的情况，在合适的时机对重用的cell进行清除操作。</p>
+<h3 id="uitableviewuitableviewcellcellcell">在使用UITableView和UITableViewCell的时候一定要考虑到cell被复用的情况，在合适的时机对重用的cell进行清除操作。</h3>
 
-<p>###为UITableViewCell功能或者子View的时候有限考虑子类化。尽量不要使用在delegate中为Cell添加View。子类化，利于Cell重用和对cell内新添加的子View的布局。</p>
+<h3 id="uitableviewcellviewdelegatecellviewcellcellview">为UITableViewCell功能或者子View的时候有限考虑子类化。尽量不要使用在delegate中为Cell添加View。子类化，利于Cell重用和对cell内新添加的子View的布局。</h3>
 
 <p>良好的风格示例：</p>
 
-<pre><code>@interface BWSettingCell : UITableViewCell
+<p>```
+@interface BWSettingCell : UITableViewCell
 @property (nonatomic, strong, readonly) UIImageView* rightAppendImageView;
-@end
+@end</p>
 
-@implementation BWSettingCell
+<p>@implementation BWSettingCell</p>
 
-- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+<ul>
+  <li>(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (!self) {
-        return self;
-    }
-    _rightAppendImageView = [UIImageView new];
-    [self.contentView addSubview:_rightAppendImageView];
-    return self;
-}
-- (void) layoutSubviews
+  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+  if (!self) {
+      return self;
+  }
+  _rightAppendImageView = [UIImageView new];
+  [self.contentView addSubview:_rightAppendImageView];
+  return self;
+}</li>
+  <li>(void) layoutSubviews
 {
-    [super layoutSubviews];
-    CGSize rightImageSize = _rightAppendImageView.image.size;
-    _rightAppendImageView.frame = CGRectMake(CGRectGetWidth(self.frame) - rightImageSize.width,
-                                             (CGRectGetHeight(self.frame) - rightImageSize.height) /2,
-                                             rightImageSize.width,
-                                             rightImageSize.height);
+  [super layoutSubviews];
+  CGSize rightImageSize = _rightAppendImageView.image.size;
+  _rightAppendImageView.frame = CGRectMake(CGRectGetWidth(self.frame) - rightImageSize.width,
+                                           (CGRectGetHeight(self.frame) - rightImageSize.height) /2,
+                                           rightImageSize.width,
+                                           rightImageSize.height);
 }
 @end
-</code></pre>
+```</li>
+</ul>
 
 <p>反面教材：</p>
 
-<pre><code>...
-- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+<p>```
+…
+- (UITableViewCell<em>) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const settingCellIdentify = @"settingCellIdentify";
+    static NSString</em> const settingCellIdentify = @”settingCellIdentify”;
     UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:settingCellIdentify];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:settingCellIdentify];
     }
-    static int kSettingCellSubViewTag = 90001;
-    
-    //非常错误的地方，尽量不要这样写
-    [cell.contentView removeAllSubviews];
-    
-    UIImageView* rightAppendingView = [UIImageView new];
-    rightAppendingView.image = nil;
-    rightAppendingView.frame = CGRectMake(230, 8, 30, 30);
-    [cell.contentView addSubview:rightAppendingView];
-    return cell;
-}
-...
+    static int kSettingCellSubViewTag = 90001;</p>
+
+<pre><code>//非常错误的地方，尽量不要这样写
+[cell.contentView removeAllSubviews];
+
+UIImageView* rightAppendingView = [UIImageView new];
+rightAppendingView.image = nil;
+rightAppendingView.frame = CGRectMake(230, 8, 30, 30);
+[cell.contentView addSubview:rightAppendingView];
+return cell; } ... ```
 </code></pre>
 
-<p>##设计模式相关</p>
+<h2 id="section-18">设计模式相关</h2>
 
 <p>使用设计模式的最基本原则，除非你明确知道自己要做件什么事情，而且知道使用特定设计模式带来的影响，否则不要刻意的使用设计模式。</p>
 
-<p>###单例模式<br />
-创建一个单例模式可以使用dispatch_once</p>
+<h3 id="section-19">单例模式</h3>
+<p>创建一个单例模式可以使用dispatch_once</p>
 
-<pre><code>+ (instancetype)defaultManager
+<p><code>
++ (instancetype)defaultManager
 {
     if (!_defaultManager) {
         static dispatch_once_t onceToken;
@@ -734,21 +785,23 @@ numFrame.size = CGSizeMake(cellWidth,cellHeight);
     }
     return _defaultManager;
 }
-</code></pre>
-<p>###观察者模式<br />
+</code>
+###观察者模式
 ####如果只是单纯的传递数据，不要使用观察者模式，容易导致逻辑链断裂。</p>
 
-<p>##抽象<br />
-##逻辑连贯性</p>
+<h2 id="section-20">抽象</h2>
+<p>##逻辑连贯性</p>
 
-<p>##参考资料<br />
-1. 《<a href="http://item.jd.com/10064006.html">Clean Code</a>》<br />
-2. 《<a href="http://item.jd.com/11020839.html">编写可阅读代码的艺术</a>》<br />
-3. 《<a href="http://zh-google-styleguide.readthedocs.org/en/latest/google-objc-styleguide/">Google Objective-C Style Guide</a>》<br />
-4. 《<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html#//apple_ref/doc/uid/10000146-SW1">Introduction to Coding Guidelines for Cocoa</a>》<br />
-5. 《<a href="http://www.cnblogs.com/xdream86/p/3309345.html">iOS应用开发最佳实践系列一：编写高质量的Objective-C代码</a>》</p>
+<h2 id="section-21">参考资料</h2>
+<ol>
+  <li>《<a href="http://item.jd.com/10064006.html">Clean Code</a>》</li>
+  <li>《<a href="http://item.jd.com/11020839.html">编写可阅读代码的艺术</a>》</li>
+  <li>《<a href="http://zh-google-styleguide.readthedocs.org/en/latest/google-objc-styleguide/">Google Objective-C Style Guide</a>》</li>
+  <li>《<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html#//apple_ref/doc/uid/10000146-SW1">Introduction to Coding Guidelines for Cocoa</a>》</li>
+  <li>《<a href="http://www.cnblogs.com/xdream86/p/3309345.html">iOS应用开发最佳实践系列一：编写高质量的Objective-C代码</a>》</li>
+</ol>
 
-<p>##版本修订记录</p>
+<h2 id="section-22">版本修订记录</h2>
 
 <table>
   <thead>
@@ -773,69 +826,44 @@ numFrame.size = CGSizeMake(cellWidth,cellHeight);
 </table>
 
 
-  </div>
+</article> <!-- end #post__content -->
 
-</article>
+<div id="post__share">
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/11/11/objective-c.html&text=Objective-C编码建议" target="_blank"></a>
+  <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/11/11/objective-c.html&title=Objective-C编码建议" target="_blank"></a>
+</div> <!-- end #post__share -->
+<div id="disqus_thread" name="yishuiliunian">
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink" target="_blank">Loading Disqus comments...</a>
+</div>
 
+
+
+        <p id="copyright">Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Theme <a href="https://github.com/P233/3-Jekyll" target="_blank">3-Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Hosted on <a href="https://pages.github.com" target="_blank">Github</a></p>
+      </div> <!-- end #pjax -->
+
+      <div id="post__toc-trigger">
+        <div id="post__toc">
+          <span id="post__toc-title">Table of Contents</span>
+          <ul id="post__toc-ul"></ul>
+        </div>
       </div>
-    </div>
+    </div> <!-- end #post -->
 
-    <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key=/2015/11/11/objective-c data-title=Objective-C编码建议 data-url="www.dzpqzb.com/2015/11/11/objective-c.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"dzpqzb"};
-        (function() {
-                var ds = document.createElement('script');
-                ds.type = 'text/javascript';ds.async = true;
-                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-                ds.charset = 'UTF-8';
-                (document.getElementsByTagName('head')[0] 
-                 || document.getElementsByTagName('body')[0]).appendChild(ds);
-        })();
-        </script>
-        <!-- 多说公共JS代码 end -->
+    <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
 
-    <footer class="site-footer">
-
-  <div class="wrapper">
-
-    <h2 class="footer-heading">一水的技术博客</h2>
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li>一水的技术博客</li>
-          <li><a href="mailto:yishuiliunian@gmail.com">yishuiliunian@gmail.com</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col footer-col-2">
-        <ul class="social-media-list">
-          
-          <li>
-            <a href="https://github.com/yishuiliunian"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
-</span><span class="username">yishuiliunian</span></a>
-
-          </li>
-          
-
-          
-        </ul>
-      </div>
-
-      <div class="footer-col footer-col-3">
-        <p>iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips。
-</p>
-      </div>
-    </div>
-
-  </div>
-
-</footer>
-
-
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.pjax.js"></script>
+<script src="/assets/js/nprogress.js"></script>
+<script src="/assets/js/script.js"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-54767140-1', 'yansu.org');
+  ga('send', 'pageview');
+</script>
   </body>
-
 </html>
