@@ -15,4 +15,9 @@ url: "http://dzpqzb.com" # the base hostname & protocol for your site
 github_username:  yishuiliunian 
 
 # Build settings
+excerpt_link: "Read on &rarr;"
+
+highlighter: pygments
 markdown: kramdown
+kramdown:
+  input: GFM

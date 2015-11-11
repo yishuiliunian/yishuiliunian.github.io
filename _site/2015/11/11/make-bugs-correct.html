@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>如何合理的制造BUG</title>
+  <meta name="description" content="什么是BUG，简单点说就是，程序没有按照我们预想的方式运行。我比较喜欢把BUG分成两类：">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://dzpqzb.com/2015/11/11/make-bugs-correct.html">
+  <link rel="alternate" type="application/rss+xml" title="一水的技术博客" href="http://dzpqzb.com/feed.xml">
+</head>
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">一水的技术博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">如何合理的制造BUG</h1>
+    <p class="post-meta"><time datetime="2015-11-11T11:59:26+08:00" itemprop="datePublished">Nov 11, 2015</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>什么是BUG，简单点说就是，程序没有按照我们预想的方式运行。我比较喜欢把BUG分成两类：</p>
+
+<ol>
+  <li>Crash掉的</li>
+  <li>没有Crash掉的</li>
+</ol>
+
+<p>可能在平时的编程实践中，往往简单的把BUG与Crash基本等价了。而且我们很多精力也都放在解决Crash的Bug上面。而对于没有Crash掉的BUG，似乎没有过多的关注。但是，实际情况上那些让人痛彻心扉的“天坑”往往是那些没有Crash掉的BUG造成的，比如前一段时间OpenSSL心脏大出血。为什么这么说呢？且听我慢慢道来。</p>
+
+<p>##如何合理的制造BUG</p>
+
+<p>Crash掉的BUG，用程序的死证明了你的程序存在问题，你必须抓紧时间来解决程序的问题了。而没有Crash掉的Bug，像是一个善于撒谎的人，伪装成可以正常运转的样子，让整个程序运行在一个不稳定的状态下。虽然外表看起来好好地（没有crash），但是里子早就烂透了，一旦报露出问题往往是致命的，比如OpenSSL的心脏大出血。这就是前人总结的“死程序不说谎”。</p>
+
+<p>Crash不可怕，可怕的是程序没有Crash而是运行在一个不稳定的状态下，如果程序还操作了数据，那带来的危害将是灾难性的。</p>
+
+<p>所以放心的让程序Crash掉吧，因为当他Crash掉的时候，你还有机会去修正自己的错误。如果没有Crash，那就有可能要给整个程序和产品收尸了。因此合理制造“BUG”的原则之一，也是最大的原则就是：尽量制造Crash的BUG，减少没有Crash的BUG，如果有可能将没有Crash掉的Bug转换成Crash的BUG以方便查找。</p>
+
+<p>###NSAssert</p>
+
+<p>这个应该都比较熟悉，他的名字叫做“断言”。断言（assertion）是指在开发期间使用的、让程序在运行时进行自检的代码（通常是一个子程序或宏）。断言为真，则表明程序运行正常，而断言为假，则意味着它已经在代码中发现了意料之外的错误。断言对于大型的复杂程序或可靠性要求极高的程序来说尤其有用。而当断言为假的时候，几乎所有的系统的处理策略都是，让程序死掉，即Crash掉。方便你知道，程序出现了问题。</p>
+
+<p>断言其实是“防御式编程”的常用的手段。防御式编程的主要思想是：子程序应该不因传入错误数据而被破坏，哪怕是由其他子程序产生的错误数据。这种思想是将可能出现的错误造成的影响控制在有限的范围内。断言能够有效的保证数据的正确性，防止因为脏数据让整个程序运行在不稳定的状态下面。</p>
+
+<p>关于如何使用断言，还是参考《代码大全2》中“防御式编程”一章。这里简单的做了一点摘录，概括其大意：</p>
+
+<ol>
+  <li>用错误处理代码来处理预期会发生的状况，用断言来处理绝不应该发生的状况。</li>
+  <li>避免把需要执行的代码放到断言中</li>
+  <li>用断言来注解并验证前条件和后条件</li>
+  <li>对于高健壮性的代码，应该先使用断言再处理错误</li>
+  <li>对来源于内部系统的可靠的数据使用断言，而不要对外部不可靠的数据使用断言，对于外部不可靠数据，应该使用错误处理代码。<br />
+而在IOS编程中，我们可以使用NSAssert来处理断言。比如：</li>
+</ol>
+
+<pre><code>- (void)printMyName:(NSString *)myName  
+{  
+    NSAssert(myName == nil, @"名字不能为空！");  
+    NSLog(@"My name is %@.",myName);  
+}
+</code></pre>
+
+<p>我们验证myName的安全性，需要保证其不能为空。NSAssert会检查其内部的表达式的值，如果为假则继续执行程序，如果不为假让程序Crash掉。</p>
+
+<p>每一个线程都有它自己的断言捕获器（一个NSAssertionHanlder的实例），当断言发生时，捕获器会打印断言信息和当前的类名、方法名等信息。然后抛出一个NSInternalInconsistencyException异常让整个程序Crash掉。并且在当前线程的断言捕获器中执行handleFailureInMethod:object:file:lineNumber:description:以上述信息为输出。</p>
+
+<p>当时，当程序发布的时候，不能把断言带入安装包，你不想让程序在用户机器上Crash掉吧。打开和关闭断言可以在项目设置中设置assert<br />
+,在release版本中设置了NS_BLOCK_ASSERTIONS之后断言失效。</p>
+
+<p>###尽可能不要用Try-Catch</p>
+
+<p>并不是说Try-Catch这样的异常处理机制不好。而是，很多人在编程中，错误了使用了Try-Catch，把异常处理机制用在了核心逻辑中。把其当成了一个变种的GOTO使用。把大量的逻辑写在了Catch中。弱弱的说一句，这种情况干嘛不用ifelse呢。</p>
+
+<p>而实际情况是，异常处理只是用户处理软件中出现异常的情况。常用的情况是子程序抛出错误，让上层调用者知道，子程序发生了错误，并让调用者使用合适的策略来处理异常。一般情况下，对于异常的处理策略就是Crash，让程序死掉，并且打印出堆栈信息。</p>
+
+<p>而在IOS编程中，抛出错误的方式，往往采用更直接的方式。如果上层需要知道错误信息，一半会传入一个NSError的指针的指针：</p>
+
+<pre><code>- (void) doSomething:(NSError* __autoreleasing*)error
+{
+    ...
+    if(error != NULL)
+    {
+        *error = [NSError new];
+    }
+    ....
+}
+</code></pre>
+<p>而能够留给异常处理的场景就极少了，所以在IOS编程中尽量不要使用Try-Catch。</p>
+
+<blockquote>
+  <p>（PS：见到过使用Try-Catch来防止程序Crash的设计，如果不是迫不得已，尽量不要使用这种策略）</p>
+</blockquote>
+
+<p>###尽量将没有Crash掉的BUG，让它Crash掉</p>
+
+<p>上面主要讲的是怎么知道Crash的“BUG”。对于合理的制造“BUG”还有一条就是尽量把没有Crash掉的“BUG”，让他Crash掉。这个没有比较靠谱的方法，靠暴力吧。比如写一些数组越界在里面之类的。比如那些难调的多线程BUG，想办法让他Crash掉吧，crash掉查找起来就比较方便了。</p>
+
+<p>总之，就是抱着让程序“死掉”的心态去编程，向死而生。</p>
+
+<p>##如何查找BUG</p>
+
+<p>其实查找BUG这个说法，有点不太靠谱。因为BUG从来都不需要你去找，他就在那里，只增不减。都是BUG来找你，你很少主动去找BUG。程序死了，然后我们就得加班加点。其实我们找的是发生BUG的原因。找到引发BUG的罪魁祸首。说的比较理论化一点就是：在一堆可能的原因中，找到那些与BUG有因果性的原因（注意，是因果性，不是相关性）。</p>
+
+<p>于是解决BUG一般可以分两步进行：</p>
+
+<ol>
+  <li>合理性假设，找到可能性最高的一系列原因。</li>
+  <li>对上面找到的原因与BUG之间的因果性进行分析。必须确定，这个BUG是由某个原因引起的，而且只由改原因引起。即确定特定原因是BUG的充分必要条件。<br />
+找到原因之后，剩下的事情就比较简单了，改代码解决掉。</li>
+</ol>
+
+<p>###合理性假设</p>
+
+<p>其实，BUG发生的原因可以分成两类：</p>
+
+<ol>
+  <li>我们自己程序的问题。</li>
+  <li>系统环境，包括OS、库、框架等的问题。<br />
+前者找到了，我们可以改。后者就比较无能为力了，要么发发牢骚，要么email开发商，最后能不能被改掉就不得而知了。比如IOS制作framework的时候，category会报方法无法找的异常，到现在都没有解决掉。</li>
+</ol>
+
+<p>当然，一般情况下导致程序出问题的原因的99.999999%都是我们自己造成的。所以合理性假设第一条：</p>
+
+<p>###首先怀疑自己和自己的程序，其次怀疑一切</p>
+
+<p>而程序的问题，其实就是开发者自己的问题。毕竟BUG是程序员的亲子亲孙，我们一手创造了BUG。而之所以能够创造BUG，开发者的原因大致有三：</p>
+
+<p>####知识储备不足，比如IOS常见的空指针问题，发现很多时候就是因为对于IOS的内存管理模型不熟悉导致。<br />
+####错心大意，比较典型的就是数组越界错误。还有在类型转化的时候没注意。比如下面这个程序：</p>
+
+<pre><code>//array.count = 9
+for (int i = 100; array.count - (unsigned int)i &amp;gt; 10 ; )
+{
+    i++
+    .....
+}
+</code></pre>
+<p>按道理讲，这应该是个可以正常执行的程序，但是你运行的话是个死循环。可能死循环的问题，你改了很多天也没解决。直到同事和你说array.count返回的是NSUInterge，当与无符号整形相间的时候，如果出现负值是回越界的啊。你才恍然大悟：靠，类型的问题。</p>
+
+<p>####逻辑错误<br />
+这个就是思维方式的问题，但是也是问题最严重的。一旦发生，很难查找。人总是最难怀疑自己的思维方式。比如死循环的问题，最严重的是函数间的循环引用，还有多线程的问题。<br />
+但是庆幸的是绝大多数的BUG都是由于知识储备不足和粗心大意造成的。所以合理性假设的第二条：</p>
+
+<p>首先怀疑基础性的原因，比如自己知识储备和粗心大意等人为因素，通过这些原因查找具体的问题。之后再去怀疑难处理的逻辑错误。<br />
+有了上面的合理性怀疑的一些基本策略，也不能缺少一些基本的素材啊。就是常见的Crash原因，最后我们还是得落地到这些具体的原因或者代码上，却找与BUG的因果性联系。</p>
+
+<ol>
+  <li>
+    <p>访问了一个已经被释放的对象，比如</p>
+
+    <p><code>
+ NSObject * aObj = [[NSObject alloc] init];
+ [aObj release];
+ NSLog(@"%@", aObj);
+</code></p>
+  </li>
+  <li>访问数组类对象越界或插入了空对象</li>
+  <li>访问了不存在的方法</li>
+  <li>字节对齐,(类型转换错误)</li>
+  <li>堆栈溢出</li>
+  <li>多线程并发操作</li>
+  <li>Repeating NSTimer</li>
+</ol>
+
+<p>合理性假设第三条：尽可能的查找就有可能性的具体原因。</p>
+
+<p>##因果性分析</p>
+
+<p>首先必须先说明的是，我们要找的是“因果性”而不是“相关性“。这是两个极度被混淆的概念。而且，很多时候我们错误的把相关性当成了因果性。比如，在解决一个多线程问题的时候，发现了一个数据混乱的问题，但是百思不得其解。终于，有一天你意外的给某个对象加了个锁，数据就正常了。然后你就说这个问题是这个对象没有枷锁导致的。</p>
+
+<p>但是，根据上述你的分析，只能够得出该对象枷锁与否与数据异常有关系，而不能得出就是数据异常的原因。因为你没能证明对象加锁是数据异常的充分必要条件，而只是使用了一个单因变量实验，变量是枷锁状态，取值x=[0，1],x为整形。然后实验结果是枷锁与否与数据异常呈现正相关性。</p>
+
+<p>相关性：在概率论和统计学中，相关（Correlation，或称相关系数或关联系数），显示两个随机变量之间线性关系的强度和方向。在统计学中，相关的意义是用来衡量两个变量相对于其相互独立的距离。在这个广义的定义下，有许多根据数据特点而定义的用来衡量数据相关的系数。</p>
+
+<p>因果性：因果是一个事件（即“因”）和第二个事件（即“果”）之间的关系，其中后一事件被认为是前一事件的结果。<br />
+错误的把相关性等价于因果性。不止是程序员，几乎所有人常见的逻辑错误。为了加深认识，可以看一下这篇小科普：相关性 ≠ 因果性。</p>
+
+<p>因果性分析的首要问题就是，别被自己的逻辑错误欺骗，正确的分辨出相关性和因果性之间的区别。不要把相关性等价于因果性。</p>
+
+<p>之后便是因果性分析的内容了，之前一直反复说，因果性分析的目的就是确定特定原因是BUG发生的充分必要条件。那么确定这个事情，就需要两步：</p>
+
+<ol>
+  <li>充分性证明</li>
+  <li>必要性证明</li>
+</ol>
+
+<p>关于充分性证明，这个基本上就是正常的逻辑推理。基本思路就是，能够还原出BUG出现的路径，从原因到BUG发生处的代码，走了怎样的函数调用和控制逻辑。确定了这个基本上就能够证明充分性。一般情况下根据Crash的堆栈信息能够，非常直接的证明充分性。</p>
+
+<p>关于必要性证明，这个就比较困难了。充分性和必要性的定义如下：当命题“若A则B”为真时，A称为B的充分条件，B称为A的必要条件。那么必要性就是，BUG能够作为导致BUG的原因的原因。这个说法比较拗口。换种说法，就是你得确认这个BUG能够解释原因，这个BUG就是而且只是这个原因造成的。</p>
+
+<p>只有证明了充分必要性，才能算是真正找到了BUG的原因。</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key=/2015/11/11/make-bugs-correct data-title=如何合理的制造BUG data-url="www.dzpqzb.com/2015/11/11/make-bugs-correct.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+        (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                 || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+        <!-- 多说公共JS代码 end -->
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">一水的技术博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>一水的技术博客</li>
+          <li><a href="mailto:yishuiliunian@gmail.com">yishuiliunian@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/yishuiliunian"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">yishuiliunian</span></a>
+
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips。
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

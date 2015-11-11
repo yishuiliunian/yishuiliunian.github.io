@@ -7,12 +7,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>tmux配置</title>
-  <meta name="description" content="为什么要用tmux">
+  <meta name="description" content="##为什么要用tmux">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://dzpqzb.com/2015/08/03/tmuxpei-zhi.html">
   <link rel="alternate" type="application/rss+xml" title="一水的技术博客" href="http://dzpqzb.com/feed.xml">
 </head>
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
   <body>
@@ -62,7 +89,7 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <h2 id="tmux">为什么要用tmux</h2>
+    <p>##为什么要用tmux</p>
 
 <p>tmux是什么？tmux是linux中一种管理窗口的程序。那么问题来了：Mac自带的Iterm2很好用啊。既支持多标签，也支持窗体内部Panel的分割，为什么还要用tmux？其实，多标签和分割窗体只是tmux的部分功能。用tmux的主要原因是它提供了一个窗体组随时存储和恢复的功能。看看以下的使用场景是否适合你：</p>
 
@@ -71,7 +98,7 @@
   <li>公司服务器上调试程序，开了一堆窗口。出去吃了个饭，发现SSH超时了，broken pipe。重头开始。。。FML！如果你之前使用了tmux就不会有这样的问题，attach就能找回原来打开的那些窗口。</li>
 </ol>
 
-<h2 id="tmux-1">tmux的基本概念</h2>
+<p>##tmux的基本概念</p>
 
 <p>我们先来理解下tmux的几个元素。tmux的主要元素分为三层：</p>
 
@@ -81,15 +108,15 @@
   <li>Pane 窗格，被划分成小块的窗口，类似于Vim中 C-w +v 后的效果。</li>
 </ol>
 
-<p>为了更好的理解，下面是三个元素在tmux中的具体展现。
+<p>为了更好的理解，下面是三个元素在tmux中的具体展现。<br />
 <img src="http://ww4.sinaimg.cn/large/7df22103jw1eupcnv0wvbj21kw0qvqhi.jpg" alt="" /></p>
 
 <p>可以看到Session总在tmux的左下角显示，通常会为他命名。例如我正在写博客，开了很多窗口那么我就会把这组窗口命名为blog方便之后的重连和切换。而Window也会在最下方以一种Tab的形式展现。每个window都有自己的需要，也会以当前活动进程的名字命名。而Pane就比较好理解，即把单个窗口分割成若干个小块后的元素。</p>
 
-<h2 id="section">个性化配置</h2>
+<p>##个性化配置</p>
 
-<h3 id="power-line">power-line</h3>
-<p>具体请参考 https://github.com/erikw/tmux-powerline</p>
+<p>###power-line<br />
+具体请参考 https://github.com/erikw/tmux-powerline</p>
 
   </div>
 
@@ -97,6 +124,23 @@
 
       </div>
     </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key=/2015/08/03/tmuxpei-zhi data-title=tmux配置 data-url="www.dzpqzb.com/2015/08/03/tmuxpei-zhi.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+        (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                 || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+        <!-- 多说公共JS代码 end -->
 
     <footer class="site-footer">
 

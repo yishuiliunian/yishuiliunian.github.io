@@ -6,9 +6,544 @@
 </description>
     <link>http://dzpqzb.com/</link>
     <atom:link href="http://dzpqzb.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 11 Nov 2015 01:26:55 +0800</pubDate>
-    <lastBuildDate>Wed, 11 Nov 2015 01:26:55 +0800</lastBuildDate>
+    <pubDate>Wed, 11 Nov 2015 13:01:49 +0800</pubDate>
+    <lastBuildDate>Wed, 11 Nov 2015 13:01:49 +0800</lastBuildDate>
     <generator>Jekyll v3.0.0</generator>
+    
+      <item>
+        <title>iOS设计模式之观察者模式</title>
+        <description>&lt;p&gt;什么是观察者模式？我们先打个比方，这就像你订报纸。比如你想知道美国最近放生了些新闻，你可能会订阅一份美国周刊，然后一旦美国有了新的故事，美国周刊就发一刊，并邮寄给你，当你收到这份报刊，然后你就能够了解美国最新的动态。其实这就是观察者模式，A对B的变化感兴趣，就注册为B的观察者，当B发生变化时通知A，告知B发生了变化。这是一种非常典型的观察者的用法，我把这种使用方法叫做经典观察者模式。当然与之相对的还有另外一种观察者模式——广义观察者模式。&lt;/p&gt;
+
+&lt;p&gt;从经典的角度看，观察者模式是一种通知变化的模式，一般认为只在对象发生变化感兴趣的场合有用。主题对象知道有观察者存在，设置会维护观察者的一个队列；而从广义的角度看，观察者模式是中传递变化数据的模式，需要查看对象属性时就会使用的一种模式，主题对象不知道观察者的存在，更像是围观者。需要知道主题对象的状态，所以即使在主题对象没有发生改变的时候，观察者也可能会去访问主题对象。换句话说广义观察者模式，是在不同的对象之间传递数据的一种模式。&lt;/p&gt;
+
+&lt;p&gt;观察者模式应当是在面向对象编程中被大规模使用的设计模式之一。从方法论的角度出发，传统的认知论认为，世界是由对象组成的，我们通过不停的观察和了解就能够了解对象的本质。整个人类的认知模型就是建立在“观察”这种行为之上的。我们通过不停与世界中的其他对象交互，并观察之来了解这个世界。同样，在程序的世界中，我们构建的每一个实例，也是通过不不停的与其他对象交互（查看其他对象的状态，或者改变其他对象的状态），并通过观察其他实例的变化并作出响应，以来完成功能。这也就是，为什么会把观察模式单独提出来，做一个专门的剖析的原因——在我看来他是很多其他设计模式的基础模式，并且是编程中极其重要的一种设计模式。&lt;/p&gt;
+
+&lt;p&gt;##经典观察者模式&lt;/p&gt;
+
+&lt;p&gt;经典观察者模式被认为是对象的行为模式，又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、源-监听器(Source/Listener)模式或从属者(Dependents)模式。经典观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己或者做出相应的一些动作。在文章一开始举的例子就是典型观察者模式的应用。&lt;/p&gt;
+
+&lt;p&gt;而在IOS开发中我们可能会接触到的经典观察者模式的实现方式，有这么几种：NSNotificationCenter、KVO、Delegate等&lt;/p&gt;
+
+&lt;p&gt;###感知通知方式&lt;/p&gt;
+
+&lt;p&gt;在经典观察者模式中，因为观察者感知到主题对象变化方式的不同，又分为推模型和拉模型两种方式。&lt;/p&gt;
+
+&lt;p&gt;####推模型&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1exwx2dkgj7j20ol0dhgn2.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;主题对象向观察者推送主题的详细信息，不管观察者是否需要，推送的信息通常是主题对象的全部或者部分数据。推模型实现了观察者和主题对象的解耦，两者之间没有过度的依赖关系。但是推模型每次都会以广播的方式，向所有观察者发送通知。所有观察者被动的接受通知。当通知的内容过多时，多个观察者同时接收，可能会对网络、内存（有些时候还会涉及IO）有较大影响。&lt;/p&gt;
+
+&lt;p&gt;在IOS中典型的推模型实现方式为NSNotificationCenter和KVO。&lt;/p&gt;
+
+&lt;p&gt;#####NSNotificationCenter&lt;/p&gt;
+
+&lt;p&gt;NSnotificationCenter是一种典型的有调度中心的观察者模式实现方式。以NSNotificationCenter为中心，观察者往Center中注册对某个主题对象的变化感兴趣，主题对象通过NSNotificationCenter进行变化广播。这种模型就是文章开始发布订阅报纸在OC中的一种类似实现。所有的观察和监听行为都向同一个中心注册，所有对象的变化也都通过同一个中心向外广播。&lt;/p&gt;
+
+&lt;p&gt;NSNotificationCenter就像一个枢纽一样，处在整个观察者模式的核心位置，调度着消息在观察者和监听者之间传递。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/7df22103jw1exwx3ni8l8j20nl06amxm.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;一次完整的观察过程如上图所示。整个过程中，关键的类有这么几个（介绍顺序按照完成顺序):&lt;/p&gt;
+
+&lt;p&gt;######1. 观察者Observer，一般继承自NSObject，通过NSNotificationCenter的~~~addObserver:selector:name:object~~~接口来注册对某一类型通知感兴趣.在注册时候一定要注意，~~~NSNotificationCenter~~~不会对观察者进行引用计数+1的操作，我们在程序中释放观察者的时候，一定要去报从center中将其注销了。&lt;/p&gt;
+
+&lt;p&gt;######2. 通知中心NSNotificationCenter，通知的枢纽。&lt;/p&gt;
+
+&lt;p&gt;######3. 主题对象，被观察的对象，通过postNotificationName:object:userInfo:发送某一类型通知，广播改变。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void) postMessage
+ {
+     [[NSNotificationCenter defaultCenter] postNotificationName:kDZTestNotificatonMessage object:Nil userInfo:@{}];
+ }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;######4. 通知对象NSNotification，当有通知来的时候，Center会调用观察者注册的接口来广播通知，同时传递存储着更改内容的NSNotification对象。&lt;/p&gt;
+
+&lt;p&gt;#####apple版实现的NotificationCenter让我用起来不太爽的几个小问题&lt;/p&gt;
+
+&lt;p&gt;在使用NSNotificationCenter的时候，从编程的角度来讲我们往往不止是希望能够做到功能实现，还能希望编码效率和整个工程的可维护性良好。而Apple提供的以NSNotificationCenter为中心的观察者模式实现，在可维护性和效率上存在以下缺点：&lt;/p&gt;
+
+&lt;p&gt;每个注册的地方需要同时注册一个函数，这将会带来大量的编码工作。仔细分析能够发现，其实我们每个观察者每次注册的函数几乎都是雷同的。这就是种变相的CtrlCV，是典型的丑陋和难维护的代码。&lt;br /&gt;
+每个观察者的回调函数，都需要对主题对象发送来的消息进行解包的操作。从UserInfo中通过KeyValue的方式，将消息解析出来，而后进行操作。试想一下，工程中有100个地方，同时对前面中在响应变化的函数中进行了解包的操作。而后期需求变化需要多传一个内容的时候，将会是一场维护上的灾难。&lt;br /&gt;
+当大规模使用观察者模式的时候，我们往往在dealloc处加上一句:&lt;br /&gt;
+[[NSNotificationCenter defaultCenter] removeObserver:self]&lt;br /&gt;
+而在实际使用过程中，会发现该函数的性能是比较低下的。在整个启动过程中，进行了10000次RemoveObserver操作，&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@implementation DZMessage
+ - (void) dealloc
+ {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+ }
+ ....
+for (int i = 0 ; i &amp;amp;lt; 10000; i++) {
+      DZMessage* message = [DZMessage new];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过下图可以看出这一过程消耗了23.4%的CPU，说明这一函数的效率还是很低的。&lt;br /&gt;
+&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1exwx55g3mdj20m708bjui.jpg&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
+这还是只有一种消息类型的存在下有这样的结果，如果整个NotificationCenter中混杂着多种消息类型，那么恐怕对于性能来说将会是灾难性的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;for (int i = 0 ; i &amp;amp;lt; 10000; i++) {
+      DZMessage* message = [DZMessage new];
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handle) name:[@(i) stringValue] object:nil];
+  }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;增加了多种消息类型之后，RemoveObserver占用了启动过程中63.9%的CPU消耗。&lt;br /&gt;
+&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1exwx5xzf1tj20lf07tju8.jpg&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
+而由于Apple没有提供Center的源码，所以修改这个Center几乎不可能了。&lt;/p&gt;
+
+&lt;p&gt;#####改进版的有中心观察者模式（DZNotificationCenter）&lt;/p&gt;
+
+&lt;p&gt;GitHub地址 在设计的时候考虑到以上用起来不爽的地方，进行了优化：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;将解包到执行函数的操作进行了封装，只需要提供某消息类型的解包block和消息类型对应的protocol，当有消息到达的时候，消息中心会进行统一解包，并直接调用观察者相应的函数。&lt;/li&gt;
+  &lt;li&gt;对观察者的维护机制进行优化（还未做完），提升查找和删除观察者的效率。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;DZNotificationCenter的用法和NSNotificationCenter在注册和注销观察者的地方是一样的，不一样的地方在于，你在使用的时候需要提供解析消息的block。你可以通过两种方式来提供。&lt;/p&gt;
+
+&lt;p&gt;######1. 直接注册的方式&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[DZDefaultNotificationCenter addDecodeNotificationBlock:^SEL(NSDictionary *userInfo, NSMutableArray *__autoreleasing *params) {
+      NSString* key = userInfo[@&quot;key&quot;];
+      if (params != NULL) {
+          *params = [NSMutableArray new];
+      }
+      [*params  addObject:key];
+      return @selector(handleTestMessageWithKey:);
+  } forMessage:kDZMessageTest];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;######2. 实现DZNotificationInitDelegaete协议，当整个工程中大规模使用观察者的时候，建议使用该方式。这样有利于统一管理所有的解析方式。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (DZDecodeNotificationBlock) decodeNotification:(NSString *)message forCenter:(DZNotificationCenter *)center
+{
+    if (message == kDZMessageTest) {
+        return ^(NSDictionary* userInfo, NSMutableArray* __autoreleasing* params){
+            NSString* key = userInfo[@&quot;key&quot;];
+            if (params != NULL) {
+                *params = [NSMutableArray new];
+            }
+            [*params  addObject:key];
+            return @selector(handlePortMessage:);
+        };
+    }
+    return nil;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在使用的过程中为了，能够保证在观察者处能够回调相同的函数，可以实现针对某一消息类型的protocol&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@protocol DZTestMessageInterface &amp;amp;lt;NSObject&amp;amp;gt;
+- (void) handleTestMessageWithKey:(NSString*)key;
+@end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样就能够保证，在使用观察者的地方不用反复的拼函数名和解析消息内容了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface DZViewController () &amp;amp;lt;DZTestMessageInterface&amp;amp;gt;
+@end
+@implementation DZViewController
+....
+- (void) handleTestMessageWithKey:(NSString *)key
+{
+    self.showLabel.text = [NSString stringWithFormat:@&quot;get message with %@&quot;, key];
+}
+....
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;###KVO&lt;/p&gt;
+
+&lt;p&gt;KVO的全称是Key-Value Observer，即键值观察。是一种没有中心枢纽的观察者模式的实现方式。一个主题对象管理所有依赖于它的观察者对象，并且在自身状态发生改变的时候主动通知观察者对象。 让我们先看一个完整的示例：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;static NSString* const kKVOPathKey = @&quot;key&quot;;
+@implementation DZKVOTest
+- (void) setMessage:(DZMessage *)message
+{
+    if (message != _message) {
+        if (_message) {
+            [_message removeObserver:self forKeyPath:kKVOPathKey];
+        }
+        if (message) {
+            [message addObserver:self forKeyPath:kKVOPathKey options:NSKeyValueObservingOptionNew context:Nil];
+        }
+        _message = message;
+    }
+}
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqual:kKVOPathKey] &amp;amp;amp;&amp;amp;amp; object == _message) {
+        NSLog(@&quot;get %@&quot;,change);
+    }
+}
+- (void) postMessage
+{
+    _message.key = @&quot;asdfasd&quot;;
+}
+@end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;完成一次完整的改变通知过程，经过以下几次过程:&lt;/p&gt;
+
+&lt;p&gt;#####1. 注册观察者[message addObserver:self forKeyPath:kKVOPathKey options:NSKeyValueObservingOptionNew context:Nil];&lt;/p&gt;
+
+&lt;p&gt;#####2. 更改主题对象属性的值，即触发发送更改的通知 _message.key = @”asdfasd”;&lt;/p&gt;
+
+&lt;p&gt;#####3.在制定的回调函数中，处理收到的更改通知&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+ if ([keyPath isEqual:kKVOPathKey] &amp;amp;amp;&amp;amp;amp; object == _message) {
+     NSLog(@&quot;get %@&quot;,change);
+ }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;#####4.注销观察者 [_message removeObserver:self forKeyPath:kKVOPathKey];&lt;/p&gt;
+
+&lt;p&gt;####KVO实现原理&lt;/p&gt;
+
+&lt;p&gt;一般情况下对于使用Property的属性，objc会为其自动添加键值观察功能，你只需要写一句@property (noatomic, assign) float age 就能够获得age的键值观察功能。而为了更深入的探讨一下，KVO的实现原理我们先手动实现一下KVO：&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;lineno&quot;&gt; 1&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@implementation&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DZKVOManual&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;setAge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 3&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 4&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;willChangeValueForKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kKVOPathAge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 5&lt;/span&gt;     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 6&lt;/span&gt;         &lt;span class=&quot;n&quot;&gt;_age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 7&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 8&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;didChangeValueForKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kKVOPathAge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 9&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;经验证&lt;/span&gt;  &lt;span class=&quot;err&quot;&gt;会先去调用&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;automaticallyNotifiesObserversForKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;当该函数没有时才会调用&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;automaticallyNotifiesObserversOfAge&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;。这个函数应该是编译器，自动增加的一个函数，使用&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xcode&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;能够自动提示出来。的确很强大。&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;11&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;BOOL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;automaticallyNotifiesObserversOfAge&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;12&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;13&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;//&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;14&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;15&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;BOOL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;automaticallyNotifiesObserversForKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;NSString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;17&lt;/span&gt;     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kKVOPathAge&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;18&lt;/span&gt;         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;19&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;20&lt;/span&gt;     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;super&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;automaticallyNotifiesObserversForKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;21&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;22&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;首先，需要手动实现属性的 setter 方法，并在设置操作的前后分别调用 willChangeValueForKey: 和 didChangeValueForKey方法，这两个方法用于通知系统该 key 的属性值即将和已经变更了；&lt;/p&gt;
+
+&lt;p&gt;其次，要实现类方法 automaticallyNotifiesObserversForKey，并在其中设置对该 key 不自动发送通知（返回 NO 即可）。这里要注意，对其它非手动实现的 key，要转交给 super 来处理。&lt;/p&gt;
+
+&lt;p&gt;在这里的手动实现，主要是手动实现了主题对象变更向外广播的过程。后续如何广播到观察者和观察者如何响应我们没有实现，其实这两个过程apple已经封装的很好了，猜测一下的话，应该是主题对象会维护一个观察者的队列，当本身属性发生变动，接受到通知的时候，找到相关属性的观察者队列，依次调用observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context来广播更改。 还有一个疑问，就是在自动实现KVO的时候，系统是否和我们手动实现做了同样的事情呢？&lt;/p&gt;
+
+&lt;p&gt;####自动实现KVO及其原理&lt;/p&gt;
+
+&lt;p&gt;我们仔细来观察一下在使用KVO的过程中类DZMessage的一个实例发生了什么变化： 在使用KVO之前：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exwxex4ozvj20d204rt9f.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;当调用Setter方法，并打了断点的时候：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1exwxf3vu2rj20b3040dge.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;神奇的发现类的isa指针发生了变化，我们原本的类叫做DZMessage，而使用KVO后类名变成了NSKVONotifying_DZMessage。这说明objc在运行时对我们的类做了些什么。&lt;/p&gt;
+
+&lt;p&gt;我们从Apple的文档&lt;a href=&quot;https://developer.apple.com/library/mac/documentation/cocoa/conceptual/KeyValueObserving/Articles/KVOImplementation.html&quot;&gt;Key-Value Observing Implementation Details&lt;/a&gt;找到了一些线索。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Automatic key-value observing is implemented using a technique called isa-swizzling. The isa pointer, as the name suggests, points to the object’s class which maintains a dispatch table.This dispatch table essentially contains pointers to the methods the class implements, among other data. When an observer is registered for an attribute of an object the isa pointer of the observed object is modified, pointing to an intermediate class rather than at the true class. As a result the value of the isa pointer does not necessarily reflect the actual class of the instance. You should never rely on the isa pointer to determine class membership. Instead, you should use the class method to determine the class of an object instance.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;当某一个类的实例第一次使用KVO的时候，系统就会在运行期间动态的创建该类的一个派生类，该类的命名规则一般是以NSKVONotifying为前缀，以原本的类名为后缀。并且将原型的对象的isa指针指向该派生类。同时在派生类中重载了使用KVO的属性的setter方法，在重载的setter方法中实现真正的通知机制，正如前面我们手动实现KVO一样。这么做是基于设置属性会调用 setter 方法，而通过重写就获得了 KVO 需要的通知机制。当然前提是要通过遵循 KVO 的属性设置方式来变更属性值，如果仅是直接修改属性对应的成员变量，是无法实现 KVO 的。&lt;/p&gt;
+
+&lt;p&gt;同时派生类还重写了 class 方法以“欺骗”外部调用者它就是起初的那个类。因此这个对象就成为该派生类的对象了，因而在该对象上对 setter 的调用就会调用重写的 setter，从而激活键值通知机制。此外，派生类还重写了 dealloc 方法来释放资源。&lt;/p&gt;
+
+&lt;p&gt;##拉模型&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1exwxg9a68nj20o50f1q4l.jpg&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
+拉模型是指主题对象在通知观察者的时候，只传递少量信息或者只是通知变化。如果观察者需求要更具体的信息，由观察者主动从主题对象中拉取数据。相比推模型来说，拉模型更加自由，观察者只要知道有情况发生就好了，至于什么时候获取、获取那些内容、甚至是否获取都可以自主决定。但是，却存在两个问题：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;如果某个观察者响应过慢，可能会漏掉之前通知的内容&lt;/li&gt;
+  &lt;li&gt;观察者必须保存一个对目标对象的引用，而且还需要了解主题对象的结构，这就使观察者产生了对主题对象的依赖。&lt;br /&gt;
+可能每种设计模式都会存在或多或少的一些弊端，但是他们的确能够解决问题，也有更多有用的地方。在使用的时候，就需要我们权衡利弊，做出一个合适的选择。而工程师的价值就体现在，能够在纷繁复杂的工具世界中找到最有效的那个。而如果核桃没被砸开，不是你手力气不大的问题，而是你选错了工具，谁让你非得用门缝夹，不用锤子呢！&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;当然，上面那段属于题外话。言归正传，在OBJC编程中，典型的一种拉模型的实现是delegate。可能很多人会不同意我的观点，说delegate应当是委托模式。好吧，我不否认，delegate的确是委托模式的一种极度典型的实现方式。但是这并不妨碍，他也是一种观察者模式。其实本来各种设计模式之间就不是泾渭分明的。在使用和解释的时候，只要你能够说得通，而且能够解决问题就好了，没必要纠缠他们的名字。而在通知变化这个事情上delegate的确是能够解决问题的。&lt;/p&gt;
+
+&lt;p&gt;我们来看一个使用delegate实现拉模型的观察者的例子：&lt;/p&gt;
+
+&lt;p&gt;####1. 先实现一个delegate方便注册观察者，和回调函数&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;lineno&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@class&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DZClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@protocol&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DZClientChangedDelegate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;NSObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DZClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;didChangedContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;NSString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@end&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@interface&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DZClient&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NSObject&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;6&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@property&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nonatomic&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weak&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DZClientChangedDelegate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delegate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;7&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@property&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nonatomic&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strong&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NSString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;8&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;####2. 注册观察者&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;lineno&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DZAppDelegate&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DZClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DZClient&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delegate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;aa&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;####3. 当主题对象的属性发生改变的时候，发送内容有变化的通知&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;lineno&quot;&gt; 1&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@implementation&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DZClient&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;setKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;NSString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 3&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 4&lt;/span&gt;     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 5&lt;/span&gt;         &lt;span class=&quot;n&quot;&gt;_key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 6&lt;/span&gt;         &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_delegate&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;respondsToSelector&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@selector&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;didChangedContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 7&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_delegate&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;didChangedContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;key&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 8&lt;/span&gt;         &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt; 9&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;####4. 观察者收到主题对象有变化的通知后，主动去拉取变化的内容。&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;lineno&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DZAppDelegate&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DZClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;didChangedContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;NSString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;4&lt;/span&gt;     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;  &lt;span class=&quot;ss&quot;&gt;isEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;key&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;5&lt;/span&gt;         &lt;span class=&quot;no&quot;&gt;NSLog&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;get changed key %@&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;6&lt;/span&gt;     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;lineno&quot;&gt;7&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;##广义观察者模式&lt;/p&gt;
+
+&lt;p&gt;在上面介绍了，观察者被动的接受主题改变的经典意义上的观察者模式之后，我们再来看一下广义观察者模式。当然上面所讲的经典观察者模式，也是一种一种传递数据的方式。广义观察者涵盖了经典观察者模式。&lt;/p&gt;
+
+&lt;p&gt;往往我们会有需要在“观察者”和“主题对象”之间传递变化的数据。而这种情况下，主题对象可能不会像经典观察者模式中的主题对象那样勤劳，在发生改变的时候不停的广播。在广义观察者模式中，主题对象可能是懒惰的，而是由观察者通过不停的查询主题对象的状态，来获知改变的内容。&lt;/p&gt;
+
+&lt;p&gt;我们熟悉的服务器CS架构，始终比较典型的冠以观察者模式，服务器是伺服的，等待着客户端的访问，客户端通过访问服务器来获取最新的内容，而不是服务器主动的推送。&lt;/p&gt;
+
+&lt;p&gt;之所以，要提出广义观察者模式这样一个概念。是为了探讨一下观察者模式的本质。方便我们能够更深刻的理解观察者模式，并且合理的使用它。而且我们平时更多的将注意力放在了通知变化上面，而观察者根本的目的是在于，在观察者和主题对象之间，传递变化的数据。这些数据可能是变化这个事件本身，也可能是变化的内容，甚至可能是一些其他的内容。&lt;/p&gt;
+
+&lt;p&gt;从变化数据传递的角度来思考的话，能够实现这个的模式和策略实在是数不胜数，比如传统的网络CS模型，比如KVC等等。在这里就先不详细展开讨论了。&lt;/p&gt;
+</description>
+        <pubDate>Wed, 11 Nov 2015 12:20:12 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/11/11/shejimoshizhiguanchazhemoshi.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/shejimoshizhiguanchazhemoshi.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>一个程序员的读书笔记：程序设计的反思</title>
+        <description>&lt;p&gt;刚开始编程的时候是在高中，那个时候计算机课上老师教的是pascal。一种典型的面相过程的语言。那个时候懵懵懂懂的认为：程序还是一个蛮神奇的东西，敲几个英文字符进去，就能够有反馈。即使这个反馈只是非常简单的输出了一个“Hello World!”。&lt;/p&gt;
+
+&lt;p&gt;而大学开始比较系统的学习计算机这个东西。但是现在回想起来，貌似没有系统的学过程序设计这个东西啊。即使上了很多叫做《XXX程序设计》的课程之后，对于程序设计这个东西还是有种雾里看花的感觉。而且学的都是像汇编了，C了这样的一些比较底层的语言。主要是语法吧，设计层面的东西真的很少。造成很长一段时间内，我对程序设计的认知停留在高中pascal的水平，程序设计就是你输入个东西，然后设计一系列串行的逻辑，然后等着输出。&lt;/p&gt;
+
+&lt;p&gt;后来上了一个叫做《C++面向对象设计》的课，在上课之前以为这是一个高大上的课程，结果到最后老师把c++讲成了一个好用的c，比c优秀的地方主要就是在加了一些支持面向对象的语法。现在回想一下，那些叫做《XXX程序设计》的课程，基本上都是一些语言课程，貌似和程序“设计”这个东西有点不着边际。而也未能让我，对于“面向对象”或者“面相过程”构建起基本的概念。&lt;/p&gt;
+
+&lt;p&gt;写程序的时候，更多还是停留在pascal那个层次中。串行的逻辑。那个时候的梦想就是能够读完knuth四卷本的《The Art of program》还有他为这本书写的辅导书《基本数学》。因为大家在程序=数据结构+算法的世界观中，这几本书如同圣经。最后花了大概四五年吧，只读了第一卷的300多页。好吧，貌似我不是一个很虔诚的信徒。&lt;/p&gt;
+
+&lt;p&gt;有幸的是，大二开始跟着一个老师给他们当码农，敲代码。就这样稀里糊涂，断断续续的以一个码农的角色在他们的项目中敲敲打打。那时作为一个新手，得到最多的就是“埋汰”。他们看着你写的c或者c++代码，说这个太不优雅了。当时，我就想：靠，就是一串代码，又不是什么画，还能用优雅来形容啊。之后，他们开始说一些设计模式了之类如同天书的东西。大三下班学期的时候，有个哥们在搞magic linux的安装程序的重构。我就听着他天天在和我白活写第一版安装程序的是如何如何牛逼哄哄的。模块划分的多么多么清晰，模块间通信竟然都是用的xml。设计的可扩展性多么多么好，模块间高耦合地内聚了。。。。当时就觉得，靠，真的很牛逼啊。用现在的一个词就是：不觉明历。不过当然，得向牛逼的人学习。于是买了本c++版的《设计模式》，就是最经典的那本。记得那个时候，读起来，略觉生涩。很多概念都是囫囵吞枣的咽下去了。在以后的编程中，也能偶尔用用什么观察者了，单例了之类的模式。偶尔，能够针对一些问题提出一些看似非常符合设计模式的“设计”。&lt;/p&gt;
+
+&lt;p&gt;在接触到设计模式并能够稍微懂点的时间内，以为面向对象这个东西的主要内容就是“设计模式”了吧。你看用了设计模式之后，腿也不酸了，要也不疼了，一口气能上十层楼了。写代码也开始有点那种玄乎的“优雅”的感觉了。切以为自己在码农这个职业上已经算是入门了。直到有一天看了一本叫做《敏捷开发》的书，才猛然间惊醒。他妈的，在设计模式之上还有六大原则：单一职责、里氏替换、开闭原则、迪米特法则、接口隔离原则、依赖倒置原则。原来设计模式被设计出来的时候也是按照一定的指导原则的，那就是六大原则。好吧，现在我的面向对象程序设计的思想库中又多了一批非常不错的概念：六大原则。而且惊喜的发现，随着对这六个原则尤其是单一职责原则的深入理解。自己开始，能够慢慢跳出原先那种刻意去使用设计模式的牢笼。开始去关注程序设计本身，或者说具体情况相关的东西。而不是为了设计去设计。这个时候，才开始慢慢的体会到其实程序设计这个东西真的并不是简单的逻辑罗列，而是思想的结晶。是必须经过深思熟虑之后，才能完成的事情。不再一听到别人高谈阔论高内聚低耦合，就不觉明历，开始尝试着去思考他们所谓的高内聚低耦合到底是个什么东西，用这个标准来评判一个面相对象的设计是否合适。这个面相过程的遗留品在面向对象的设计范畴内到底能够发挥多大的作用。渐渐的发现，其实高内聚低耦合和单一职责与迪米特法则是那么的貌离神合。讲的都是我们一段代码的职责一定要纯粹，而且越纯粹越好。不要染指其他代码的职责。登陆的代码就负责登陆，不需要管界面上的事情。界面上的代码就负责展示内容就好，不要负责业务逻辑。当能够清晰的指出系统中每个模块，每个类，甚至是每个函数那“单纯”的职责的时候，那么整个系统应该说是优雅的了吧。&lt;/p&gt;
+
+&lt;p&gt;而这个时候，进行分析与设计的时候总是有种捉襟见肘的感觉，一个类的设计，甚至一个方法的定义与实现没有什么规矩可言。有些时候从上面说的六大原则和设计模式入手，大概构想出了软件的模样。但是到了一些编码细节上的时候，总是有种力不从心的感觉。简而言之，就是看手气写代码。最终是否能够真实的还原自己的设计，完全是个靠经验吃饭的事情。而比较悲剧的是，作为一个编程经验没有十年二十年的人来说，这似乎有点不太靠谱。作为一个数学系的学生，那种定理情节油然而生。难道就没有类似与定理一样的东西能够帮助我有效的还原设计，定义一个类，定义一个方法。于是又开始了狂看书的路程。&lt;/p&gt;
+
+&lt;p&gt;c++之父Bjarne Stroustrup的《The Design and Evolution Of C++》中一句话给了我方向：c++语言在众多语言的角逐中能够胜出，本质上是一种哲学思想的胜利。乍一看可能认为是面向对象在实践中战胜了面相过程开始主导软件开发语言。但是，当去仔细品味的时候，发现这种哲学思想是一种实用主义的思想。他以目标为导向，以最终效果为评判标准。中间所做的一切努力，都是为了达到最后的目标。就像面向对象诞生的时候，正是软件规模不断扩大，软件复杂性已经超出了人类可控制的范围。人们急需要一种能够合理的控制整个软件复杂性的方法，于是就有了面向对象。而复杂性控制这个概念是来自于软件工程的东西。顿时你就觉得脑海中的很多概念开始高度重合面相对象、软件工程、复杂性控制、面相过程。。。。。。。定理没找到，反倒是炖了一锅佛跳墙。七荤八素里面什么都有。&lt;/p&gt;
+
+&lt;p&gt;偶然的机会在WIKI上看到了一个词——工具理性。才有点开始懵懵懂懂的觉得看到了一点曙光。原来一个Code Monkey废了半天劲塞进脑瓜里的所有东西，都是工具而已。编程语言是工具；面向对象设计是工具；敏捷工程是工具。。。。我们只是合适的使用这些工具来完成目标而已。恍然大悟，其实根本就没必要纠结于在编码的时候用的是面向对象还是什么，没有必要纠结用没用设计模式，没有必要纠结开发过程到底敏捷不敏捷。。。只要能够实现最终的目标就好了。只是实现目标的这个过程还是依旧曲折。如何选择工具，并且如何有效的使用工具依旧是一个很重要的问题。但是已经有了一个大概的能够指引以后学习方向的思想——了解目标、了解工具，懂得如何合理而且有效的使用工具，并且Keep it simple。发现在程序设计这个事情上，真正难的不是你写出了些什么东西，而是你没有写什么东西。难的不是你进行复杂的设计与编码，而是尽可能少的设计和尽可能少的编码。这有点像国画中的留白，那些真正简单的东西才是最复杂的东西。能够把设计最到最简才是真正的功力。一个Redis才几千行代码，sqlite也不过3w行左右的代码。这两个东西做的事情不可为不复杂，但是设计的人之功力可见一斑。&lt;/p&gt;
+
+&lt;p&gt;最后用一幅画与大家共勉：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1exwwxcouh0j20c80ut0vd.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 11 Nov 2015 12:16:19 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/11/11/fansi.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/fansi.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>如何合理的制造BUG</title>
+        <description>&lt;p&gt;什么是BUG，简单点说就是，程序没有按照我们预想的方式运行。我比较喜欢把BUG分成两类：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Crash掉的&lt;/li&gt;
+  &lt;li&gt;没有Crash掉的&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;可能在平时的编程实践中，往往简单的把BUG与Crash基本等价了。而且我们很多精力也都放在解决Crash的Bug上面。而对于没有Crash掉的BUG，似乎没有过多的关注。但是，实际情况上那些让人痛彻心扉的“天坑”往往是那些没有Crash掉的BUG造成的，比如前一段时间OpenSSL心脏大出血。为什么这么说呢？且听我慢慢道来。&lt;/p&gt;
+
+&lt;p&gt;##如何合理的制造BUG&lt;/p&gt;
+
+&lt;p&gt;Crash掉的BUG，用程序的死证明了你的程序存在问题，你必须抓紧时间来解决程序的问题了。而没有Crash掉的Bug，像是一个善于撒谎的人，伪装成可以正常运转的样子，让整个程序运行在一个不稳定的状态下。虽然外表看起来好好地（没有crash），但是里子早就烂透了，一旦报露出问题往往是致命的，比如OpenSSL的心脏大出血。这就是前人总结的“死程序不说谎”。&lt;/p&gt;
+
+&lt;p&gt;Crash不可怕，可怕的是程序没有Crash而是运行在一个不稳定的状态下，如果程序还操作了数据，那带来的危害将是灾难性的。&lt;/p&gt;
+
+&lt;p&gt;所以放心的让程序Crash掉吧，因为当他Crash掉的时候，你还有机会去修正自己的错误。如果没有Crash，那就有可能要给整个程序和产品收尸了。因此合理制造“BUG”的原则之一，也是最大的原则就是：尽量制造Crash的BUG，减少没有Crash的BUG，如果有可能将没有Crash掉的Bug转换成Crash的BUG以方便查找。&lt;/p&gt;
+
+&lt;p&gt;###NSAssert&lt;/p&gt;
+
+&lt;p&gt;这个应该都比较熟悉，他的名字叫做“断言”。断言（assertion）是指在开发期间使用的、让程序在运行时进行自检的代码（通常是一个子程序或宏）。断言为真，则表明程序运行正常，而断言为假，则意味着它已经在代码中发现了意料之外的错误。断言对于大型的复杂程序或可靠性要求极高的程序来说尤其有用。而当断言为假的时候，几乎所有的系统的处理策略都是，让程序死掉，即Crash掉。方便你知道，程序出现了问题。&lt;/p&gt;
+
+&lt;p&gt;断言其实是“防御式编程”的常用的手段。防御式编程的主要思想是：子程序应该不因传入错误数据而被破坏，哪怕是由其他子程序产生的错误数据。这种思想是将可能出现的错误造成的影响控制在有限的范围内。断言能够有效的保证数据的正确性，防止因为脏数据让整个程序运行在不稳定的状态下面。&lt;/p&gt;
+
+&lt;p&gt;关于如何使用断言，还是参考《代码大全2》中“防御式编程”一章。这里简单的做了一点摘录，概括其大意：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用错误处理代码来处理预期会发生的状况，用断言来处理绝不应该发生的状况。&lt;/li&gt;
+  &lt;li&gt;避免把需要执行的代码放到断言中&lt;/li&gt;
+  &lt;li&gt;用断言来注解并验证前条件和后条件&lt;/li&gt;
+  &lt;li&gt;对于高健壮性的代码，应该先使用断言再处理错误&lt;/li&gt;
+  &lt;li&gt;对来源于内部系统的可靠的数据使用断言，而不要对外部不可靠的数据使用断言，对于外部不可靠数据，应该使用错误处理代码。&lt;br /&gt;
+而在IOS编程中，我们可以使用NSAssert来处理断言。比如：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)printMyName:(NSString *)myName  
+{  
+    NSAssert(myName == nil, @&quot;名字不能为空！&quot;);  
+    NSLog(@&quot;My name is %@.&quot;,myName);  
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们验证myName的安全性，需要保证其不能为空。NSAssert会检查其内部的表达式的值，如果为假则继续执行程序，如果不为假让程序Crash掉。&lt;/p&gt;
+
+&lt;p&gt;每一个线程都有它自己的断言捕获器（一个NSAssertionHanlder的实例），当断言发生时，捕获器会打印断言信息和当前的类名、方法名等信息。然后抛出一个NSInternalInconsistencyException异常让整个程序Crash掉。并且在当前线程的断言捕获器中执行handleFailureInMethod:object:file:lineNumber:description:以上述信息为输出。&lt;/p&gt;
+
+&lt;p&gt;当时，当程序发布的时候，不能把断言带入安装包，你不想让程序在用户机器上Crash掉吧。打开和关闭断言可以在项目设置中设置assert&lt;br /&gt;
+,在release版本中设置了NS_BLOCK_ASSERTIONS之后断言失效。&lt;/p&gt;
+
+&lt;p&gt;###尽可能不要用Try-Catch&lt;/p&gt;
+
+&lt;p&gt;并不是说Try-Catch这样的异常处理机制不好。而是，很多人在编程中，错误了使用了Try-Catch，把异常处理机制用在了核心逻辑中。把其当成了一个变种的GOTO使用。把大量的逻辑写在了Catch中。弱弱的说一句，这种情况干嘛不用ifelse呢。&lt;/p&gt;
+
+&lt;p&gt;而实际情况是，异常处理只是用户处理软件中出现异常的情况。常用的情况是子程序抛出错误，让上层调用者知道，子程序发生了错误，并让调用者使用合适的策略来处理异常。一般情况下，对于异常的处理策略就是Crash，让程序死掉，并且打印出堆栈信息。&lt;/p&gt;
+
+&lt;p&gt;而在IOS编程中，抛出错误的方式，往往采用更直接的方式。如果上层需要知道错误信息，一半会传入一个NSError的指针的指针：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void) doSomething:(NSError* __autoreleasing*)error
+{
+    ...
+    if(error != NULL)
+    {
+        *error = [NSError new];
+    }
+    ....
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而能够留给异常处理的场景就极少了，所以在IOS编程中尽量不要使用Try-Catch。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;（PS：见到过使用Try-Catch来防止程序Crash的设计，如果不是迫不得已，尽量不要使用这种策略）&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;###尽量将没有Crash掉的BUG，让它Crash掉&lt;/p&gt;
+
+&lt;p&gt;上面主要讲的是怎么知道Crash的“BUG”。对于合理的制造“BUG”还有一条就是尽量把没有Crash掉的“BUG”，让他Crash掉。这个没有比较靠谱的方法，靠暴力吧。比如写一些数组越界在里面之类的。比如那些难调的多线程BUG，想办法让他Crash掉吧，crash掉查找起来就比较方便了。&lt;/p&gt;
+
+&lt;p&gt;总之，就是抱着让程序“死掉”的心态去编程，向死而生。&lt;/p&gt;
+
+&lt;p&gt;##如何查找BUG&lt;/p&gt;
+
+&lt;p&gt;其实查找BUG这个说法，有点不太靠谱。因为BUG从来都不需要你去找，他就在那里，只增不减。都是BUG来找你，你很少主动去找BUG。程序死了，然后我们就得加班加点。其实我们找的是发生BUG的原因。找到引发BUG的罪魁祸首。说的比较理论化一点就是：在一堆可能的原因中，找到那些与BUG有因果性的原因（注意，是因果性，不是相关性）。&lt;/p&gt;
+
+&lt;p&gt;于是解决BUG一般可以分两步进行：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;合理性假设，找到可能性最高的一系列原因。&lt;/li&gt;
+  &lt;li&gt;对上面找到的原因与BUG之间的因果性进行分析。必须确定，这个BUG是由某个原因引起的，而且只由改原因引起。即确定特定原因是BUG的充分必要条件。&lt;br /&gt;
+找到原因之后，剩下的事情就比较简单了，改代码解决掉。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;###合理性假设&lt;/p&gt;
+
+&lt;p&gt;其实，BUG发生的原因可以分成两类：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;我们自己程序的问题。&lt;/li&gt;
+  &lt;li&gt;系统环境，包括OS、库、框架等的问题。&lt;br /&gt;
+前者找到了，我们可以改。后者就比较无能为力了，要么发发牢骚，要么email开发商，最后能不能被改掉就不得而知了。比如IOS制作framework的时候，category会报方法无法找的异常，到现在都没有解决掉。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;当然，一般情况下导致程序出问题的原因的99.999999%都是我们自己造成的。所以合理性假设第一条：&lt;/p&gt;
+
+&lt;p&gt;###首先怀疑自己和自己的程序，其次怀疑一切&lt;/p&gt;
+
+&lt;p&gt;而程序的问题，其实就是开发者自己的问题。毕竟BUG是程序员的亲子亲孙，我们一手创造了BUG。而之所以能够创造BUG，开发者的原因大致有三：&lt;/p&gt;
+
+&lt;p&gt;####知识储备不足，比如IOS常见的空指针问题，发现很多时候就是因为对于IOS的内存管理模型不熟悉导致。&lt;br /&gt;
+####错心大意，比较典型的就是数组越界错误。还有在类型转化的时候没注意。比如下面这个程序：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//array.count = 9
+for (int i = 100; array.count - (unsigned int)i &amp;amp;gt; 10 ; )
+{
+    i++
+    .....
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;按道理讲，这应该是个可以正常执行的程序，但是你运行的话是个死循环。可能死循环的问题，你改了很多天也没解决。直到同事和你说array.count返回的是NSUInterge，当与无符号整形相间的时候，如果出现负值是回越界的啊。你才恍然大悟：靠，类型的问题。&lt;/p&gt;
+
+&lt;p&gt;####逻辑错误&lt;br /&gt;
+这个就是思维方式的问题，但是也是问题最严重的。一旦发生，很难查找。人总是最难怀疑自己的思维方式。比如死循环的问题，最严重的是函数间的循环引用，还有多线程的问题。&lt;br /&gt;
+但是庆幸的是绝大多数的BUG都是由于知识储备不足和粗心大意造成的。所以合理性假设的第二条：&lt;/p&gt;
+
+&lt;p&gt;首先怀疑基础性的原因，比如自己知识储备和粗心大意等人为因素，通过这些原因查找具体的问题。之后再去怀疑难处理的逻辑错误。&lt;br /&gt;
+有了上面的合理性怀疑的一些基本策略，也不能缺少一些基本的素材啊。就是常见的Crash原因，最后我们还是得落地到这些具体的原因或者代码上，却找与BUG的因果性联系。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;访问了一个已经被释放的对象，比如&lt;/p&gt;
+
+    &lt;p&gt;&lt;code&gt;
+ NSObject * aObj = [[NSObject alloc] init];
+ [aObj release];
+ NSLog(@&quot;%@&quot;, aObj);
+&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;访问数组类对象越界或插入了空对象&lt;/li&gt;
+  &lt;li&gt;访问了不存在的方法&lt;/li&gt;
+  &lt;li&gt;字节对齐,(类型转换错误)&lt;/li&gt;
+  &lt;li&gt;堆栈溢出&lt;/li&gt;
+  &lt;li&gt;多线程并发操作&lt;/li&gt;
+  &lt;li&gt;Repeating NSTimer&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;合理性假设第三条：尽可能的查找就有可能性的具体原因。&lt;/p&gt;
+
+&lt;p&gt;##因果性分析&lt;/p&gt;
+
+&lt;p&gt;首先必须先说明的是，我们要找的是“因果性”而不是“相关性“。这是两个极度被混淆的概念。而且，很多时候我们错误的把相关性当成了因果性。比如，在解决一个多线程问题的时候，发现了一个数据混乱的问题，但是百思不得其解。终于，有一天你意外的给某个对象加了个锁，数据就正常了。然后你就说这个问题是这个对象没有枷锁导致的。&lt;/p&gt;
+
+&lt;p&gt;但是，根据上述你的分析，只能够得出该对象枷锁与否与数据异常有关系，而不能得出就是数据异常的原因。因为你没能证明对象加锁是数据异常的充分必要条件，而只是使用了一个单因变量实验，变量是枷锁状态，取值x=[0，1],x为整形。然后实验结果是枷锁与否与数据异常呈现正相关性。&lt;/p&gt;
+
+&lt;p&gt;相关性：在概率论和统计学中，相关（Correlation，或称相关系数或关联系数），显示两个随机变量之间线性关系的强度和方向。在统计学中，相关的意义是用来衡量两个变量相对于其相互独立的距离。在这个广义的定义下，有许多根据数据特点而定义的用来衡量数据相关的系数。&lt;/p&gt;
+
+&lt;p&gt;因果性：因果是一个事件（即“因”）和第二个事件（即“果”）之间的关系，其中后一事件被认为是前一事件的结果。&lt;br /&gt;
+错误的把相关性等价于因果性。不止是程序员，几乎所有人常见的逻辑错误。为了加深认识，可以看一下这篇小科普：相关性 ≠ 因果性。&lt;/p&gt;
+
+&lt;p&gt;因果性分析的首要问题就是，别被自己的逻辑错误欺骗，正确的分辨出相关性和因果性之间的区别。不要把相关性等价于因果性。&lt;/p&gt;
+
+&lt;p&gt;之后便是因果性分析的内容了，之前一直反复说，因果性分析的目的就是确定特定原因是BUG发生的充分必要条件。那么确定这个事情，就需要两步：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;充分性证明&lt;/li&gt;
+  &lt;li&gt;必要性证明&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;关于充分性证明，这个基本上就是正常的逻辑推理。基本思路就是，能够还原出BUG出现的路径，从原因到BUG发生处的代码，走了怎样的函数调用和控制逻辑。确定了这个基本上就能够证明充分性。一般情况下根据Crash的堆栈信息能够，非常直接的证明充分性。&lt;/p&gt;
+
+&lt;p&gt;关于必要性证明，这个就比较困难了。充分性和必要性的定义如下：当命题“若A则B”为真时，A称为B的充分条件，B称为A的必要条件。那么必要性就是，BUG能够作为导致BUG的原因的原因。这个说法比较拗口。换种说法，就是你得确认这个BUG能够解释原因，这个BUG就是而且只是这个原因造成的。&lt;/p&gt;
+
+&lt;p&gt;只有证明了充分必要性，才能算是真正找到了BUG的原因。&lt;/p&gt;
+</description>
+        <pubDate>Wed, 11 Nov 2015 11:59:26 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/11/11/make-bugs-correct.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/make-bugs-correct.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>有序构建之概念篇</title>
@@ -42,7 +577,7 @@
 
 &lt;p&gt;从这个过程中我们发现了什么：&lt;strong&gt;我们吃过盘是有预谋的，而且是有预谋，有计划！&lt;/strong&gt;。目标是尽可能的堆更多的水果，计划是打地基、筑结构，多填充。这是典型的有序构建的过程。相比较一般入门级的人来，我们能够明显的看出，入门级的选手果盘堆得杂乱无章，完全没有秩序。他们要么是不在意能装多少水果，要么就是无计划，随意堆砌。&lt;/p&gt;
 
-&lt;p&gt;而所谓的有序构建就是：
+&lt;p&gt;而所谓的有序构建就是：&lt;br /&gt;
 在明确构建目标的前提下，按照一定的规则来构建。&lt;/p&gt;
 
 &lt;p&gt;这个和架构的定义多少有些类似，只是架构的观念太大。一提起架构，脑子里面往往会冒出一些非常宏大的概念，比如三层架构，CS架构等等。而这里我们需要一个小的很多的概念，来指导日常的编码。一个小需求，我们可能不需要去设计那么宏大的架构。但是我们必须保持我们程序的构建过程有序。我们要明确我们的需求，这个需求可能是产品侧的，也可能是性能的，也可能是来自第三方使用者的。之后我们需要按照一定的规则或者秩序去构建我们的程序。&lt;/p&gt;
@@ -55,14 +590,14 @@
 
 &lt;p&gt;下面是开脑洞的时间，之说IOS开发相关的东西。因为楼主目前是搞这个的。说一些在IOS上我们可能会用到的一些构建的规则。一般的东西比如：面向对象、敏捷开发、设计模式等等这些耳熟能像的，大家比我懂得多，我就不班门弄斧了。我们来看一些，没有那么高大上，但是非常实用的一些构建的规则。只是为了脑洞大开。&lt;/p&gt;
 
-&lt;h1 id=&quot;section-1&quot;&gt;语言特性&lt;/h1&gt;
-&lt;p&gt;##动态语言
+&lt;p&gt;#语言特性&lt;br /&gt;
+##动态语言&lt;br /&gt;
 ###切面范式&lt;/p&gt;
 
-&lt;p&gt;什么是切面范式？
+&lt;p&gt;什么是切面范式？&lt;br /&gt;
 如果一个程序是一个管道系统，AOP就是在管道上钻一些孔，在每个孔中注入新的代码流。因此AOP实现的关键是将advice的代码嵌入到主体程序之中，术语称编织（weaving）。这是很自然的——将问题分解之后再合成，问题才得以还原。编织可分两种：一种是静态编织，通过修改源码或字节码（bytecode）在编译期（compile-time）、后编译期（post-compile）或加载期（load-time）嵌入代码——请注意，这里涉及到刚才提到的元编程和产生式编程；另一种是动态编织，通过代理（proxy）等技术在运行期（run-time）实现嵌入。具体的工具包括一些扩展性语言如AspectJ、AspectC++等和一些框架如AspectWerkz、Spring、Jboss AOP等。&lt;/p&gt;
 
-&lt;p&gt;在Java中切面范式可能比较常见，但是在OC中貌似比较少用。而往往，很多时候这种东西能够解决一些很大的问题。我们现在有这样的一个业务需求，就是用于提醒的各种样式的小红点。他可能出现在各式各样的地方上。比如“动态”tab里面的cell上面，在抽屉里面的cell上面，钱包里面的View上面……而这些cell或者view所属的类，繁复而众多。比如：QQTableViewCell，UITableViewCell,UIButton…..而我们的任务是给这些类的LayoutSubview方法中加上红点的布局信息，并在其他相关的地方加上红点相关的业务逻辑。
+&lt;p&gt;在Java中切面范式可能比较常见，但是在OC中貌似比较少用。而往往，很多时候这种东西能够解决一些很大的问题。我们现在有这样的一个业务需求，就是用于提醒的各种样式的小红点。他可能出现在各式各样的地方上。比如“动态”tab里面的cell上面，在抽屉里面的cell上面，钱包里面的View上面……而这些cell或者view所属的类，繁复而众多。比如：QQTableViewCell，UITableViewCell,UIButton…..而我们的任务是给这些类的LayoutSubview方法中加上红点的布局信息，并在其他相关的地方加上红点相关的业务逻辑。&lt;br /&gt;
 无疑这里按照面向对象的思路去分析，最常见的一个策略就是让这些类都继承自同一个父类，然后在父类中添加相关的业务逻辑。但是这个方案的问题是，改动量太大，需要所有让所有使用的红点的地方都进行修改实现类继承。这个改动量不是一朝一夕能改完的，而且后续的需求也得注意类继承时候的一些问题。同时，已经有很多业务按照最笨的每个地方自己布局的方式接入到了红点系统中，让他们重新来过也是件很痛苦的事情。&lt;/p&gt;
 
 &lt;p&gt;那么问题来了：有没有一种方式可以做到：&lt;/p&gt;
@@ -81,13 +616,12 @@
 
 &lt;p&gt;可能是以前接触到的编程思想大都基于OOP，导致在思考问题的时候，总是喜欢从OO出发。而OO并非万能的神药，某些时候换个角度，或者换种思路来思考问题，或许有不一定的解题之道。而切面范式的构建秩序与OOP明显不同，一种是从面到点，一种是从点到面。切面范式给我提供了一种能够从软件的某个功能横切面进行构建的规则。而这种规则在某些时候恰恰能够弥补OO的不足之处。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;元编程&lt;/h3&gt;
+&lt;p&gt;###元编程&lt;/p&gt;
 
 &lt;p&gt;元编程是一个很有意思的概念，简单说就是用程序来写程序。颇有科幻电影里面，机器有了智能能够自我编程的意味。然而，其实不然：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-元编程是指某类计算机程序的编写，这类计算机程序编写或者操纵其它程序（或者自身）作为它们的数据，或者在运行时完成部分本应在编译时完成的工作。多数情况下，与手工编写全部代码相比，程序员可以获得更高的工作效率, 或者给与程序更大的灵活度去处理新的情形而无需重新编译。
-&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;元编程是指某类计算机程序的编写，这类计算机程序编写或者操纵其它程序（或者自身）作为它们的数据，或者在运行时完成部分本应在编译时完成的工作。多数情况下，与手工编写全部代码相比，程序员可以获得更高的工作效率, 或者给与程序更大的灵活度去处理新的情形而无需重新编译。
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;元编程在很多动态语言中非常常见，比如Ruby中最出名的rails框架就大量使用了元编程。不过元编程在里面有了另外的一个名字——DSL，领域特定语言。而如C++之类的静态编译性的语言借助于模板也可实现元编程&lt;a href=&quot;http://book.douban.com/subject/4136223/&quot;&gt;C++模板元编程&lt;/a&gt;。那么对于OC或者IOS呢，元编程是否有些应用？&lt;/p&gt;
 
@@ -101,18 +635,18 @@
 
 &lt;p&gt;元编程是另外的一种构建规则，我们提供基础的构建规则之后，让程序按照既定的规则来构建另外的程序。&lt;/p&gt;
 
-&lt;h2 id=&quot;block&quot;&gt;Block闭包&lt;/h2&gt;
+&lt;p&gt;##Block闭包&lt;/p&gt;
 
-&lt;p&gt;什么是block？
+&lt;p&gt;什么是block？&lt;br /&gt;
 Block是C语言的扩展功能，可以用一句话来表示Blocks的带来的扩充功能：带有自动变量的匿名函数。有些地方称之为lambda表达式或者闭包。IOS4.0之后引入了闭包的功能。而上文提到的WAX框架的作者当时写WAX的初衷就是为了给OC引入这个特性。而我们在另外一些现代语言中，频频见到闭包的影子，在ruby中，在swift中，在js中……那么闭包为什么会这么有吸引力呢？因为闭包是函数式编程的基础要素之一。(BTW:关于apple如何实现的闭包，可以参考&lt;a href=&quot;http://item.jd.com/11258970.html?utm_source=www.googleadservices.com&amp;amp;utm_medium=tuiguang&amp;amp;utm_campaign=t_50_s_sda1&amp;amp;utm_term=802e7d6365a04596b8b70cbf7ad6a221&quot;&gt;《Objective-C高级编程》&lt;/a&gt;第二章，blocks)。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;基本用法&lt;/h3&gt;
-&lt;p&gt;###函数式编程&lt;/p&gt;
+&lt;p&gt;###基本用法&lt;br /&gt;
+###函数式编程&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;函数式编程（英语：Functional programming）或者函数程序设计，又称泛函编程，是一种编程范型，它将电脑运算视为数学上的函数计算，并且避免使用程序状态以及易变对象。函数编程语言最重要的基础是λ演算（lambda calculus）。而且λ演算的函数可以接受函数当作输入（引数）和输出（传出值）。&lt;/p&gt;
 
-  &lt;p&gt;和命令式编程相比，函数式编程强调程序的执行结果比执行过程更重要，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。
+  &lt;p&gt;和命令式编程相比，函数式编程强调程序的执行结果比执行过程更重要，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。&lt;br /&gt;
 ————————出自&lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B8%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80&quot;&gt;WIKI&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -124,46 +658,45 @@ Block是C语言的扩展功能，可以用一句话来表示Blocks的带来的�
 
 &lt;p&gt;横向布局一些图片和文字，而且文字的颜色不同，点击之后还会有效果。你可能会说使用NSAttributeString，但是考虑到兼容性的问题，这个方案临时不考虑。我们就用最笨的方法展示：用UIImageView展示图片，用UILabel展示灰色的文字，用UIButton展示可点击的文字。那么问题来了，在给这些元素布局的时候，我们应该怎样code？一个一个的算frame然后赋值吗，那么代码将会丑陋不堪。这个时候何不尝试一下函数式编程。&lt;/p&gt;
 
-&lt;p&gt;```
- CGFloat offsetY = IS_IPHONE5 ? 80 : 50;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;CGFloat textOffsetY = CGRectGetMaxY(_urlImageView.frame) + offsetY;
-
-typedef UILabel*  (^GetLabel)(UIView* aView);
-void (^SetFameWithLabel)(CGFloat x, UIView* aView, GetLabel block) = ^(CGFloat x, UIView* aView, GetLabel block) {
+&lt;pre&gt;&lt;code&gt; CGFloat offsetY = IS_IPHONE5 ? 80 : 50;
     
-    UILabel* label = block(aView);
+    CGFloat textOffsetY = CGRectGetMaxY(_urlImageView.frame) + offsetY;
     
-    NSString* str = label.text;
-    CGSize size = [str sizeWithFont:label.font];
-    aView.frame = CGRectMake(x,
-                             textOffsetY,
-                             size.width, CGRectGetHeight(_checkButton.frame));
+    typedef UILabel*  (^GetLabel)(UIView* aView);
+    void (^SetFameWithLabel)(CGFloat x, UIView* aView, GetLabel block) = ^(CGFloat x, UIView* aView, GetLabel block) {
+        
+        UILabel* label = block(aView);
+        
+        NSString* str = label.text;
+        CGSize size = [str sizeWithFont:label.font];
+        aView.frame = CGRectMake(x,
+                                 textOffsetY,
+                                 size.width, CGRectGetHeight(_checkButton.frame));
+        
+    };
     
-};
-
-GetLabel lableBlock =  ^(UIView* aview) {
-    return (UILabel*)aview;
-};
-
-
-GetLabel buttonBlock  =  ^(UIView* aview){
-    UIButton* button = (UIButton*) aview;
-    return button.titleLabel;
-};
-
-_checkButton.frame = CGRectMake(15, textOffsetY, 30, 30);
-SetFameWithLabel(CGRectGetMaxX(_checkButton.frame), _headLabel, lableBlock );
-SetFameWithLabel(CGRectGetMaxX(_headLabel.frame), _serviceContractButton, buttonBlock);
-SetFameWithLabel(CGRectGetMaxX(_serviceContractButton.frame), _tailLabel, lableBlock);
-SetFameWithLabel(CGRectGetMaxX(_tailLabel.frame), _userageButton, buttonBlock); ```
+    GetLabel lableBlock =  ^(UIView* aview) {
+        return (UILabel*)aview;
+    };
+    
+    
+    GetLabel buttonBlock  =  ^(UIView* aview){
+        UIButton* button = (UIButton*) aview;
+        return button.titleLabel;
+    };
+    
+    _checkButton.frame = CGRectMake(15, textOffsetY, 30, 30);
+    SetFameWithLabel(CGRectGetMaxX(_checkButton.frame), _headLabel, lableBlock );
+    SetFameWithLabel(CGRectGetMaxX(_headLabel.frame), _serviceContractButton, buttonBlock);
+    SetFameWithLabel(CGRectGetMaxX(_serviceContractButton.frame), _tailLabel, lableBlock);
+    SetFameWithLabel(CGRectGetMaxX(_tailLabel.frame), _userageButton, buttonBlock);
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;我们构建了几个基础的block，然后用这几个block之间的组合完成了上述的功能。而这正是函数式编程的精髓：利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。而这个思想同样可以应用在我们日常的编程之中——保持代码的简洁，尽量使用简单的规则祖曾退到负责的运算，而不是一上来就构建一个复杂的系统。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-4&quot;&gt;函数响应式编程&lt;/h4&gt;
+&lt;p&gt;####函数响应式编程&lt;/p&gt;
 
-&lt;p&gt;函数响应式编程（RF）是最近一场火爆的一个编程范式。RP提高了代码的抽象层级，所以你可以只关注定义了业务逻辑的那些相互依赖的事件，而非纠缠于大量的实现细节。RP的代码往往会更加简明。
+&lt;p&gt;函数响应式编程（RF）是最近一场火爆的一个编程范式。RP提高了代码的抽象层级，所以你可以只关注定义了业务逻辑的那些相互依赖的事件，而非纠缠于大量的实现细节。RP的代码往往会更加简明。&lt;br /&gt;
 特别是在开发现在这些有着大量与Data events相关的UI events的高互动性Webapps、Mobile apps的时候，RP的优势将更加明显。10年前，网页的交互就只是提交一个很长的表单到后端，而前端只有简单的渲染。Apps就表现得更加的实时了：修改一个表单域就能自动地把修改后的值保存到后端，为一些内容”点赞”时，会实时的反应到其它在线用户那里等等。&lt;/p&gt;
 
 &lt;p&gt;现在的Apps有着大量各种各样的实时Events，以给用户提供一个交互性较高的体验。我们需要工具去应对这个变化，而RP就是一个答案。&lt;/p&gt;
@@ -172,77 +705,72 @@ SetFameWithLabel(CGRectGetMaxX(_tailLabel.frame), _userageButton, buttonBlock); 
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/ReactiveCocoa/ReactiveCocoa&quot;&gt;ReactiveCocoa&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;RF一直都缺少比较好的学习资料，终于一个国外的大神忍无可忍，自己动手写了一个：
-&lt;a href=&quot;https://gist.github.com/staltz/868e7e9bc2a7b8c1f754&quot;&gt;The introduction to Reactive Programming you’ve been missing&lt;/a&gt;
+&lt;p&gt;RF一直都缺少比较好的学习资料，终于一个国外的大神忍无可忍，自己动手写了一个：&lt;br /&gt;
+&lt;a href=&quot;https://gist.github.com/staltz/868e7e9bc2a7b8c1f754&quot;&gt;The introduction to Reactive Programming you’ve been missing&lt;/a&gt;&lt;br /&gt;
 &lt;a href=&quot;https://github.com/benjycui/introrx-chinese-edition&quot;&gt;中文版&lt;/a&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;section-5&quot;&gt;混编&lt;/h2&gt;
+&lt;p&gt;##混编&lt;/p&gt;
 
-&lt;h3 id=&quot;c&quot;&gt;与C混编&lt;/h3&gt;
+&lt;p&gt;###与C混编&lt;/p&gt;
 
-&lt;h4 id=&quot;section-6&quot;&gt;宏&lt;/h4&gt;
+&lt;p&gt;####宏&lt;/p&gt;
 
 &lt;p&gt;使用宏定义来简化输入，提高输入的效率。同时提高输入准确性。&lt;/p&gt;
 
-&lt;h5 id=&quot;property&quot;&gt;案例一 属性定义 @property&lt;/h5&gt;
+&lt;p&gt;#####案例一 属性定义 @property&lt;/p&gt;
 
 &lt;p&gt;我们在定义一个类的属性的时候，&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-@interface TestObject : NSObject
+&lt;pre&gt;&lt;code&gt;@interface TestObject : NSObject
 @property (strong, nonatomic) NSString* title;
 @end
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;最起码要输入5个单词，四个符号和多个空格。写多了就会觉得这里重复输入的地方太多，为什么不想个办法优化一下输入呢。而且有些时候，中间的某个单词比如strong拼错了，还得会过头来继续修改。
+&lt;p&gt;最起码要输入5个单词，四个符号和多个空格。写多了就会觉得这里重复输入的地方太多，为什么不想个办法优化一下输入呢。而且有些时候，中间的某个单词比如strong拼错了，还得会过头来继续修改。&lt;br /&gt;
 优化输入效率，有很多种方式。比如使用sinepts。而且xcode的snip支持也不错。直接拖拽代码块就能够生成snip。&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-\\key is
+&lt;pre&gt;&lt;code&gt;\\key is
 \\@propertystrongnonatomic
 @property (strong, nonatomic) &amp;lt;#type#&amp;gt;* &amp;lt;#name#&amp;gt;
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;这样的确是可以，但是你需要定义大量的snip来适应不同的定义peroperty的情况。那有没有更简单的一点的方法呢。必须有啊，使用宏啊。&lt;/p&gt;
 
-&lt;p&gt;```
-#define DEFINE_PROPERTY(mnmKind, type , name)       @property (nonatomic, mnmKind)  type  name
+&lt;pre&gt;&lt;code&gt;#define DEFINE_PROPERTY(mnmKind, type , name)       @property (nonatomic, mnmKind)  type  name
 #define DEFINE_PROPERTY_ASSIGN(type, name)          DEFINE_PROPERTY(assign, type, name)
-#define DEFINE_PROPERTY_ASSIGN_Double(name) DEFINE_PROPERTY_ASSIGN(double, name)&lt;/p&gt;
+#define DEFINE_PROPERTY_ASSIGN_Double(name) DEFINE_PROPERTY_ASSIGN(double, name)
 
-&lt;h1 id=&quot;define-definepropertystrongtype-name-definepropertystrong-type-name&quot;&gt;define DEFINE_PROPERTY_STRONG(type, name) DEFINE_PROPERTY(strong, type, name)&lt;/h1&gt;
-&lt;p&gt;#define DEFINE_PROPERTY_STRONG_NSString(name) DEFINE_PROPERTY_STRONG(NSString*, name)
-```&lt;/p&gt;
+#define DEFINE_PROPERTY_STRONG(type, name) DEFINE_PROPERTY(strong, type, name)
+#define DEFINE_PROPERTY_STRONG_NSString(name) DEFINE_PROPERTY_STRONG(NSString*, name)
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;具体参见&lt;a href=&quot;https://github.com/yishuiliunian/DZProgrameDefines&quot;&gt;DZProgrameDefines&lt;/a&gt;
+&lt;p&gt;具体参见&lt;a href=&quot;https://github.com/yishuiliunian/DZProgrameDefines&quot;&gt;DZProgrameDefines&lt;/a&gt;&lt;br /&gt;
 我们完全可以通过使用宏定义，来扩展出一些列的定义属性的宏方法，借助于XCode的强大的自动补全来方便我们输入，少敲了非常多的字符。并且还减少了出错的情况，在可读性上，如果宏定义的名字起得好，可读性也不错。&lt;/p&gt;
 
-&lt;p&gt;同时，不得不说的一点是我们借助于这种宏定义的方式，还规范和统一了定义属性的格式，方便维护同一个工程的多个同事修改同一份代码。让他们的代码质量能够保持在一个比较整齐的水平。
+&lt;p&gt;同时，不得不说的一点是我们借助于这种宏定义的方式，还规范和统一了定义属性的格式，方便维护同一个工程的多个同事修改同一份代码。让他们的代码质量能够保持在一个比较整齐的水平。&lt;br /&gt;
 这种&lt;/p&gt;
 
-&lt;h4 id=&quot;section-7&quot;&gt;代码模板&lt;/h4&gt;
+&lt;p&gt;####代码模板&lt;/p&gt;
 
 &lt;p&gt;某些情况下，我们可能会写一些大量的重复代码，而这些代码又很难将其抽离出来做成一个独立的函数（甚至是lambda表达式），而这种时候宏的作用就体现出来了。考虑下述情况：&lt;/p&gt;
 
-&lt;p&gt;```
-NSString* a = infos[@”aKey”];
+&lt;pre&gt;&lt;code&gt;NSString* a = infos[@&quot;aKey&quot;];
 if(!a) {
-        [self postError:@”need aKey”];
-        return;
-}&lt;/p&gt;
-
-&lt;p&gt;NSString* b = infos[@”bKey”];
-if(!b) {
-        [self postError:@”need bKey”];
+        [self postError:@&quot;need aKey&quot;];
         return;
 }
-….
-```&lt;/p&gt;
+
+NSString* b = infos[@&quot;bKey&quot;];
+if(!b) {
+        [self postError:@&quot;need bKey&quot;];
+        return;
+}
+....
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;上述代码中，我们需要从字典infos中取一批参数并且要判断这些参数是否为空，为空的时候报错并返回。其中有大量的代码是重复的。而这种重复又不太适合抽离成函数那么这个时候就可以这样做了：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-#define GetValueWithLocalNameAndKey(name , key) \
+&lt;pre&gt;&lt;code&gt;#define GetValueWithLocalNameAndKey(name , key) \
 \
 NSString* name = [infos getWBValueForKey:key error:&amp;amp;error];\
 if (!error) { [self postPayError:error]; return;}\
@@ -251,26 +779,25 @@ if (!error) { [self postPayError:error]; return;}\
 GetValueWithLocalNameAndKey(a,aKey);
 GetValueWithLocalNameAndKey(b,bKey);
 ...
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;这样做的时候，就将一段代码抽离成了模板。方便了使用和维护。&lt;/p&gt;
 
-&lt;h3 id=&quot;c-1&quot;&gt;与C++混编&lt;/h3&gt;
+&lt;p&gt;###与C++混编&lt;/p&gt;
 
 &lt;p&gt;其实这个比较大的话题，OC中与C++混编使用，往往是因为C++的一些优秀的特性。当然这里有很多，我们也只能撷取一二。在code的时候，往往我们需要考虑我们需要用哪种语言来表达我们对于需求的认知：OC or c++ or c？这个时候，能帮助我们做最后决定的往往是一些简单的规则，比如保持代码有序，最大复用原则等等。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-8&quot;&gt;模板&lt;/h4&gt;
+&lt;p&gt;####模板&lt;/p&gt;
 
 &lt;p&gt;使用过JEC与后台通讯的同学可能有过，写接口的痛苦。构建发送包，接口回调消息，解析回调，然后向外传递内容。这个过程，是多么的类似啊。那么问题来了，有没有什么方法可以简化这个过程中的编码，让大多数接口通信过程开起来更有序呢？何不使用模板呢。&lt;/p&gt;
 
-&lt;p&gt;```
-template&lt;typename t=&quot;&quot;&gt;
+&lt;pre&gt;&lt;code&gt;template&amp;lt;typename T&amp;gt;
 inline const int decodeForResponse(T&amp;amp; response , unsigned char* pData ,int nDataLen ,std::string key)
 {
     .....
-}&lt;/typename&gt;&lt;/p&gt;
+}
 
-&lt;p&gt;template&lt;typename t=&quot;&quot;&gt;
+template&amp;lt;typename T&amp;gt;
 inline const int getDecodedRespnse(T&amp;amp; response ,
                                     unsigned char* pData ,
                                   int nDataLen ,
@@ -278,9 +805,9 @@ inline const int getDecodedRespnse(T&amp;amp; response ,
                                   int seq,
                                   WBServiceCenter* self) {
     ......
-}&lt;/typename&gt;&lt;/p&gt;
+}
 
-&lt;p&gt;template&lt;typename t=&quot;&quot;&gt;
+template&amp;lt;typename T&amp;gt;
 inline int sendRequest(std::string funcName,
                         std::string servantName,
                         const std::string&amp;amp; dataKey,
@@ -292,19 +819,19 @@ inline int sendRequest(std::string funcName,
 {
   .....
 }
-```&lt;/typename&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;上述的过程中，把一直在变动的结构体，当成模板参数传进来，不就省事了很多嘛。（BTW：这里使用了一个重定义self的技巧。）&lt;/p&gt;
 
-&lt;h1 id=&quot;section-9&quot;&gt;改造&lt;/h1&gt;
+&lt;p&gt;#改造&lt;/p&gt;
 
 &lt;p&gt;这里还有一个比较有意思的想法，将Ruby的一些语法特性以语法糖的形式提供在了OC中。可以借鉴一下，很多时候一些优秀的东西是可以通用的。&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/supermarin/ObjectiveSugar.git&quot;&gt;ObjectiveSugar&lt;/a&gt;&lt;/p&gt;
 
-&lt;h1 id=&quot;section-10&quot;&gt;总结&lt;/h1&gt;
+&lt;p&gt;#总结&lt;/p&gt;
 
-&lt;p&gt;上面只是在使用OC的过程中，总结出来的一些开脑洞的使用方式。而且这些方式，从某些意义上能够提高整个程序的质量，甚至在某些时候能够带来不一样的技术解决方案。本来，一直以为OC是一门神奇的语言，直到遇见了swift。上文中，提到的很多的构建方式，swift原生支持，函数式编程更加便捷，模板也不用和C++混编。这从另外一个角度，印证了swift的确是OC的升级版。
+&lt;p&gt;上面只是在使用OC的过程中，总结出来的一些开脑洞的使用方式。而且这些方式，从某些意义上能够提高整个程序的质量，甚至在某些时候能够带来不一样的技术解决方案。本来，一直以为OC是一门神奇的语言，直到遇见了swift。上文中，提到的很多的构建方式，swift原生支持，函数式编程更加便捷，模板也不用和C++混编。这从另外一个角度，印证了swift的确是OC的升级版。&lt;br /&gt;
 言归正传，所谓有序构建其中的“序”，大家理解不一。但是，可能都同意的是，软件的构建过程，代码的增长过程应当保持一定的秩序和规则。那么你在coding的时候将会遵循什么样的“有序构建”？&lt;/p&gt;
 
 </description>
@@ -317,7 +844,7 @@ inline int sendRequest(std::string funcName,
     
       <item>
         <title>SWIFT与OC的比较</title>
-        <description>&lt;h1 id=&quot;swiftoc&quot;&gt;SWIFT与OC的比较&lt;/h1&gt;
+        <description>&lt;p&gt;#SWIFT与OC的比较&lt;/p&gt;
 
 &lt;p&gt;废了半天劲，用蹩脚的英语终于把《The Swift Programming Language》看了个大概。在看过的过程中，的确发现有很多东西很惊艳。但是，做为一直使用OC多年的我来说，自然会冒出一个问题：Swift到底比OC优秀在什么地方？&lt;/p&gt;
 
@@ -355,7 +882,7 @@ inline int sendRequest(std::string funcName,
     
       <item>
         <title>Objective-C编码建议</title>
-        <description>&lt;h1 id=&quot;objective-c-&quot;&gt;Objective-C 编码建议&lt;/h1&gt;
+        <description>&lt;p&gt;#Objective-C 编码建议&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;神在细节之中&lt;/p&gt;
@@ -371,7 +898,7 @@ inline int sendRequest(std::string funcName,
 
 &lt;p&gt;下面我们将围绕一些基本的准则展开讨论，目的是让我们写出一手漂亮的代码，更好的用代码与其他同事沟通，也为了提高我们代码的可维护性和可修改性，也是为了让我们自己工作的地方有一个愉悦的代码环境。&lt;/p&gt;
 
-&lt;p&gt;（PS：当你真的按照这些看似偏执的规则去做的时候，你就真的能够发现“伟大来自细节”，而且会受益匪浅。保剑锋自磨砺出，梅花香自苦寒来。）
+&lt;p&gt;（PS：当你真的按照这些看似偏执的规则去做的时候，你就真的能够发现“伟大来自细节”，而且会受益匪浅。保剑锋自磨砺出，梅花香自苦寒来。）&lt;br /&gt;
 ##总则&lt;/p&gt;
 
 &lt;ol&gt;
@@ -382,51 +909,43 @@ inline int sendRequest(std::string funcName,
   &lt;li&gt;借用美国童子军军规：让营地比你来时更干净。&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;格式&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;任意函数长度不得超过50行。&lt;/li&gt;
-  &lt;li&gt;任意行代码不得超过80字符。可以在设置中设置超过80个字符的提醒。&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exwdqpzlbgj20ky0fdtci.jpg&quot; alt=&quot;&quot; /&gt;&lt;/li&gt;
-  &lt;li&gt;在定义函数的行前留白一行&lt;/li&gt;
-  &lt;li&gt;功能相近的代码要放在一起。&lt;/li&gt;
-  &lt;li&gt;使用#pragma来切分不同功能区域的代码。&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;二元运算符和参数之间需要放置一个空格，一元运算符、强制类型转换和参数之间不放置空格。关键字之后圆括号之前需要放置一个空格.&lt;/p&gt;
+&lt;p&gt;##格式&lt;br /&gt;
+1. 任意函数长度不得超过50行。&lt;br /&gt;
+2. 任意行代码不得超过80字符。可以在设置中设置超过80个字符的提醒。  &lt;br /&gt;
+   &lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exwdqpzlbgj20ky0fdtci.jpg&quot; alt=&quot;&quot; /&gt;&lt;br /&gt;
+3. 在定义函数的行前留白一行&lt;br /&gt;
+4. 功能相近的代码要放在一起。&lt;br /&gt;
+5. 使用#pragma来切分不同功能区域的代码。&lt;br /&gt;
+6. 二元运算符和参数之间需要放置一个空格，一元运算符、强制类型转换和参数之间不放置空格。关键字之后圆括号之前需要放置一个空格.&lt;/p&gt;
 
-    &lt;pre&gt;&lt;code&gt; ```
- void *ptr = &amp;amp;value + 10 * 3;
- NewType a = (NewType)b;
- for (int i = 0; i &amp;lt; 10; i++) {
-     doCoolThings();
- }
- ```
-&lt;/code&gt;&lt;/pre&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;长的字面值应被拆分为多行。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    ```
+    void *ptr = &amp;amp;value + 10 * 3;
+    NewType a = (NewType)b;
+    for (int i = 0; i &amp;lt; 10; i++) {
+        doCoolThings();
+    }
+    ``` 7. 长的字面值应被拆分为多行。
 
-    &lt;pre&gt;&lt;code&gt; ```
- NSArray *theShit = @[
-         @&quot;Got some long string objects in here.&quot;,
-         [AndSomeModelObjects too],
-         @&quot;Moar strings.&quot;
- ];
+    ```
+    NSArray *theShit = @[
+            @&quot;Got some long string objects in here.&quot;,
+            [AndSomeModelObjects too],
+            @&quot;Moar strings.&quot;
+    ];
     
- NSDictionary *keyedShit = @{
- @&quot;this.key&quot;: @&quot;corresponds to this value&quot;,
- @&quot;otherKey&quot;: @&quot;remoteData.payload&quot;,
- @&quot;some&quot;: @&quot;more&quot;,
- @&quot;JSON&quot;: @&quot;keys&quot;,
- @&quot;and&quot;: @&quot;stuff&quot;,
- };
- ``` 8.
+    NSDictionary *keyedShit = @{
+    @&quot;this.key&quot;: @&quot;corresponds to this value&quot;,
+    @&quot;otherKey&quot;: @&quot;remoteData.payload&quot;,
+    @&quot;some&quot;: @&quot;more&quot;,
+    @&quot;JSON&quot;: @&quot;keys&quot;,
+    @&quot;and&quot;: @&quot;stuff&quot;,
+    };
+    ``` 8.
 &lt;/code&gt;&lt;/pre&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
 
-&lt;h2 id=&quot;section-1&quot;&gt;命名&lt;/h2&gt;
-&lt;p&gt;命名是编程中最基本的技能，我们给变量、函数、类、包等等命名。给他们以名字，让他们有意义，既能表示他们到底是做什么的，也能将其与其他变量区别开来。而通过，语言的发展史，我们也能够看到“方便编程人员理解和使用”一直都是编程语言发展的动力之一，而命名则是其最最核心的环节。像人一样娶一个好名字至关重要，“丁当”总比“狗蛋”来的好听。
-为什么要命名？命名代表着抽象，我们使用名字将一些没必要关系的细节隐去，减少我们自己的记忆成本，也更加方便我们理解。用过C语言的人都知道，一个变量名最终会转化成类似于&lt;code&gt;0x11111111&lt;/code&gt;之类的地址，相比去理解和记忆这些地址，用一个更加抽象的变量名来代表这些地址。无论从理解还是记忆上都要方便的。
+&lt;p&gt;##命名&lt;br /&gt;
+命名是编程中最基本的技能，我们给变量、函数、类、包等等命名。给他们以名字，让他们有意义，既能表示他们到底是做什么的，也能将其与其他变量区别开来。而通过，语言的发展史，我们也能够看到“方便编程人员理解和使用”一直都是编程语言发展的动力之一，而命名则是其最最核心的环节。像人一样娶一个好名字至关重要，“丁当”总比“狗蛋”来的好听。&lt;br /&gt;
+为什么要命名？命名代表着抽象，我们使用名字将一些没必要关系的细节隐去，减少我们自己的记忆成本，也更加方便我们理解。用过C语言的人都知道，一个变量名最终会转化成类似于&lt;code&gt;0x11111111&lt;/code&gt;之类的地址，相比去理解和记忆这些地址，用一个更加抽象的变量名来代表这些地址。无论从理解还是记忆上都要方便的。&lt;br /&gt;
 ###命名一定要“名副其实”，尽可能使用有意的名称，而且这个意义和指称的变量真实意义相关。&lt;/p&gt;
 
 &lt;p&gt;尽量不要出现没有任何意义的命名类似于下述形式的命名：&lt;/p&gt;
@@ -444,29 +963,27 @@ inline int sendRequest(std::string funcName,
     ```
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;命名首字母大写，其他命名首字母小写。并且采用驼峰格式分割单词。&lt;/h3&gt;
-&lt;p&gt;例如：&lt;code&gt;BWTest&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;###命名首字母大写，其他命名首字母小写。并且采用驼峰格式分割单词。&lt;br /&gt;
+例如：&lt;code&gt;BWTest&lt;/code&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;使用能够读出来的名称&lt;/h3&gt;
-&lt;p&gt;人类长于记忆和使用单词。大脑中的相当一部分就是用来容纳和处理单词的。单词如果能够读的出来，则非常方便我们阅读和理解。&lt;/p&gt;
+&lt;p&gt;###使用能够读出来的名称&lt;br /&gt;
+人类长于记忆和使用单词。大脑中的相当一部分就是用来容纳和处理单词的。单词如果能够读的出来，则非常方便我们阅读和理解。&lt;/p&gt;
 
-&lt;p&gt;错误的示例：
+&lt;p&gt;错误的示例：&lt;br /&gt;
 &lt;code&gt;
 genymdhms （生成日期,年、月、日、时、分、秒）
 &lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;正确的实例：
+&lt;p&gt;正确的实例：&lt;br /&gt;
 &lt;code&gt;
 generationTimeStamp
 &lt;/code&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;section-4&quot;&gt;使用可搜索的名称。&lt;/h3&gt;
-&lt;p&gt;单字母名称和数字常量有一个问题，就是很难在一大篇文字中找出来。试想一下，你找&lt;code&gt;MAX_CLASSES_PER_STUDENT&lt;/code&gt;容易还是找数字7容易。&lt;/p&gt;
+&lt;p&gt;###使用可搜索的名称。&lt;br /&gt;
+单字母名称和数字常量有一个问题，就是很难在一大篇文字中找出来。试想一下，你找&lt;code&gt;MAX_CLASSES_PER_STUDENT&lt;/code&gt;容易还是找数字7容易。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-5&quot;&gt;文件名&lt;/h3&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;文件名反映出了其实现了什么类（包括大小写），你需要遵循所参与醒目的约定。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;###文件名&lt;br /&gt;
+&amp;gt; 文件名反映出了其实现了什么类（包括大小写），你需要遵循所参与醒目的约定。&lt;/p&gt;
 
 &lt;p&gt;文件的扩展名及其意义如下：&lt;/p&gt;
 
@@ -501,11 +1018,11 @@ generationTimeStamp
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;h4 id=&quot;section-6&quot;&gt;类别的扩展名以“被扩展的类名+自定义命名部分组成”&lt;/h4&gt;
-&lt;p&gt;例如：
+&lt;p&gt;####类别的扩展名以“被扩展的类名+自定义命名部分组成”&lt;br /&gt;
+例如：&lt;br /&gt;
 &lt;code&gt;
 NSSstring+Utils.h
-&lt;/code&gt;
+&lt;/code&gt;&lt;br /&gt;
 ###缩略词&lt;/p&gt;
 
 &lt;p&gt;虽然方法命名不应使用缩略词，然而有些缩略词在过去被反复的使用，所以使用这些缩略词能更好的的表达代码的含义。下表列出了Cocoa可接受的缩略词。&lt;/p&gt;
@@ -591,185 +1108,162 @@ NSSstring+Utils.h
 
 &lt;p&gt;以下是一些常用的首字母缩略词：&lt;code&gt;ASCII,PDF,XML,HTML,URL,RTF,HTTP,TIFF,JPG,PNG,GIF,LZW,ROM,RGB,CMYK,MIDI,FTP...&lt;/code&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;define-bwdebug-1&quot;&gt;宏定义全部字母大写，例如:&lt;code&gt;#define BW_DEBUG 1&lt;/code&gt;&lt;/h3&gt;
-&lt;p&gt;###常量定义，字符串定义以小写字母&lt;code&gt;k&lt;/code&gt;开头，随后首字母大写&lt;/p&gt;
+&lt;p&gt;###宏定义全部字母大写，例如:&lt;code&gt;#define BW_DEBUG 1&lt;/code&gt;&lt;br /&gt;
+###常量定义，字符串定义以小写字母&lt;code&gt;k&lt;/code&gt;开头，随后首字母大写&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-static NSString* const kBWBarTitle = @&quot;动态&quot;;
-&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;static NSString* const kBWBarTitle = @&quot;动态&quot;;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;static-const&quot;&gt;如果要定义常量使用static const优于宏定义，前者会进行类型检查&lt;/h3&gt;
+&lt;p&gt;###如果要定义常量使用static const优于宏定义，前者会进行类型检查&lt;/p&gt;
 
-&lt;h3 id=&quot;ocnsobjectns&quot;&gt;因为OC没有命名空间的概念，所以使用前两个或者多个字母来表示命名空间，例如”NSObject中的NS”，我们也使用自己的命名空间。比如&lt;/h3&gt;
+&lt;p&gt;###因为OC没有命名空间的概念，所以使用前两个或者多个字母来表示命名空间，例如”NSObject中的NS”，我们也使用自己的命名空间。比如&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-红点中使用了VAS:VASAddValueInfo...
+&lt;pre&gt;&lt;code&gt;红点中使用了VAS:VASAddValueInfo...
 钱包中使用了QW:QWApplication....
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;section-7&quot;&gt;注释&lt;/h2&gt;
-&lt;p&gt;###让代码自注释，不要依赖注释来解释自己的设计或者编码意图。除了特殊情况外，代码中不要有多余的注释。&lt;/p&gt;
+&lt;p&gt;##注释&lt;br /&gt;
+###让代码自注释，不要依赖注释来解释自己的设计或者编码意图。除了特殊情况外，代码中不要有多余的注释。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-8&quot;&gt;函数&lt;/h2&gt;
-&lt;p&gt;###函数长度不要超过50行，小函数要比大函数可阅读性和可复用性强。
+&lt;p&gt;##函数&lt;br /&gt;
+###函数长度不要超过50行，小函数要比大函数可阅读性和可复用性强。&lt;br /&gt;
 ###零元函数最好，一元函数也不错，二元函数担心了，三元函数有风险，高于三元需重构。函数的参数越多，引起其变化的因素就越多。越不利于以后的修改。&lt;/p&gt;
 
 &lt;p&gt;不知道当你看到如下形式的函数的时候，是什么想法：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-- (void)RequestGetLocation:(int)lat lon:(int)lon alt:(int)alt isMars:(BOOL)yn bJiejingSOSO:(BOOL)bJiejingSOSO;
-&lt;/code&gt;
-###尽量少的写有副作用的函数
-###尽量不要出现火车链式的命名，如果可以尽量使用过程变量替代。
+&lt;pre&gt;&lt;code&gt;- (void)RequestGetLocation:(int)lat lon:(int)lon alt:(int)alt isMars:(BOOL)yn bJiejingSOSO:(BOOL)bJiejingSOSO;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;###尽量少的写有副作用的函数&lt;br /&gt;
+###尽量不要出现火车链式的命名，如果可以尽量使用过程变量替代。&lt;br /&gt;
 反例例如：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-_needLogoutAccount = [[[[BWAppSetting GetInstance] appSetting] valueForKey:NeedLogoutAccounts] retain];
-&lt;/code&gt;
-考虑如果改成下述模样，是不是可读性一下子提高了很多：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;_needLogoutAccount = [[[[BWAppSetting GetInstance] appSetting] valueForKey:NeedLogoutAccounts] retain];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;考虑如果改成下述模样，是不是可读性一下子提高了很多：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-BWAppSetting* shareSetting = [BWAppSetting GetInstance];
+&lt;pre&gt;&lt;code&gt;BWAppSetting* shareSetting = [BWAppSetting GetInstance];
 BWLockDictionary* defaultSettings = [shareSetting appSetting];
 _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retain];
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;section-9&quot;&gt;调用时所有参数应该在同一行&lt;/h3&gt;
+&lt;p&gt;###调用时所有参数应该在同一行&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-[myObject doFooWith:arg1 name:arg2 error:arg3];
-&lt;/code&gt;
-或者每行一个参数，以冒号对齐：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[myObject doFooWith:arg1 name:arg2 error:arg3];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;或者每行一个参数，以冒号对齐：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-[myObject doFooWith:arg1
+&lt;pre&gt;&lt;code&gt;[myObject doFooWith:arg1
                name:arg2
               error:arg3];
-&lt;/code&gt;
-对于参数过多的函数，尽量使用后面一种对其方式。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;对于参数过多的函数，尽量使用后面一种对其方式。&lt;/p&gt;
 
 &lt;p&gt;不要使用下面的缩进风格：&lt;/p&gt;
 
-&lt;p&gt;```
-[myObject doFooWith:arg1 name:arg2  // some lines with &amp;gt;1 arg
-              error:arg3];&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[myObject doFooWith:arg1 name:arg2  // some lines with &amp;gt;1 arg
+              error:arg3];
 
-&lt;p&gt;[myObject doFooWith:arg1
-               name:arg2 error:arg3];&lt;/p&gt;
+[myObject doFooWith:arg1
+               name:arg2 error:arg3];
 
-&lt;p&gt;[myObject doFooWith:arg1
+[myObject doFooWith:arg1
           name:arg2  // aligning keywords instead of colons
           error:arg3];
-```&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;ifobjc&quot;&gt;如果对传入参数进行数据保护尽量不要用&lt;code&gt;if(!objc)&lt;/code&gt;,使用断言来处理。&lt;/h3&gt;
+&lt;p&gt;###如果对传入参数进行数据保护尽量不要用&lt;code&gt;if(!objc)&lt;/code&gt;,使用断言来处理。&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-- (void) sendArgs:(NSDictionary*)args {
+&lt;pre&gt;&lt;code&gt;- (void) sendArgs:(NSDictionary*)args {
         NSAssert(args, @&quot;args is nil&quot;);
         .....   
 }
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;theannew&quot;&gt;方法参数名前一般使用的前缀包括“the”、“an”、“new”。&lt;/h3&gt;
+&lt;p&gt;###方法参数名前一般使用的前缀包括“the”、“an”、“new”。&lt;/p&gt;
 
 &lt;p&gt;示例:&lt;/p&gt;
 
-&lt;p&gt;```
-- (void)       setTitle:           (NSString *)   aTitle;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;- (void)       setTitle:           (NSString *)   aTitle;
 
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;(void)       setName:            (NSString *)   newName;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;(id)         keyForOption:       (CDCOption *)  anOption&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;(NSArray *)  emailsForMailbox:   (CDCMailbox *) theMailbox;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;(CDCEmail *) emailForRecipients: (NSArray *)    theRecipients;
-```&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+- (void)       setName:            (NSString *)   newName;
 
-&lt;h4 id=&quot;block&quot;&gt;Block相关&lt;/h4&gt;
-&lt;p&gt;######在block中使用到self变量的时候，一定要先weak再strong.&lt;/p&gt;
+- (id)         keyForOption:       (CDCOption *)  anOption
 
-&lt;p&gt;&lt;code&gt;
-__weak typeof(self) weakSelf = self;
+- (NSArray *)  emailsForMailbox:   (CDCMailbox *) theMailbox;
+
+- (CDCEmail *) emailForRecipients: (NSArray *)    theRecipients;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;####Block相关&lt;br /&gt;
+######在block中使用到self变量的时候，一定要先weak再strong.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;__weak typeof(self) weakSelf = self;
 [self doABlockOperation:^{
     __strong typeof(weakSelf) strongSelf = weakSelf;
     if (strongSelf) {
         ...
     }
 }];
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;section-10&quot;&gt;控制结构&lt;/h2&gt;
+&lt;p&gt;##控制结构&lt;/p&gt;
 
-&lt;h3 id=&quot;section-11&quot;&gt;顺序结构&lt;/h3&gt;
-&lt;p&gt;###分支结构
-####if-else结构超过四层的时候，要考虑重构。多层的ifelse结构极其难维护。
-####当需要满足一定条件时才执行某项操作时，最左边缘应该是愉快路径代码。不要将愉快路径代码内嵌到if语句中。多个return是正常合理的。
+&lt;p&gt;###顺序结构&lt;br /&gt;
+###分支结构&lt;br /&gt;
+####if-else结构超过四层的时候，要考虑重构。多层的ifelse结构极其难维护。&lt;br /&gt;
+####当需要满足一定条件时才执行某项操作时，最左边缘应该是愉快路径代码。不要将愉快路径代码内嵌到if语句中。多个return是正常合理的。&lt;br /&gt;
 良好的风格：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-- (void) someMethod {
+&lt;pre&gt;&lt;code&gt;- (void) someMethod {
   if (![someOther boolValue]) {
       return;
   }
   //Do something important
 }
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;反面教材：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-- (void) someMethod {
+&lt;pre&gt;&lt;code&gt;- (void) someMethod {
   if ([someOther boolValue]) {
       //Do something important
   }
 }
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&quot;section-12&quot;&gt;所有的逻辑块必须使用花括号包围，即使条件体只需编写一行代码也必须使用花括号。&lt;/h4&gt;
+&lt;p&gt;####所有的逻辑块必须使用花括号包围，即使条件体只需编写一行代码也必须使用花括号。&lt;/p&gt;
 
 &lt;p&gt;良好的风格：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-if (!error) {
+&lt;pre&gt;&lt;code&gt;if (!error) {
     return success;
 }
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;反面教材：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-if (!error)
+&lt;pre&gt;&lt;code&gt;if (!error)
     return success;
 ...
 if (!error) return success;
-&lt;/code&gt;
-###循环结构
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;###循环结构&lt;br /&gt;
 ####遍历可变容器之前，需要复制该容器，遍历该容器的Copy.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-//typeof(self.cells) is NSMutableArray
+&lt;pre&gt;&lt;code&gt;//typeof(self.cells) is NSMutableArray
 NSArray* cellArrays = [self.cells copy];
 for(UITableViewCell* cell in cellArrays) {
         ...
 }
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;section-13&quot;&gt;尽量不要使用异常，尤其是不要将异常做为业务逻辑的一部分，在异常中尝试进行灾难恢复。&lt;/h3&gt;
+&lt;p&gt;###尽量不要使用异常，尤其是不要将异常做为业务逻辑的一部分，在异常中尝试进行灾难恢复。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-14&quot;&gt;类与对象&lt;/h2&gt;
-&lt;p&gt;###明确指定构造函数
+&lt;p&gt;##类与对象&lt;br /&gt;
+###明确指定构造函数&lt;br /&gt;
 &amp;gt; 注释并且明确指定你的类的构造函数。&lt;/p&gt;
 
-&lt;p&gt;对于需要继承你的类的人来说，明确指定构造函数十分重要。这样他们就可以只重写一个构造函数（可能是几个）来保证他们的子类的构造函数会被调用。这也有助于将来别人调试你的类时，理解初始化代码的工作流程。
+&lt;p&gt;对于需要继承你的类的人来说，明确指定构造函数十分重要。这样他们就可以只重写一个构造函数（可能是几个）来保证他们的子类的构造函数会被调用。这也有助于将来别人调试你的类时，理解初始化代码的工作流程。&lt;br /&gt;
 ###重载指定构造函数&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -778,78 +1272,69 @@ for(UITableViewCell* cell in cellArrays) {
 
 &lt;p&gt;如果你没有重载父类的指定构造函数，你的构造函数有时可能不会被调用，这会导致非常隐秘而且难以解决的 bug。&lt;/p&gt;
 
-&lt;h3 id=&quot;nsobject-&quot;&gt;重载 NSObject 的方法&lt;/h3&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;如果重载了 NSObject 类的方法，强烈建议把它们放在 @implementation 内的起始处，这也是常见的操作方法。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;###重载 NSObject 的方法&lt;br /&gt;
+&amp;gt; 如果重载了 NSObject 类的方法，强烈建议把它们放在 @implementation 内的起始处，这也是常见的操作方法。&lt;/p&gt;
 
 &lt;p&gt;通常适用（但不局限）于 &lt;code&gt;init...，copyWithZone:&lt;/code&gt;，以及&lt;code&gt;dealloc&lt;/code&gt;方法。所有 &lt;code&gt;init...&lt;/code&gt;方法应该放在一起&lt;code&gt;，copyWithZone:&lt;/code&gt;紧随其后，最后才是&lt;code&gt;dealloc&lt;/code&gt;方法&lt;/p&gt;
 
-&lt;h3 id=&quot;section-15&quot;&gt;初始化&lt;/h3&gt;
-&lt;p&gt;####不要在 init 方法中，将成员变量初始化为 0 或者 nil；毫无必要。
-现代的 Ojbective-C 代码通过调用 alloc 和 init 方法来创建并 retain 一个对象。由于类方法 new 很少使用，这使得有关内存分配的代码审查更困难。
+&lt;p&gt;###初始化&lt;br /&gt;
+####不要在 init 方法中，将成员变量初始化为 0 或者 nil；毫无必要。&lt;br /&gt;
+现代的 Ojbective-C 代码通过调用 alloc 和 init 方法来创建并 retain 一个对象。由于类方法 new 很少使用，这使得有关内存分配的代码审查更困难。&lt;br /&gt;
 ####保持init函数简洁，不要让init函数成为千行的大函数，当超过50行的时候，适当考虑分拆一下。&lt;/p&gt;
 
 &lt;p&gt;良好的风格实例：&lt;/p&gt;
 
-&lt;p&gt;```
-- (void) commonInit
+&lt;pre&gt;&lt;code&gt;- (void) commonInit
 {
     _rightAppendImageView = [UIImageView new];
     [self.contentView addSubview:_rightAppendImageView];
-}&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-  if (!self) {
-      return self;
-  }
-  [self commonInit];
-  return self;
 }
-```&lt;/li&gt;
-&lt;/ul&gt;
 
-&lt;h4 id=&quot;uiviewlayoutsubviews&quot;&gt;UIView的子类初始化的时候，不要进行任何布局操作。布局操作在LayoutSubViews里面做。&lt;/h4&gt;
-&lt;p&gt;####UIView的子类布局必须在layoutSubViews里面进行，需要布局的时候调用&lt;code&gt;setNeedLayout&lt;/code&gt;来告诉系统，需要重新布局该View，不要直接调用&lt;code&gt;layoutSubViews&lt;/code&gt;&lt;/p&gt;
+- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (!self) {
+        return self;
+    }
+    [self commonInit];
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;api-&quot;&gt;保持公共 API 简单&lt;/h3&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;保持类简单；避免 “厨房水槽（kitchen-sink）” 式的 API。如果一个函数压根没必要公开，就不要这么做。用私有类别保证公共头文件整洁。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;####UIView的子类初始化的时候，不要进行任何布局操作。布局操作在LayoutSubViews里面做。&lt;br /&gt;
+####UIView的子类布局必须在layoutSubViews里面进行，需要布局的时候调用&lt;code&gt;setNeedLayout&lt;/code&gt;来告诉系统，需要重新布局该View，不要直接调用&lt;code&gt;layoutSubViews&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;###保持公共 API 简单&lt;br /&gt;
+&amp;gt; 保持类简单；避免 “厨房水槽（kitchen-sink）” 式的 API。如果一个函数压根没必要公开，就不要这么做。用私有类别保证公共头文件整洁。&lt;/p&gt;
 
 &lt;p&gt;与 C++ 不同，Objective-C 没有方法来区分公共的方法和私有的方法 – 所有的方法都是公共的（译者注：这取决于 Objective-C 运行时的方法调用的消息机制）。因此，除非客户端的代码期望使用某个方法，不要把这个方法放进公共 API 中。尽可能的避免了你你不希望被调用的方法却被调用到。这包括重载父类的方法。对于内部实现所需要的方法，在实现的文件中定义一个类别，而不是把它们放进公有的头文件中。&lt;/p&gt;
 
-&lt;p&gt;```
-// GTMFoo.m
-#import “GTMFoo.h”&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// GTMFoo.m
+#import &quot;GTMFoo.h&quot;
 
-&lt;p&gt;@interface GTMFoo (PrivateDelegateHandling)
+@interface GTMFoo (PrivateDelegateHandling)
 - (NSString *)doSomethingWithDelegate;  // Declare private method
-@end&lt;/p&gt;
+@end
 
-&lt;p&gt;@implementation GTMFoo(PrivateDelegateHandling)
-…
+@implementation GTMFoo(PrivateDelegateHandling)
+...
 - (NSString *)doSomethingWithDelegate {
   // Implement this method
 }
-…
+...
 @end
-```&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;在OC2.0以后，你可以在实现文件中使用，类扩展来生命你的私有类别：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-@interface GMFoo () { ... }
-&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;@interface GMFoo () { ... }
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;section-16&quot;&gt;每个文件中只创建或者实现一个类。同一个文件中不要存在多个类。&lt;/h3&gt;
-&lt;p&gt;###Protocol单独用一个文件来创建。尽量不要与相关类混在一个文件中。
+&lt;p&gt;###每个文件中只创建或者实现一个类。同一个文件中不要存在多个类。&lt;br /&gt;
+###Protocol单独用一个文件来创建。尽量不要与相关类混在一个文件中。&lt;br /&gt;
 ###类的私有变量以”_“开头。&lt;/p&gt;
 
-&lt;p&gt;创建私有变量，份两种情况。
+&lt;p&gt;创建私有变量，份两种情况。&lt;br /&gt;
 第一种情况子类需要继承的，在头文件中定义：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;```
@@ -861,12 +1346,12 @@ for(UITableViewCell* cell in cellArrays) {
 ```
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;第二种情况，不需要子类继承的，在实现文件中以Category的方式定义：
-     ```
-    // BWTest.m
-    @interface BWTest ()
-    {
-        NSString* _name;
+&lt;p&gt;第二种情况，不需要子类继承的，在实现文件中以Category的方式定义：&lt;br /&gt;
+     ```&lt;br /&gt;
+    // BWTest.m&lt;br /&gt;
+    @interface BWTest ()&lt;br /&gt;
+    {&lt;br /&gt;
+        NSString* _name;&lt;br /&gt;
     }&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;@implementation BWTest
@@ -875,11 +1360,11 @@ for(UITableViewCell* cell in cellArrays) {
 ``` ###公有变量在一般使用属性的方法定义```@property (....) ...```
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&quot;delegatearcweakmrcretaindealloc&quot;&gt;使用委托模式，设置delegate的时候，在ARC下使用&lt;code&gt;weak&lt;/code&gt;;在MRC下使用&lt;code&gt;retain&lt;/code&gt;,并且在dealloc中将其指针置空。&lt;/h4&gt;
-&lt;p&gt;####外部引用对象，外部不会发生set操作的对象，比如在创建界面元素的时候，使用readonly属性。
-    ```
-    @interface BWView : UIView
-    @property (nonatomic, strong, readonly) UIView* backgoundView;
+&lt;p&gt;####使用委托模式，设置delegate的时候，在ARC下使用&lt;code&gt;weak&lt;/code&gt;;在MRC下使用&lt;code&gt;retain&lt;/code&gt;,并且在dealloc中将其指针置空。&lt;br /&gt;
+####外部引用对象，外部不会发生set操作的对象，比如在创建界面元素的时候，使用readonly属性。&lt;br /&gt;
+    ```&lt;br /&gt;
+    @interface BWView : UIView&lt;br /&gt;
+    @property (nonatomic, strong, readonly) UIView* backgoundView;&lt;br /&gt;
     @end&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;@implementation BWView
@@ -887,161 +1372,152 @@ for(UITableViewCell* cell in cellArrays) {
 ```
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;class&quot;&gt;在类定义中使用到自己定义的类的时候，尽量不要在头文件中引入自己定义的类的同文件，使用&lt;code&gt;@class&lt;/code&gt;替换。在实现文件中引入相应头文件。&lt;/h3&gt;
+&lt;p&gt;###在类定义中使用到自己定义的类的时候，尽量不要在头文件中引入自己定义的类的同文件，使用&lt;code&gt;@class&lt;/code&gt;替换。在实现文件中引入相应头文件。&lt;/p&gt;
 
-&lt;p&gt;例如：
-```
-//BWTest.h
-@class BWDataCenter;
-@interface BWTest : NSObject
-@property (nonatomic, strong) BWDataCenter* dataCenter;
+&lt;p&gt;例如：&lt;br /&gt;
+```&lt;br /&gt;
+//BWTest.h&lt;br /&gt;
+@class BWDataCenter;&lt;br /&gt;
+@interface BWTest : NSObject&lt;br /&gt;
+@property (nonatomic, strong) BWDataCenter* dataCenter;&lt;br /&gt;
 @end&lt;/p&gt;
 
 &lt;p&gt;//BWTest.m&lt;/p&gt;
 
-&lt;h1 id=&quot;import-bwdatacenterh&quot;&gt;import “BWDataCenter.h”&lt;/h1&gt;
-&lt;p&gt;@implementation BWTest
-@end
+&lt;p&gt;#import “BWDataCenter.h”&lt;br /&gt;
+@implementation BWTest&lt;br /&gt;
+@end&lt;br /&gt;
 ```&lt;/p&gt;
 
-&lt;h3 id=&quot;dtodata-transfer-objectclass&quot;&gt;如果一个类只是DTO(data transfer object)，只是作为数据传输使用，可以不用引入使用的自定义的类的头文件，只是用&lt;code&gt;@class&lt;/code&gt;，表明相应的自定义的类型。&lt;/h3&gt;
+&lt;p&gt;###如果一个类只是DTO(data transfer object)，只是作为数据传输使用，可以不用引入使用的自定义的类的头文件，只是用&lt;code&gt;@class&lt;/code&gt;，表明相应的自定义的类型。&lt;/p&gt;
 
-&lt;h3 id=&quot;dtokvc&quot;&gt;对于DTO类型的对象，在给其成员变量设置值的时候可以考虑使用KVC，实现下述函数：&lt;/h3&gt;
+&lt;p&gt;###对于DTO类型的对象，在给其成员变量设置值的时候可以考虑使用KVC，实现下述函数：&lt;/p&gt;
 
-&lt;p&gt;```
-- (void) setValue:(id)value forKey:(NSString *)key
+&lt;pre&gt;&lt;code&gt;- (void) setValue:(id)value forKey:(NSString *)key
 {
     if ([key isEqualToString:kRedDotAppInfoPath]) {
-        ….
-    } else if …
-    ….
-}&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;(id) valueForKey:(NSString *)key {
-….
+        ....
+    } else if ...
+    ....
 }
-```
-###点标记语法
-属性和幂等方法（多次调用和一次调用返回的结果相同）使用点标记语法访问，其他的情况使用方括号标记语法。
-良好的风格：&lt;/li&gt;
-&lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;
-view.backgroundColor = [UIColor orangeColor];
+- (id) valueForKey:(NSString *)key {
+  ....
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;###点标记语法&lt;br /&gt;
+属性和幂等方法（多次调用和一次调用返回的结果相同）使用点标记语法访问，其他的情况使用方括号标记语法。&lt;br /&gt;
+良好的风格：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;view.backgroundColor = [UIColor orangeColor];
 [UIApplication sharedApplication].delegate;
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;反面实例：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-[view setBackgroundColor:[UIColor orangeColor]];
+&lt;pre&gt;&lt;code&gt;[view setBackgroundColor:[UIColor orangeColor]];
 UIApplication.sharedApplication.delegate;
-&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;cocoa&quot;&gt;Cocoa相关&lt;/h2&gt;
-&lt;p&gt;###每个NSObject都有其生命周期，要在其生命周期的合适的时机做合适的事情。
+&lt;p&gt;##Cocoa相关&lt;br /&gt;
+###每个NSObject都有其生命周期，要在其生命周期的合适的时机做合适的事情。&lt;br /&gt;
 例如：在初始化的时候，进行变量初始化，在销毁的时候，销毁变量等等。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-17&quot;&gt;尽量不要在界面布局的写任何死数字&lt;/h3&gt;
-&lt;p&gt;错误的示范：&lt;/p&gt;
+&lt;p&gt;###尽量不要在界面布局的写任何死数字&lt;br /&gt;
+错误的示范：&lt;/p&gt;
 
-&lt;p&gt;```
- CGFloat delta = SYSTEM_VERSION &amp;gt;= 7.0 ? 0.0f : -14.0f;
+&lt;pre&gt;&lt;code&gt; CGFloat delta = SYSTEM_VERSION &amp;gt;= 7.0 ? 0.0f : -14.0f;
  newFrame = CGRectMake(245 + delta,
                               (self.frame.size.height - tipNewSize.height)/2,
                               tipNewSize.width,
-                              tipNewSize.height);&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;    dotFrame = CGRectMake(258.0 + delta,  (self.frame.size.height - tipDotSize.height)/2,
-                          tipDotSize.width,
-                          tipDotSize.height);
-    
-    iconFrame = CGRectMake(245 + delta,
-                           (self.frame.size.height - tipIconSize.height)/2,
-                           tipIconSize.width,
-                           tipIconSize.height);
-    numFrame = CGRectMake(245+delta, (self.frame.size.height - tipNumSize.height)/2, tipNumSize.width, tipNumSize.height); ``` 正确的示范：
+                              tipNewSize.height);
+        
+        dotFrame = CGRectMake(258.0 + delta,  (self.frame.size.height - tipDotSize.height)/2,
+                              tipDotSize.width,
+                              tipDotSize.height);
+        
+        iconFrame = CGRectMake(245 + delta,
+                               (self.frame.size.height - tipIconSize.height)/2,
+                               tipIconSize.width,
+                               tipIconSize.height);
+        numFrame = CGRectMake(245+delta, (self.frame.size.height - tipNumSize.height)/2, tipNumSize.width, tipNumSize.height);
 &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;正确的示范：&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-CGFloat cellHeight = CGRectGetHeight(self.frame);
+&lt;pre&gt;&lt;code&gt;CGFloat cellHeight = CGRectGetHeight(self.frame);
 CGFloat cellWidth = CGRectGetWidth(self.frame);
 CGRect numFrame = CGRectZero;
 numFrame.size = CGSizeMake(cellWidth,cellHeight);
 ...
-&lt;/code&gt;
-###布局时尽量使用相对布局，比如使用子View在父View中的相对位置。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;###布局时尽量使用相对布局，比如使用子View在父View中的相对位置。&lt;/p&gt;
 
-&lt;h3 id=&quot;uitableviewuitableviewcellcellcell&quot;&gt;在使用UITableView和UITableViewCell的时候一定要考虑到cell被复用的情况，在合适的时机对重用的cell进行清除操作。&lt;/h3&gt;
+&lt;p&gt;###在使用UITableView和UITableViewCell的时候一定要考虑到cell被复用的情况，在合适的时机对重用的cell进行清除操作。&lt;/p&gt;
 
-&lt;h3 id=&quot;uitableviewcellviewdelegatecellviewcellcellview&quot;&gt;为UITableViewCell功能或者子View的时候有限考虑子类化。尽量不要使用在delegate中为Cell添加View。子类化，利于Cell重用和对cell内新添加的子View的布局。&lt;/h3&gt;
+&lt;p&gt;###为UITableViewCell功能或者子View的时候有限考虑子类化。尽量不要使用在delegate中为Cell添加View。子类化，利于Cell重用和对cell内新添加的子View的布局。&lt;/p&gt;
 
 &lt;p&gt;良好的风格示例：&lt;/p&gt;
 
-&lt;p&gt;```
-@interface BWSettingCell : UITableViewCell
+&lt;pre&gt;&lt;code&gt;@interface BWSettingCell : UITableViewCell
 @property (nonatomic, strong, readonly) UIImageView* rightAppendImageView;
-@end&lt;/p&gt;
+@end
 
-&lt;p&gt;@implementation BWSettingCell&lt;/p&gt;
+@implementation BWSettingCell
 
-&lt;ul&gt;
-  &lt;li&gt;(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-  if (!self) {
-      return self;
-  }
-  _rightAppendImageView = [UIImageView new];
-  [self.contentView addSubview:_rightAppendImageView];
-  return self;
-}&lt;/li&gt;
-  &lt;li&gt;(void) layoutSubviews
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (!self) {
+        return self;
+    }
+    _rightAppendImageView = [UIImageView new];
+    [self.contentView addSubview:_rightAppendImageView];
+    return self;
+}
+- (void) layoutSubviews
 {
-  [super layoutSubviews];
-  CGSize rightImageSize = _rightAppendImageView.image.size;
-  _rightAppendImageView.frame = CGRectMake(CGRectGetWidth(self.frame) - rightImageSize.width,
-                                           (CGRectGetHeight(self.frame) - rightImageSize.height) /2,
-                                           rightImageSize.width,
-                                           rightImageSize.height);
+    [super layoutSubviews];
+    CGSize rightImageSize = _rightAppendImageView.image.size;
+    _rightAppendImageView.frame = CGRectMake(CGRectGetWidth(self.frame) - rightImageSize.width,
+                                             (CGRectGetHeight(self.frame) - rightImageSize.height) /2,
+                                             rightImageSize.width,
+                                             rightImageSize.height);
 }
 @end
-```&lt;/li&gt;
-&lt;/ul&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;反面教材：&lt;/p&gt;
 
-&lt;p&gt;```
-…
-- (UITableViewCell&lt;em&gt;) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+&lt;pre&gt;&lt;code&gt;...
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString&lt;/em&gt; const settingCellIdentify = @”settingCellIdentify”;
+    static NSString* const settingCellIdentify = @&quot;settingCellIdentify&quot;;
     UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:settingCellIdentify];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:settingCellIdentify];
     }
-    static int kSettingCellSubViewTag = 90001;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//非常错误的地方，尽量不要这样写
-[cell.contentView removeAllSubviews];
-
-UIImageView* rightAppendingView = [UIImageView new];
-rightAppendingView.image = nil;
-rightAppendingView.frame = CGRectMake(230, 8, 30, 30);
-[cell.contentView addSubview:rightAppendingView];
-return cell; } ... ```
+    static int kSettingCellSubViewTag = 90001;
+    
+    //非常错误的地方，尽量不要这样写
+    [cell.contentView removeAllSubviews];
+    
+    UIImageView* rightAppendingView = [UIImageView new];
+    rightAppendingView.image = nil;
+    rightAppendingView.frame = CGRectMake(230, 8, 30, 30);
+    [cell.contentView addSubview:rightAppendingView];
+    return cell;
+}
+...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;section-18&quot;&gt;设计模式相关&lt;/h2&gt;
+&lt;p&gt;##设计模式相关&lt;/p&gt;
 
 &lt;p&gt;使用设计模式的最基本原则，除非你明确知道自己要做件什么事情，而且知道使用特定设计模式带来的影响，否则不要刻意的使用设计模式。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-19&quot;&gt;单例模式&lt;/h3&gt;
-&lt;p&gt;创建一个单例模式可以使用dispatch_once&lt;/p&gt;
+&lt;p&gt;###单例模式&lt;br /&gt;
+创建一个单例模式可以使用dispatch_once&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-+ (instancetype)defaultManager
+&lt;pre&gt;&lt;code&gt;+ (instancetype)defaultManager
 {
     if (!_defaultManager) {
         static dispatch_once_t onceToken;
@@ -1051,23 +1527,21 @@ return cell; } ... ```
     }
     return _defaultManager;
 }
-&lt;/code&gt;
-###观察者模式
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;###观察者模式&lt;br /&gt;
 ####如果只是单纯的传递数据，不要使用观察者模式，容易导致逻辑链断裂。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-20&quot;&gt;抽象&lt;/h2&gt;
-&lt;p&gt;##逻辑连贯性&lt;/p&gt;
+&lt;p&gt;##抽象&lt;br /&gt;
+##逻辑连贯性&lt;/p&gt;
 
-&lt;h2 id=&quot;section-21&quot;&gt;参考资料&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;《&lt;a href=&quot;http://item.jd.com/10064006.html&quot;&gt;Clean Code&lt;/a&gt;》&lt;/li&gt;
-  &lt;li&gt;《&lt;a href=&quot;http://item.jd.com/11020839.html&quot;&gt;编写可阅读代码的艺术&lt;/a&gt;》&lt;/li&gt;
-  &lt;li&gt;《&lt;a href=&quot;http://zh-google-styleguide.readthedocs.org/en/latest/google-objc-styleguide/&quot;&gt;Google Objective-C Style Guide&lt;/a&gt;》&lt;/li&gt;
-  &lt;li&gt;《&lt;a href=&quot;https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html#//apple_ref/doc/uid/10000146-SW1&quot;&gt;Introduction to Coding Guidelines for Cocoa&lt;/a&gt;》&lt;/li&gt;
-  &lt;li&gt;《&lt;a href=&quot;http://www.cnblogs.com/xdream86/p/3309345.html&quot;&gt;iOS应用开发最佳实践系列一：编写高质量的Objective-C代码&lt;/a&gt;》&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;##参考资料&lt;br /&gt;
+1. 《&lt;a href=&quot;http://item.jd.com/10064006.html&quot;&gt;Clean Code&lt;/a&gt;》&lt;br /&gt;
+2. 《&lt;a href=&quot;http://item.jd.com/11020839.html&quot;&gt;编写可阅读代码的艺术&lt;/a&gt;》&lt;br /&gt;
+3. 《&lt;a href=&quot;http://zh-google-styleguide.readthedocs.org/en/latest/google-objc-styleguide/&quot;&gt;Google Objective-C Style Guide&lt;/a&gt;》&lt;br /&gt;
+4. 《&lt;a href=&quot;https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html#//apple_ref/doc/uid/10000146-SW1&quot;&gt;Introduction to Coding Guidelines for Cocoa&lt;/a&gt;》&lt;br /&gt;
+5. 《&lt;a href=&quot;http://www.cnblogs.com/xdream86/p/3309345.html&quot;&gt;iOS应用开发最佳实践系列一：编写高质量的Objective-C代码&lt;/a&gt;》&lt;/p&gt;
 
-&lt;h2 id=&quot;section-22&quot;&gt;版本修订记录&lt;/h2&gt;
+&lt;p&gt;##版本修订记录&lt;/p&gt;
 
 &lt;table&gt;
   &lt;thead&gt;
@@ -1101,18 +1575,18 @@ return cell; } ... ```
     
       <item>
         <title>在设计SDK的时候应当注意的点</title>
-        <description>&lt;p&gt;在SDK设计的时候，不注意自己是嵌入到别人的运行环境中的一部分。还是按照原先做App的思路去处理，可以随意的更改运行时的实例的属性，甚至是修改很多全局变量的值。结果就是污染了宿主的环境，导致宿主无法正常运行。
+        <description>&lt;p&gt;在SDK设计的时候，不注意自己是嵌入到别人的运行环境中的一部分。还是按照原先做App的思路去处理，可以随意的更改运行时的实例的属性，甚至是修改很多全局变量的值。结果就是污染了宿主的环境，导致宿主无法正常运行。&lt;br /&gt;
 &lt;!--more--&gt;&lt;/p&gt;
 
-&lt;h1 id=&quot;sdk&quot;&gt;在设计SDK的时候应当注意到底点之污染问题（一）&lt;/h1&gt;
+&lt;p&gt;#在设计SDK的时候应当注意到底点之污染问题（一）&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;运行时环境污染，内存污染，文件污染&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;切记不要污染宿主的环境，修改宿主环境中的变量&lt;/h2&gt;
+&lt;p&gt;##切记不要污染宿主的环境，修改宿主环境中的变量&lt;/p&gt;
 
-&lt;p&gt;在处理百度钱包集成到手机百度的过程中，发现了一个奇怪的问题：
+&lt;p&gt;在处理百度钱包集成到手机百度的过程中，发现了一个奇怪的问题：&lt;br /&gt;
 &amp;gt; 当进入钱包首页，再退出钱包的时候，手百中的手势滑动神奇的被禁掉了。&lt;/p&gt;
 
 &lt;p&gt;跟踪了半天，发现了问题所在。原来在钱包ViewController的基类，BaseVC中将self.navigationController.delegate设置成了nil。而钱包Push界面的时候，是用的手机百度传进来的navigationControoler。也就是说手机百度和钱包在公用一个UINavigationController的实例。这一下子所有原来的navigationController的delegate就真的成了nil了，尤其是推出之后。结果就导致了，手机百度写在delegate中的逻辑无法顺利执行,于是手百中的手势被干掉了。&lt;/p&gt;
@@ -1127,35 +1601,34 @@ return cell; } ... ```
 
 &lt;p&gt;但是问题来了，有些时候SDK的确需要对环境做出一些修改，来让SDK的逻辑能够正常运行，那么我们可以怎么去处理？&lt;/p&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;备忘录模式，快照与还原&lt;/h3&gt;
+&lt;p&gt;###备忘录模式，快照与还原&lt;/p&gt;
 
-&lt;p&gt;这是最直接的一个想法，既然要污染他的环境。修改他的变量，那么我可不可以在改动之前先做一个备份。等到推出SDK的时候进行还原呢。是啊，这是一个可行的方案。&lt;br /&gt;
+&lt;p&gt;这是最直接的一个想法，既然要污染他的环境。修改他的变量，那么我可不可以在改动之前先做一个备份。等到推出SDK的时候进行还原呢。是啊，这是一个可行的方案。  &lt;br /&gt;
 但是要求SDK要有明确的入口和出口。这样才能够保证你能够在合适的地方进行快照，也在合适的出口的地方进行还原操作。在设计并实践该方法的时候，本着职责单一的原则，尽量将这个快照与还原的功能设计成一个单独的功能模块。尽量不要放在原有业务逻辑处理模块中。否则将会带来维护上的灾难。&lt;/p&gt;
 
 &lt;p&gt;这个问题在钱包中所也是有所体现，将设置self.navigationController.delegate的代码写在了所有VC的基类之类。这样，就导致了现在钱包所有的VC都会执行这段代码。假设我现在有这么几个类：&lt;/p&gt;
 
-&lt;p&gt;```
-@interface BaseVC : ViewController
+&lt;pre&gt;&lt;code&gt;@interface BaseVC : ViewController
 - (void) viewDidLoad
 {
   [super viewDidLoad];
   self.navigationController.delegate = nil;
 }
-@end&lt;/p&gt;
+@end
 
-&lt;p&gt;@interface VC1 : BaseVC&lt;/p&gt;
+@interface VC1 : BaseVC
 
-&lt;p&gt;@end&lt;/p&gt;
+@end
 
-&lt;p&gt;@interface VC2 : BaseVC&lt;/p&gt;
+@interface VC2 : BaseVC
 
-&lt;p&gt;@end
-……..
-```&lt;/p&gt;
+@end
+........
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;这段一是嵌入到了业务逻辑当中，二来由于是在基类中，所以当程序运行时VC1，VC2被实例化之后，而又由同一个NavigtionController来push的话，那么navigationController的delegate将会被重置好多次。oy my god！这样就更难理解和维护。虽然你可以拆东墙补西墙，发现BUG之后，在这里再继续写多余的逻辑来保证delegate能够被设置正确。但是为什么不修改一次，彻底杜绝类似的BUG发生呢？&lt;/p&gt;
 
-&lt;h3 id=&quot;vitualenviroment&quot;&gt;创建VitualEnviroment，搞一个自己的环境，不和宿主共享。&lt;/h3&gt;
+&lt;p&gt;###创建VitualEnviroment，搞一个自己的环境，不和宿主共享。&lt;/p&gt;
 
 &lt;p&gt;这里说的VitrualEnviroment没有像VM那么高大上，只是一个比较贴切的说法。就是搞一个自己的环境，不和宿主共享。这样就直接做到了内存上的隔离。就拿刚才一直说的navigationController的例子来说吧。就是我们创建一个自己的navigationController来使用，不去使用宿主的那个实例。这样无论我们怎样&lt;code&gt;self.navigationController.delegate = nil;&lt;/code&gt;。也不会对原先的nav造成影响。让宿主出现莫名其妙的问题。&lt;/p&gt;
 
@@ -1168,7 +1641,7 @@ return cell; } ... ```
 
 &lt;p&gt;内存隔离也是非常重要的一个事情啊。&lt;/p&gt;
 
-&lt;h1 id=&quot;section-2&quot;&gt;重中之重，是要识别&lt;/h1&gt;
+&lt;p&gt;#重中之重，是要识别&lt;/p&gt;
 
 &lt;p&gt;其实，最关键的是，我们在改动的时候，需要识别出来，我们的改动是否对宿主的环境有所污染，是否修改了宿主的实例，是否修改了宿主的全局变量，是否动了宿主的某些文件。。。。。。重要的事情说三遍。一行代码虽小，影响却不知几何。尤其是在做SDK的时候，更要慎之又慎。考虑周全，从设计到编码，从编码到编译与链接，从连接到运行时，到整个变量的生命周期。&lt;/p&gt;
 
@@ -1186,10 +1659,10 @@ return cell; } ... ```
         <title>全局变量漫谈</title>
         <description>&lt;!--more--&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;什么是全局变量&lt;/h2&gt;
+&lt;p&gt;##什么是全局变量&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;在程序设计中，全局变量是在所有作用域都可访问的变量，与之对应的是局部变量。&lt;br /&gt;
+  &lt;p&gt;在程序设计中，全局变量是在所有作用域都可访问的变量，与之对应的是局部变量。  &lt;br /&gt;
   —-&lt;a href=&quot;https://zh.wikipedia.org/wiki/%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F&quot;&gt;WIKI&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1210,17 +1683,17 @@ return cell; } ... ```
 
 &lt;p&gt;使用全局变量，当然有必须是它才能够完成的任务，然而它在完成功能的时候，也产生了一些副作用。于是，我们必然会思考：是够该使用全局变量。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-1&quot;&gt;我们是否该使用全局变量&lt;/h2&gt;
+&lt;p&gt;##我们是否该使用全局变量&lt;/p&gt;
 
-&lt;h2 id=&quot;section-2&quot;&gt;全局变量的变种&lt;/h2&gt;
+&lt;p&gt;##全局变量的变种&lt;/p&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;单例&lt;/h3&gt;
+&lt;p&gt;###单例&lt;/p&gt;
 
-&lt;h3 id=&quot;strong&quot;&gt;被strong之后在实例之间传来传去的变量&lt;/h3&gt;
+&lt;p&gt;###被strong之后在实例之间传来传去的变量&lt;/p&gt;
 
-&lt;h3 id=&quot;static&quot;&gt;函数内部的static变量&lt;/h3&gt;
+&lt;p&gt;###函数内部的static变量&lt;/p&gt;
 
-&lt;h2 id=&quot;section-4&quot;&gt;使用全局变量的时候，请慎重，慎之又慎&lt;/h2&gt;
+&lt;p&gt;##使用全局变量的时候，请慎重，慎之又慎&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;该对象是否是真的需要在整个程序的生命周期内，常驻内存。&lt;/li&gt;
@@ -1237,7 +1710,7 @@ return cell; } ... ```
       <item>
         <title>机制与策略分离</title>
         <description>&lt;blockquote&gt;
-  &lt;p&gt;提供机制，而不是策略
+  &lt;p&gt;提供机制，而不是策略&lt;br /&gt;
             –《Unix编程艺术》&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1265,37 +1738,37 @@ return cell; } ... ```
 
 &lt;p&gt;在设计模式的江湖中，各种“牛逼”级的人物纷纷登场，你方唱罢我登场，我方唱罢你登场。有的修炼的是“行为型”的外功，有的练得一手“构件型”的内家子，还有的剑走偏锋玩的一套“创建型”的招式。就像所有的江湖一样，在高手如云的地方，总会出现一个高手中的高手，他融汇百家之长，他雄霸江湖，他号令群雄，在武侠中是少林——天下武功出少林。在设计模式的江湖中，他是“六大模式”——天下模式出原则。就像武功一样，招式千变万化，但万变不离其宗，剑谱千奇百怪，终究万剑归宗。今天就说说街巷间传言甚多的“六大原则”。&lt;/p&gt;
 
-&lt;p&gt;第一章 缘起
-是什么
-六大原则，是谁名什，师出何门，曾经做出过什么经天纬地的事情？大家众说纷纭，我这里只是说说坊间流传较多的一种说法。
+&lt;p&gt;第一章 缘起&lt;br /&gt;
+是什么&lt;br /&gt;
+六大原则，是谁名什，师出何门，曾经做出过什么经天纬地的事情？大家众说纷纭，我这里只是说说坊间流传较多的一种说法。&lt;br /&gt;
 我们先不深究六大原则的细节，先看看他们都长了个什么模样。&lt;/p&gt;
 
-&lt;p&gt;单一指责
-里氏替换
-依赖倒置
-接口隔离
-迪米特法则
-开闭原则
-面向对象
+&lt;p&gt;单一指责&lt;br /&gt;
+里氏替换&lt;br /&gt;
+依赖倒置&lt;br /&gt;
+接口隔离&lt;br /&gt;
+迪米特法则&lt;br /&gt;
+开闭原则&lt;br /&gt;
+面向对象&lt;br /&gt;
 据说六大原则和面向对象（Object-Oriented）渊源很深。在某些场合下，人们经常会这样谈起：面向对象的六大原则有什么什么。也就是说六大原则，不是个石猴，凭空就变出来的。他是从面向对象的某些特质中演变而来。&lt;/p&gt;
 
 &lt;p&gt;面向对象是编程范式（关于编程范式的东西，看客可以出门左拐《关于程序设计和思维的思考》）的一种，而且是时下最流行的。面向对象其实是我们对于程序的一种理解方式，用“Object”的方式去理解程序。于是很关键的就有两个东西：&lt;/p&gt;
 
-&lt;p&gt;对象本身的特征
-对象之间的关系
+&lt;p&gt;对象本身的特征&lt;br /&gt;
+对象之间的关系&lt;br /&gt;
 在对这两个东西研究的基础上发展出了面向对象的三个基础特征：封装、继承、多态。仔细看看，就觉得封装是说的怎么去处理对象本身的特质，而继承和多态处理的是对象之间的关系。人们自然就会问了，只知道了这些特征没有一些可以操作的东西怎么成啊。于是六大原则和设计模式来了，指导着面向对象的实践。告诉你一些在处理对象和对象之间的关系的时候，应当注意一些什么，又应当遵守一些什么，或者应当规避些什么。&lt;/p&gt;
 
-&lt;p&gt;鸡生蛋，蛋生鸡
+&lt;p&gt;鸡生蛋，蛋生鸡&lt;br /&gt;
 原则，故名思议就是本质，是设计模式的起源。他指导着怎么去创造设计模式。这个是比较直白的了。但是，我搜了半天也没有找到一个地方能够明确的说明白，到底是先有的设计模式，人们用着用着发现：唉，应该再抽象一层到原则；还是先有的六大原则，在其指导下有计划有预谋的搞出了设计模式。&lt;/p&gt;
 
 &lt;p&gt;但无论是哪一种，都在说明一个问题：设计模式和六大原则之间或许没有那么明显的界限。他们不过是用来处理实际的变成问题的时候的一种思路或者思想而已。只要在使用的过程中，能够很好的解决问题就OK了，何必纠结于疍与鸡的问题。&lt;/p&gt;
 
-&lt;p&gt;在其他范式中的应用
+&lt;p&gt;在其他范式中的应用&lt;br /&gt;
 既然是一种思路或者思想，他一旦出来后，可能就不局限于应用在面向对象这一种地方了。在其他的一些编程范式中，或许你也能够发现它的一些影子。&lt;/p&gt;
 
-&lt;p&gt;第二章 各显神通
-概述SOLID
-单一指责
+&lt;p&gt;第二章 各显神通&lt;br /&gt;
+概述SOLID&lt;br /&gt;
+单一指责&lt;br /&gt;
 定义:就一个类而言，应该仅有一个引起它变化的原因。&lt;/p&gt;
 
 &lt;p&gt;解析:从定义来看，理解起来应该不困难，通俗点地说就是不存在多个原因使得一个类发生变化，也就是说一个类只负责一种职责工作，该原则是六大原则中最简单的一种，因此不必多说。&lt;/p&gt;
@@ -1308,7 +1781,7 @@ return cell; } ... ```
 
 &lt;p&gt;(3)可维护性强，一个易读、简单的类当然也易维护&lt;/p&gt;
 
-&lt;p&gt;里氏替换
+&lt;p&gt;里氏替换&lt;br /&gt;
 定义:里氏替换原则的定义有两种，据说是由麻省理工的一位姓里的女士所提出，因此以其名所命名。&lt;/p&gt;
 
 &lt;p&gt;定义1:如果对一个类型为T1的对象o1，都有类型为T2的对象o2，使得以T1所定义的程序P中在o1全都替换成o2时，程序的行为不发生任何变化，那么T2为T1的子类。&lt;/p&gt;
@@ -1333,26 +1806,26 @@ return cell; } ... ```
 
 &lt;p&gt;优点:可扩展性与可维护性强&lt;/p&gt;
 
-&lt;p&gt;依赖倒置
+&lt;p&gt;依赖倒置&lt;br /&gt;
 定义:抽象不应该依赖于细节，细节依赖于抽象。&lt;/p&gt;
 
 &lt;p&gt;解析:依赖倒置原则在程序编码中很常运用，其中心思想就是面向接口编程，高层模块不应该依赖底层模块(原子操作的模块)，两者都应该依赖于抽象。接触过Spring框架的朋友都知道，Spring框架就是一个很好的依赖倒置原则思想的体现。&lt;/p&gt;
 
-&lt;p&gt;接口隔离
+&lt;p&gt;接口隔离&lt;br /&gt;
 定义:一个类对另一个类的依赖应该建立在最小的接口上。&lt;/p&gt;
 
 &lt;p&gt;解析:一个接口代表一个角色，不应该将不同的角色都交给一个接口，这样会导致形成一个臃肿的大接口。听起来好像有些像单一职责原则，但是不尽然，在单一职责原则中，一个接口可能有多个方法，提供给多种不同的调用者所调用，但是它们始终完成同一种功能，因此它们符合单一原则，却不符合接口隔离原则，因为这个接口存在着多种角色，因此可以拆分成更多的子接口，以供不同的调用者所调用。&lt;/p&gt;
 
 &lt;p&gt;优点:符合高内聚低耦合的设计思想，意在设计一个短而小的接口和类，这个在代码重构中比较常见，可读性、可扩展性、可维护性等都不错，很受程序员们的欢迎。&lt;/p&gt;
 
-&lt;p&gt;迪米特法则
+&lt;p&gt;迪米特法则&lt;br /&gt;
 定义:一个对象应该对其他对象有最少的了解。&lt;/p&gt;
 
 &lt;p&gt;解析:意思就是一个对象对其他对象知道得越少越好，其核心就是低耦合。迪米特法则又有一个解释，即是只与直接的朋友通信，何谓直接朋友?大家都知道，对象之间的交流必定是少不了耦合的，为了降低对象之间的耦合，我们可以设定一个中间者，让这个中间者给要通信的双方进行传话，这样的话，这两个对象耦合程度可以达到很小，而我所说的这个中间者，就是直接朋友。&lt;/p&gt;
 
 &lt;p&gt;优点:我们可以试想一下，两个对象之间的耦合越大，其维护起来就越是困难，假如我们需要改变其中一个对象，另外一个对象也要进行大量的修改，而迪米特法则，则让对象之间的耦合降到最小，符合高内聚低耦合的特性，这样维护起来当然就容易多咯~&lt;/p&gt;
 
-&lt;p&gt;开闭原则
+&lt;p&gt;开闭原则&lt;br /&gt;
 定义:一个软件实体(如类、模块、函数)应当对扩展开放，对修改关闭。&lt;/p&gt;
 
 &lt;p&gt;解析:该定义理解起来略微抽象，按照自己的理解就是，对于一个已经存在的类，如果我们需要继续去扩充其功能，不应该直接修改该类的内部实现，而是应该通过抽象类或者接口来进行功能的扩充，由此可见，实现开闭原则关键是抽象。至于为什么需要开闭原则，我们可以假想，一个网络游戏若需要更新，我们常做的方法是为该游戏打上一个补丁，或者是更新它仅需更新的模块，而不会把整个游戏卸载，然后再重新装上新版本的游戏。&lt;/p&gt;
@@ -1363,339 +1836,17 @@ return cell; } ... ```
 
 &lt;p&gt;(2)具有稳定性，表现在其基本功能类不允许被修改，使得被破坏的程度大大下降。&lt;/p&gt;
 
-&lt;p&gt;第三章 重剑无锋，大巧不工
+&lt;p&gt;第三章 重剑无锋，大巧不工&lt;br /&gt;
 像武侠的世界中，最牛逼的人物，不止是会了什么降龙十八掌之类的绝世武功的主。而是少林寺中的扫地神僧——一无招胜有招。话说，剑术分三级：&lt;/p&gt;
 
-&lt;p&gt;手中有剑，心中无剑。此为初作者。虽然手握神兵利器，但是不知如何去用。刚刚知道有六大原则和设计模式这个东西，但是止步于知道，不知如何运用。
-手中有剑，心中亦有剑。这是大师，深谙剑谱，也有一把神兵利器。但是容易陷入刻意追求形式的境地。要么一心想苦练《辟邪剑谱》——欲练此功，必先自宫….；要么用剑的时候，一定要按照某种特定的套路去做。这个时候，已经熟谙六大原则和23中常用的设计模式。在设计或者编码的时候，刻意追求应用设计模式。
-手中无剑，心中有剑。这是已经做到人剑合一的境地了。其虚手中无剑，其实万物皆剑。一草一木，信手拈来，皆幻化做锋利的兵器。扫地神僧，扫把都是神器。郭靖用的那把剑不是也是看起来很笨重。所谓重剑无锋，大巧不工。
+&lt;p&gt;手中有剑，心中无剑。此为初作者。虽然手握神兵利器，但是不知如何去用。刚刚知道有六大原则和设计模式这个东西，但是止步于知道，不知如何运用。&lt;br /&gt;
+手中有剑，心中亦有剑。这是大师，深谙剑谱，也有一把神兵利器。但是容易陷入刻意追求形式的境地。要么一心想苦练《辟邪剑谱》——欲练此功，必先自宫….；要么用剑的时候，一定要按照某种特定的套路去做。这个时候，已经熟谙六大原则和23中常用的设计模式。在设计或者编码的时候，刻意追求应用设计模式。&lt;br /&gt;
+手中无剑，心中有剑。这是已经做到人剑合一的境地了。其虚手中无剑，其实万物皆剑。一草一木，信手拈来，皆幻化做锋利的兵器。扫地神僧，扫把都是神器。郭靖用的那把剑不是也是看起来很笨重。所谓重剑无锋，大巧不工。&lt;br /&gt;
 这个时候，在设计或者编码的时候，不在可以的追求设计模式，也不再在乎形式。往往很多时候出来的方案：简单、粗暴、有效。&lt;/p&gt;
 </description>
         <pubDate>Sat, 24 Oct 2015 19:14:39 +0800</pubDate>
         <link>http://dzpqzb.com/2015/10/24/ios.html</link>
         <guid isPermaLink="true">http://dzpqzb.com/2015/10/24/ios.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>奇怪的动画</title>
-        <description>&lt;p&gt;在重构红点的UI过程中，发现一个奇怪的问题。使用block传进来的布局信息调用后会神奇的产生一个动画：
-&lt;!--more--&gt;&lt;/p&gt;
-
-&lt;p&gt;在重构红点的UI过程中，发现一个奇怪的问题。使用block传进来的布局信息调用后会神奇的产生一个动画：
-```
-//扩展红点View
-QQExtendViewRedPoint(self.buttton, @”1000100”, YES, ^(UIView* originView, UIView* redPointView, RedPointShowInfo* showInfo) {
-        redPointView.frame = CGRectMake(CGRectGetMaxX(originView.frame), CGRectGetMinY(originView.frame), CGRectGetWidth(redPointView.frame), CGRectGetHeight(redPointView.frame) );
-})&lt;/p&gt;
-
-&lt;p&gt;….&lt;/p&gt;
-
-&lt;p&gt;```&lt;/p&gt;
-
-&lt;p&gt;```
-//红点View布局的代码&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;(void) layout {
-      ….
-      case VASHintTypeDot:
-              redPointView = [self __layoutRedDot:showInfo]; //(1)第一次默认布局
-      ….
-          QQRedPointLayoutBlock layoutBlock = self.redPointLayoutBlock;
-          if(layoutBlock) {
-                      layoutBlock(self, redPointView, showInfo); //(2)用户自定义布局
-          }&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;}&lt;/p&gt;
-
-&lt;p&gt;```&lt;/p&gt;
-
-&lt;p&gt;但是当给&lt;code&gt;self.button&lt;/code&gt;加上了一个调整frame的动画之后，开始变得神奇了：&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;
-    [UIView animateWithDuration:1.0 delay:0.8 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        if (showOrHide) {
-        //动画部分，改变了accountButton的frame
-            self.accountButton.frame = CGRectMake(0, 1, self.bottomView.frame.size.width/2 -1 , self.bottomView.frame.size.height -1);
-            self.addCardButton.frame = CGRectMake(self.bottomView.frame.size.width/2, 1, self.bottomView.frame.size.width/2, self.bottomView.frame.size.height-1);
-            VIPDataReportWithOperationName(@&quot;bindbtnshow&quot;, nil, nil, nil, nil);
-        }else{
-            self.accountButton.frame = CGRectMake(0, 1, self.bottomView.frame.size.width, self.bottomView.frame.size.height -1);
-            self.addCardButton.frame = CGRectMake(self.bottomView.frame.size.width+1, 1, self.bottomView.frame.size.width/2, self.bottomView.frame.size.height-1);
-        }
-    } completion:^(BOOL finished){
-        [self updateAddCardButtonWithSubTitle:self.bindCardPromotion.promoWord];//动画完成后update一下
-        self.buttonIsAnimating = NO;
-    }];
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;红点产生了一个奇怪的动画:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103gw1excfefctlzj20cd044t8p.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;红点首先出现在（1）位置，然年跳动到（2），之后动画返回到(3).
-奇怪的地方在于，我们没有给红点添加任何动画，唯一可能添加动画的地方，就是给accountButton添加的动画。而预期的动画效果，不应该出现在用户布局位置和默认布局位置之间抖动的情况。那么问题到底出在了哪里？&lt;/p&gt;
-
-&lt;p&gt;而且有意思的是，同样的代码在IOS8上没有问题，在IOS7上才会有问题。所以我们就怀疑到了在动画处理上IOS系统版本之间可能会有差异。&lt;/p&gt;
-
-&lt;p&gt;仔细研究代码发现，在layout中对红点进行了两次frame设置，如上面代码中标注的（1）与（2）位置的代码。而IOS7一下的系统在处理父View的layout的时候，同事调用了1与2处的代码，对红点的View进行了两次布局。而又把这两个布局之间的过程处理成了动画，所以产生了抖动的问题。而在IOS8上面apple应该修正了这个问题，把在同一个layout中的布局处理成了一个无动画过程。&lt;/p&gt;
-</description>
-        <pubDate>Sat, 24 Oct 2015 19:03:35 +0800</pubDate>
-        <link>http://dzpqzb.com/2015/10/24/strage-animation.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/10/24/strage-animation.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>StyleSheet</title>
-        <description>&lt;!--more--&gt;
-&lt;p&gt;# StyleSheet&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/dongzhao/StyleSheet&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/dongzhao/StyleSheet.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/StyleSheet&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/StyleSheet.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/StyleSheet&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/StyleSheet.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/StyleSheet&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/StyleSheet.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;usage&quot;&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;UIKit&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;StyleSheet is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
-it, simply add the following line to your Podfile:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;ruby
-pod &quot;StyleSheet&quot;
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;whats-wrong-with-origin-method&quot;&gt;What’s wrong with origin method?&lt;/h2&gt;
-&lt;p&gt;如果要实现下面这个效果，两个label，一个button，一个view
-&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1euv1c5pbvdj20k00zkq3f.jpg&quot; alt=&quot;image&quot; /&gt;
-基于原有的配置大概要写&lt;/p&gt;
-
-&lt;p&gt;```
-    self.label.layer.cornerRadius = 3;
-    self.label.textColor = [UIColor darkTextColor];
-    self.label.font = [UIFont systemFontOfSize:13];
-    self.label.backgroundColor = [UIColor greenColor];
-    self.label.layer.borderWidth = 2;
-    self.label.layer.borderColor = [UIColor redColor].CGColor;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;self.label2.layer.cornerRadius = 3;
-self.label2.textColor = [UIColor darkTextColor];
-self.label2.font = [UIFont systemFontOfSize:13];
-self.label2.backgroundColor = [UIColor greenColor];
-self.label2.layer.borderWidth = 2;
-self.label2.layer.borderColor = [UIColor redColor].CGColor;
-
-
-self.button.layer.cornerRadius = 3;
-self.button.backgroundColor = [UIColor greenColor];
-self.button.layer.borderWidth = 2;
-self.button.layer.borderColor = [UIColor redColor].CGColor;
-
-self.aView.layer.cornerRadius = 3;
-self.aView.backgroundColor = [UIColor greenColor];
-self.aView.layer.borderWidth = 2;
-self.aView.layer.borderColor = [UIColor redColor].CGColor; ```
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;所暴漏的问题：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;繁琐的代码，大量重复性的工作&lt;/li&gt;
-  &lt;li&gt;样式无法共享，每一个View都需要重新进行样式赋值。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;因而StyleSheet所要解决的问题就是：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;样式配置轻便化，能够使用更加少的代码来描述View的样式&lt;/li&gt;
-  &lt;li&gt;样式在View之间的共享&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;目前阶段使用StyleSheet完成上述样式：&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;
-self.label.style = DZLabelStyleMake(
-                                        style.backgroundColor = [UIColor greenColor];
-                                        style.cornerRedius = 3;
-                                        style.borderColor = [UIColor redColor];
-                                        style.borderWidth = 2;
-                                        style.textStyle.textColor = [UIColor darkTextColor];
-                                        style.textStyle.font = [UIFont systemFontOfSize:13];
-    );
-    self.label2.style = self.label.style;
-    self.aView.style = self.label.style;
-    [self.button.style copyAttributesWithStyle:self.label.style];
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;how-to-use&quot;&gt;How to use?&lt;/h3&gt;
-&lt;p&gt;在设计StyleSheet的时候故意淡化了被渲染的View的类型的概念，任何一种类型的Style可以对任何类型的View进行渲染，但是必须是这种类型的View支持Style所指称的属性。比如你可以使用真对Button设计的DZButtonStateStyle来渲染一个UILabel，但由于UILabel不支持DZButtonStateStyle中的渲染属性，所以渲染结果是无效的。&lt;/p&gt;
-
-&lt;p&gt;但是当使用DZButtonStyle(继承自DZViewStyle)来渲染UILabel的时候，会使用DZButtonStyle中其父类的某些渲染属性，来渲染UILabel的父类UIView所支持的那些属性。
-####直接使用Style对View进行渲染：&lt;/p&gt;
-
-&lt;p&gt;```
-DZLabelStyle* style = DZLabelStyleMake(
-                                        style.backgroundColor = [UIColor greenColor];
-                                        style.cornerRedius = 3;
-                                        style.borderColor = [UIColor redColor];
-                                        style.borderWidth = 2;
-                                        style.textStyle.textColor = [UIColor darkTextColor];
-                                        style.textStyle.font = [UIFont systemFontOfSize:13];
-    );&lt;/p&gt;
-
-&lt;p&gt;[style decorateView:self.label];
-```
-直接渲染的好处是，不用再次生成Style对象，更加方便样式在多个View之间渲染。&lt;/p&gt;
-
-&lt;h4 id=&quot;section&quot;&gt;赋值渲染&lt;/h4&gt;
-
-&lt;p&gt;&lt;code&gt;
-self.label.style = style;
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;或者&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;
-self.label.style = DZLabelStyleMake(
-                                        style.backgroundColor = [UIColor greenColor];
-                                        style.cornerRedius = 3;
-                                        style.borderColor = [UIColor redColor];
-                                        style.borderWidth = 2;
-                                        style.textStyle.textColor = [UIColor darkTextColor];
-                                        style.textStyle.font = [UIFont systemFontOfSize:13];
-    );
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;当进行赋值渲染的时候，会将Style的Copy后的实例与当前View绑定，当更改Style的属性的时候，对应View的样式会立刻改变。&lt;/p&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;通用样式的共享&lt;/h3&gt;
-&lt;p&gt;使用原有的配置，进行通用样式的共享是个非常困难的事情，基本上都是体力活，靠人力来维护。我们的代码中会掺杂大量的用于配置样式的代码，而且是独立且散在。&lt;/p&gt;
-
-&lt;p&gt;现在你可以通过StyleSheet解决：
-####定义共享的样式：&lt;/p&gt;
-
-&lt;p&gt;```
-EXTERN_SHARE_LABEL_STYLE(Content)&lt;/p&gt;
-
-&lt;p&gt;IMP_SHARE_LABEL_STYLE(Content,
-                      style.backgroundColor = [UIColor clearColor];
-                      style.cornerRedius = 2;
-                      style.textStyle.textColor = [UIColor redColor];
-                      )
-```&lt;/p&gt;
-
-&lt;h4 id=&quot;section-2&quot;&gt;使用共享样式,方式一&lt;/h4&gt;
-
-&lt;p&gt;&lt;code&gt;
-self.label.style =  DZStyleContent();
-&lt;/code&gt;
-####使用共享样式，方式二（推荐）
-很多时候, 如果不需要进一步更改样式,可以不采复制赋值的方式来进行渲染，可以直接使用：&lt;/p&gt;
-
-&lt;p&gt;```
-[DZStyleContent() decorateView:self.label];&lt;/p&gt;
-
-&lt;p&gt;```
-只进行渲染，而不进行复制&lt;/p&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;支持的类型&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;UIView&lt;/li&gt;
-  &lt;li&gt;UILabel&lt;/li&gt;
-  &lt;li&gt;UITextView&lt;/li&gt;
-  &lt;li&gt;UITextField&lt;/li&gt;
-  &lt;li&gt;UIButton&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;section-4&quot;&gt;计划中支持的类型&lt;/h2&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;UISearchBar&lt;/li&gt;
-  &lt;li&gt;UINavigationBar&lt;/li&gt;
-  &lt;li&gt;…..&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
-
-&lt;p&gt;yishuiliunian@gmail.com&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;StyleSheet is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 10 Aug 2015 23:46:19 +0800</pubDate>
-        <link>http://dzpqzb.com/2015/08/10/stylesheet.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/08/10/stylesheet.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>分层，那一刀切的是否精准？</title>
-        <description>&lt;!--more--&gt;
-
-&lt;p&gt;分层的核心目的在于：分离关注点。&lt;/p&gt;
-
-&lt;p&gt;我们所得到的模块，关键的不止是他能做什么，还有他不能做什么。而往往他不能做什么更加关键。&lt;/p&gt;
-
-&lt;p&gt;分层是表示将功能进行有序的分组：应用程序专用功能位于上层，跨越应用程序领域的功能位于中层，而配置环境专用功能位于低层。分层从逻辑上将子系统划分成许多集合，而层间关系的形成要遵循一定的规则。&lt;/p&gt;
-
-&lt;p&gt;分层是表示将功能进行有序的分组：应用程序专用功能位于上层，跨越应用程序领域的功能位于中层，而配置环境专用功能位于低层。分层从逻辑上将子系统划分成许多集合，而层间关系的形成要遵循一定的规则。通过分层，可以限制子系统间的依赖关系，使系统以更松散的方式耦合，从而更易于维护。子系统的分组标准包含以下几条规则可见度。各子系统只能与同一层及其下一层的子系统存在依赖关系。&lt;/p&gt;
-
-&lt;p&gt;可见度。各子系统只能与同一层及其下一层的子系统存在依赖关系。&lt;/p&gt;
-
-&lt;p&gt;易变性。最上层放置随用户需求的改变而改变的元素。最底层放置随实施平台（硬件、语言、操作系统、数据库等）的改变而改变的元素。中间的夹层放置广泛适用于各种系统和实施环境的元素。如果在这些大类中进一步划分有助于对模型进行组织，则添加更多的层。&lt;/p&gt;
-
-&lt;p&gt;通用性。一般将抽象的模型元素放置在模型的低层。如果它们不针对于具体的实施，则倾向于将其放置在中间层。 
-层数。对于小型系统，三层就足够了。对于复杂系统，通常需要 5-7 层。无论复杂程度如何，如果超过 10 层，就需要慎重考虑了。层数越多，越需慎重。以下列出了一些经验法则：&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;类的数量&lt;/th&gt;
-      &lt;th&gt;层数&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;0 - 10&lt;/td&gt;
-      &lt;td&gt;无需分层&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;10 - 50&lt;/td&gt;
-      &lt;td&gt;2 层&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;25 - 150&lt;/td&gt;
-      &lt;td&gt;3 层&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;100 - 1000&lt;/td&gt;
-      &lt;td&gt;4 层&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;粒度问题&lt;/p&gt;
-</description>
-        <pubDate>Tue, 04 Aug 2015 17:24:59 +0800</pubDate>
-        <link>http://dzpqzb.com/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html</guid>
         
         
       </item>

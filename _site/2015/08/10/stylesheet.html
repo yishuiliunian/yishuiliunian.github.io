@@ -13,6 +13,33 @@
   <link rel="canonical" href="http://dzpqzb.com/2015/08/10/stylesheet.html">
   <link rel="alternate" type="application/rss+xml" title="一水的技术博客" href="http://dzpqzb.com/feed.xml">
 </head>
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
   <body>
@@ -65,9 +92,9 @@
     <!--more-->
 <p># StyleSheet</p>
 
-<p><a href="https://travis-ci.org/dongzhao/StyleSheet"><img src="http://img.shields.io/travis/dongzhao/StyleSheet.svg?style=flat" alt="CI Status" /></a>
-<a href="http://cocoapods.org/pods/StyleSheet"><img src="https://img.shields.io/cocoapods/v/StyleSheet.svg?style=flat" alt="Version" /></a>
-<a href="http://cocoapods.org/pods/StyleSheet"><img src="https://img.shields.io/cocoapods/l/StyleSheet.svg?style=flat" alt="License" /></a>
+<p><a href="https://travis-ci.org/dongzhao/StyleSheet"><img src="http://img.shields.io/travis/dongzhao/StyleSheet.svg?style=flat" alt="CI Status" /></a><br />
+<a href="http://cocoapods.org/pods/StyleSheet"><img src="https://img.shields.io/cocoapods/v/StyleSheet.svg?style=flat" alt="Version" /></a><br />
+<a href="http://cocoapods.org/pods/StyleSheet"><img src="https://img.shields.io/cocoapods/l/StyleSheet.svg?style=flat" alt="License" /></a><br />
 <a href="http://cocoapods.org/pods/StyleSheet"><img src="https://img.shields.io/cocoapods/p/StyleSheet.svg?style=flat" alt="Platform" /></a></p>
 
 <h2 id="usage">Usage</h2>
@@ -82,43 +109,42 @@
 
 <h2 id="installation">Installation</h2>
 
-<p>StyleSheet is available through <a href="http://cocoapods.org">CocoaPods</a>. To install
+<p>StyleSheet is available through <a href="http://cocoapods.org">CocoaPods</a>. To install<br />
 it, simply add the following line to your Podfile:</p>
 
-<p><code>ruby
-pod "StyleSheet"
-</code></p>
+<pre><code class="language-ruby">pod "StyleSheet"
+</code></pre>
 
-<h2 id="whats-wrong-with-origin-method">What’s wrong with origin method?</h2>
-<p>如果要实现下面这个效果，两个label，一个button，一个view
-<img src="http://ww1.sinaimg.cn/large/7df22103jw1euv1c5pbvdj20k00zkq3f.jpg" alt="image" />
+<p>##What’s wrong with origin method?<br />
+如果要实现下面这个效果，两个label，一个button，一个view<br />
+<img src="http://ww1.sinaimg.cn/large/7df22103jw1euv1c5pbvdj20k00zkq3f.jpg" alt="image" /><br />
 基于原有的配置大概要写</p>
 
-<p>```
-    self.label.layer.cornerRadius = 3;
+<pre><code>    self.label.layer.cornerRadius = 3;
     self.label.textColor = [UIColor darkTextColor];
     self.label.font = [UIFont systemFontOfSize:13];
     self.label.backgroundColor = [UIColor greenColor];
     self.label.layer.borderWidth = 2;
-    self.label.layer.borderColor = [UIColor redColor].CGColor;</p>
-
-<pre><code>self.label2.layer.cornerRadius = 3;
-self.label2.textColor = [UIColor darkTextColor];
-self.label2.font = [UIFont systemFontOfSize:13];
-self.label2.backgroundColor = [UIColor greenColor];
-self.label2.layer.borderWidth = 2;
-self.label2.layer.borderColor = [UIColor redColor].CGColor;
-
-
-self.button.layer.cornerRadius = 3;
-self.button.backgroundColor = [UIColor greenColor];
-self.button.layer.borderWidth = 2;
-self.button.layer.borderColor = [UIColor redColor].CGColor;
-
-self.aView.layer.cornerRadius = 3;
-self.aView.backgroundColor = [UIColor greenColor];
-self.aView.layer.borderWidth = 2;
-self.aView.layer.borderColor = [UIColor redColor].CGColor; ```
+    self.label.layer.borderColor = [UIColor redColor].CGColor;
+    
+    
+    self.label2.layer.cornerRadius = 3;
+    self.label2.textColor = [UIColor darkTextColor];
+    self.label2.font = [UIFont systemFontOfSize:13];
+    self.label2.backgroundColor = [UIColor greenColor];
+    self.label2.layer.borderWidth = 2;
+    self.label2.layer.borderColor = [UIColor redColor].CGColor;
+    
+    
+    self.button.layer.cornerRadius = 3;
+    self.button.backgroundColor = [UIColor greenColor];
+    self.button.layer.borderWidth = 2;
+    self.button.layer.borderColor = [UIColor redColor].CGColor;
+    
+    self.aView.layer.cornerRadius = 3;
+    self.aView.backgroundColor = [UIColor greenColor];
+    self.aView.layer.borderWidth = 2;
+    self.aView.layer.borderColor = [UIColor redColor].CGColor;
 </code></pre>
 
 <p>所暴漏的问题：</p>
@@ -137,8 +163,7 @@ self.aView.layer.borderColor = [UIColor redColor].CGColor; ```
 
 <p>目前阶段使用StyleSheet完成上述样式：</p>
 
-<p><code>
-self.label.style = DZLabelStyleMake(
+<pre><code>self.label.style = DZLabelStyleMake(
                                         style.backgroundColor = [UIColor greenColor];
                                         style.cornerRedius = 3;
                                         style.borderColor = [UIColor redColor];
@@ -149,38 +174,15 @@ self.label.style = DZLabelStyleMake(
     self.label2.style = self.label.style;
     self.aView.style = self.label.style;
     [self.button.style copyAttributesWithStyle:self.label.style];
-</code></p>
+</code></pre>
 
-<h3 id="how-to-use">How to use?</h3>
-<p>在设计StyleSheet的时候故意淡化了被渲染的View的类型的概念，任何一种类型的Style可以对任何类型的View进行渲染，但是必须是这种类型的View支持Style所指称的属性。比如你可以使用真对Button设计的DZButtonStateStyle来渲染一个UILabel，但由于UILabel不支持DZButtonStateStyle中的渲染属性，所以渲染结果是无效的。</p>
+<p>###How to use?<br />
+在设计StyleSheet的时候故意淡化了被渲染的View的类型的概念，任何一种类型的Style可以对任何类型的View进行渲染，但是必须是这种类型的View支持Style所指称的属性。比如你可以使用真对Button设计的DZButtonStateStyle来渲染一个UILabel，但由于UILabel不支持DZButtonStateStyle中的渲染属性，所以渲染结果是无效的。</p>
 
-<p>但是当使用DZButtonStyle(继承自DZViewStyle)来渲染UILabel的时候，会使用DZButtonStyle中其父类的某些渲染属性，来渲染UILabel的父类UIView所支持的那些属性。
+<p>但是当使用DZButtonStyle(继承自DZViewStyle)来渲染UILabel的时候，会使用DZButtonStyle中其父类的某些渲染属性，来渲染UILabel的父类UIView所支持的那些属性。<br />
 ####直接使用Style对View进行渲染：</p>
 
-<p>```
-DZLabelStyle* style = DZLabelStyleMake(
-                                        style.backgroundColor = [UIColor greenColor];
-                                        style.cornerRedius = 3;
-                                        style.borderColor = [UIColor redColor];
-                                        style.borderWidth = 2;
-                                        style.textStyle.textColor = [UIColor darkTextColor];
-                                        style.textStyle.font = [UIFont systemFontOfSize:13];
-    );</p>
-
-<p>[style decorateView:self.label];
-```
-直接渲染的好处是，不用再次生成Style对象，更加方便样式在多个View之间渲染。</p>
-
-<h4 id="section">赋值渲染</h4>
-
-<p><code>
-self.label.style = style;
-</code></p>
-
-<p>或者</p>
-
-<p><code>
-self.label.style = DZLabelStyleMake(
+<pre><code>DZLabelStyle* style = DZLabelStyleMake(
                                         style.backgroundColor = [UIColor greenColor];
                                         style.cornerRedius = 3;
                                         style.borderColor = [UIColor redColor];
@@ -188,41 +190,58 @@ self.label.style = DZLabelStyleMake(
                                         style.textStyle.textColor = [UIColor darkTextColor];
                                         style.textStyle.font = [UIFont systemFontOfSize:13];
     );
-</code></p>
+
+[style decorateView:self.label];
+</code></pre>
+<p>直接渲染的好处是，不用再次生成Style对象，更加方便样式在多个View之间渲染。</p>
+
+<p>####赋值渲染</p>
+
+<pre><code>self.label.style = style;
+</code></pre>
+
+<p>或者</p>
+
+<pre><code>self.label.style = DZLabelStyleMake(
+                                        style.backgroundColor = [UIColor greenColor];
+                                        style.cornerRedius = 3;
+                                        style.borderColor = [UIColor redColor];
+                                        style.borderWidth = 2;
+                                        style.textStyle.textColor = [UIColor darkTextColor];
+                                        style.textStyle.font = [UIFont systemFontOfSize:13];
+    );
+</code></pre>
 
 <p>当进行赋值渲染的时候，会将Style的Copy后的实例与当前View绑定，当更改Style的属性的时候，对应View的样式会立刻改变。</p>
 
-<h3 id="section-1">通用样式的共享</h3>
-<p>使用原有的配置，进行通用样式的共享是个非常困难的事情，基本上都是体力活，靠人力来维护。我们的代码中会掺杂大量的用于配置样式的代码，而且是独立且散在。</p>
+<p>###通用样式的共享<br />
+使用原有的配置，进行通用样式的共享是个非常困难的事情，基本上都是体力活，靠人力来维护。我们的代码中会掺杂大量的用于配置样式的代码，而且是独立且散在。</p>
 
-<p>现在你可以通过StyleSheet解决：
+<p>现在你可以通过StyleSheet解决：<br />
 ####定义共享的样式：</p>
 
-<p>```
-EXTERN_SHARE_LABEL_STYLE(Content)</p>
+<pre><code>EXTERN_SHARE_LABEL_STYLE(Content)
 
-<p>IMP_SHARE_LABEL_STYLE(Content,
+IMP_SHARE_LABEL_STYLE(Content,
                       style.backgroundColor = [UIColor clearColor];
                       style.cornerRedius = 2;
                       style.textStyle.textColor = [UIColor redColor];
                       )
-```</p>
+</code></pre>
 
-<h4 id="section-2">使用共享样式,方式一</h4>
+<p>####使用共享样式,方式一</p>
 
-<p><code>
-self.label.style =  DZStyleContent();
-</code>
-####使用共享样式，方式二（推荐）
+<pre><code>self.label.style =  DZStyleContent();
+</code></pre>
+<p>####使用共享样式，方式二（推荐）<br />
 很多时候, 如果不需要进一步更改样式,可以不采复制赋值的方式来进行渲染，可以直接使用：</p>
 
-<p>```
-[DZStyleContent() decorateView:self.label];</p>
+<pre><code>[DZStyleContent() decorateView:self.label];
 
-<p>```
-只进行渲染，而不进行复制</p>
+</code></pre>
+<p>只进行渲染，而不进行复制</p>
 
-<h2 id="section-3">支持的类型</h2>
+<p>##支持的类型</p>
 
 <ol>
   <li>UIView</li>
@@ -232,7 +251,7 @@ self.label.style =  DZStyleContent();
   <li>UIButton</li>
 </ol>
 
-<h2 id="section-4">计划中支持的类型</h2>
+<p>##计划中支持的类型</p>
 
 <ol>
   <li>UISearchBar</li>
@@ -254,6 +273,23 @@ self.label.style =  DZStyleContent();
 
       </div>
     </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key=/2015/08/10/stylesheet data-title=StyleSheet data-url="www.dzpqzb.com/2015/08/10/stylesheet.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+        (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                 || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+        <!-- 多说公共JS代码 end -->
 
     <footer class="site-footer">
 

@@ -13,6 +13,33 @@
   <link rel="canonical" href="http://dzpqzb.com/ios/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html">
   <link rel="alternate" type="application/rss+xml" title="一水的技术博客" href="http://dzpqzb.com/feed.xml">
 </head>
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
   <body>
@@ -66,26 +93,24 @@
 
 <p>比如这个例子,因为继承的层级过于复杂，而不知道父类有没有实现WebViewDelegate的特定方法，需要确认一下在执行：</p>
 
-<p><code>
-- (void) webViewDidFinishLoad:(UIWebView *)webView
+<pre><code>- (void) webViewDidFinishLoad:(UIWebView *)webView
 {
     if ([super respondsToSelector:@selector(webViewDidFinishLoad:)]) {
             [super webViewDidFinishLoad:webView];
      }
      ....
 }
-</code></p>
+</code></pre>
 
-<p>这个语义上看，是完成了我们要的功能，对父类是否实现特定方法进行了验证，但是实际使用的时候却发现，结果一直返回YES，不管父类有没有实现！！！那么问题出在了哪里。
+<p>这个语义上看，是完成了我们要的功能，对父类是否实现特定方法进行了验证，但是实际使用的时候却发现，结果一直返回YES，不管父类有没有实现！！！那么问题出在了哪里。<br />
 self和super实质上都是向当前的Instance实例发送消息，而其不同在于进行函数查找时的起点不同。self是从当前的class，而super是从superclass。由于<code>respondsToSelector:</code>方法实质上是在NSObject中实现的，也就是说无论用self，还是super来调用该方法实质上，都是调用的NSObject中该方法。同事该方法，检查当前实例是否支持该方法，结果就一直返回YES了。</p>
 
 <p>因为在使用的时候，要完成检查super是否支持某方法就得用其他的方法了：</p>
 
-<p><code>
-  if (class_respondsToSelector(class_getSuperclass([self class]), @selector(webViewDidFinishLoad:))) {
+<pre><code>  if (class_respondsToSelector(class_getSuperclass([self class]), @selector(webViewDidFinishLoad:))) {
         [super webViewDidFinishLoad:webView];
     }
-</code></p>
+</code></pre>
 
 <p>虽然知道原因和解决方法，但是还是觉得这个apple的一个bug。因为语义和实际的执行结果出现了偏差。很容易让人在实际编程中，因为这个而造成method not found的crash。</p>
 
@@ -96,6 +121,23 @@ self和super实质上都是向当前的Instance实例发送消息，而其不同
 
       </div>
     </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key=/ios/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti data-title=由Runtime想到的几个问题 data-url="www.dzpqzb.com/ios/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+        (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                 || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+        <!-- 多说公共JS代码 end -->
 
     <footer class="site-footer">
 

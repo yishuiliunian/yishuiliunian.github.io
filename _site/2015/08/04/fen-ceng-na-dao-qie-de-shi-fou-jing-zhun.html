@@ -13,6 +13,33 @@
   <link rel="canonical" href="http://dzpqzb.com/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html">
   <link rel="alternate" type="application/rss+xml" title="一水的技术博客" href="http://dzpqzb.com/feed.xml">
 </head>
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
   <body>
@@ -76,7 +103,7 @@
 
 <p>易变性。最上层放置随用户需求的改变而改变的元素。最底层放置随实施平台（硬件、语言、操作系统、数据库等）的改变而改变的元素。中间的夹层放置广泛适用于各种系统和实施环境的元素。如果在这些大类中进一步划分有助于对模型进行组织，则添加更多的层。</p>
 
-<p>通用性。一般将抽象的模型元素放置在模型的低层。如果它们不针对于具体的实施，则倾向于将其放置在中间层。 
+<p>通用性。一般将抽象的模型元素放置在模型的低层。如果它们不针对于具体的实施，则倾向于将其放置在中间层。 <br />
 层数。对于小型系统，三层就足够了。对于复杂系统，通常需要 5-7 层。无论复杂程度如何，如果超过 10 层，就需要慎重考虑了。层数越多，越需慎重。以下列出了一些经验法则：</p>
 
 <table>
@@ -114,6 +141,23 @@
 
       </div>
     </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key=/2015/08/04/fen-ceng-,na-[?]-dao-qie-de-shi-fou-jing-zhun-? data-title=分层，那一刀切的是否精准？ data-url="www.dzpqzb.com/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+        (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                 || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+        <!-- 多说公共JS代码 end -->
 
     <footer class="site-footer">
 

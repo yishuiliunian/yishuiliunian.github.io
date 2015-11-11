@@ -13,6 +13,33 @@
   <link rel="canonical" href="http://dzpqzb.com/2015/11/06/quan-ju-bian-liang-man-tan.html">
   <link rel="alternate" type="application/rss+xml" title="一水的技术博客" href="http://dzpqzb.com/feed.xml">
 </head>
+<!-- MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 
   <body>
@@ -64,10 +91,10 @@
   <div class="post-content" itemprop="articleBody">
     <!--more-->
 
-<h2 id="section">什么是全局变量</h2>
+<p>##什么是全局变量</p>
 
 <blockquote>
-  <p>在程序设计中，全局变量是在所有作用域都可访问的变量，与之对应的是局部变量。<br />
+  <p>在程序设计中，全局变量是在所有作用域都可访问的变量，与之对应的是局部变量。  <br />
   —-<a href="https://zh.wikipedia.org/wiki/%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F">WIKI</a></p>
 </blockquote>
 
@@ -88,17 +115,17 @@
 
 <p>使用全局变量，当然有必须是它才能够完成的任务，然而它在完成功能的时候，也产生了一些副作用。于是，我们必然会思考：是够该使用全局变量。</p>
 
-<h2 id="section-1">我们是否该使用全局变量</h2>
+<p>##我们是否该使用全局变量</p>
 
-<h2 id="section-2">全局变量的变种</h2>
+<p>##全局变量的变种</p>
 
-<h3 id="section-3">单例</h3>
+<p>###单例</p>
 
-<h3 id="strong">被strong之后在实例之间传来传去的变量</h3>
+<p>###被strong之后在实例之间传来传去的变量</p>
 
-<h3 id="static">函数内部的static变量</h3>
+<p>###函数内部的static变量</p>
 
-<h2 id="section-4">使用全局变量的时候，请慎重，慎之又慎</h2>
+<p>##使用全局变量的时候，请慎重，慎之又慎</p>
 
 <ol>
   <li>该对象是否是真的需要在整个程序的生命周期内，常驻内存。</li>
@@ -111,6 +138,23 @@
 
       </div>
     </div>
+
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key=/2015/11/06/quan-ju-bian-liang-man-tan data-title=全局变量漫谈 data-url="www.dzpqzb.com/2015/11/06/quan-ju-bian-liang-man-tan.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+        (function() {
+                var ds = document.createElement('script');
+                ds.type = 'text/javascript';ds.async = true;
+                ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+                ds.charset = 'UTF-8';
+                (document.getElementsByTagName('head')[0] 
+                 || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+        <!-- 多说公共JS代码 end -->
 
     <footer class="site-footer">
 
