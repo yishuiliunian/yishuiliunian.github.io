@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>SWIFT与OC的比较</title>
+  <meta name="description" content="SWIFT与OC的比较">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://dzpqzb.com/2015/11/11/swift-compare-oc.html">
+  <link rel="alternate" type="application/rss+xml" title="一水的技术博客" href="http://dzpqzb.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">一水的技术博客</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">SWIFT与OC的比较</h1>
+    <p class="post-meta"><time datetime="2015-11-11T01:14:47+08:00" itemprop="datePublished">Nov 11, 2015</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h1 id="swiftoc">SWIFT与OC的比较</h1>
+
+<p>废了半天劲，用蹩脚的英语终于把《The Swift Programming Language》看了个大概。在看过的过程中，的确发现有很多东西很惊艳。但是，做为一直使用OC多年的我来说，自然会冒出一个问题：Swift到底比OC优秀在什么地方？</p>
+
+<p>还记得，当时从C和C++的世界，大跃进到OC的世界，对于”[]”的语法也是消耗不少时间才完全接受并弄懂。到了现在，接触Swift之后，回首OC，突然有种“曾经沧海难为水，除却巫山不是云”的感觉。现在的我并没有说想要抛弃OC，转向Swift的冲动，反而是我想继续使用OC。</p>
+
+<p>在使用过很多语言之后，自然就会比较每种语言之间的差异。语言的优劣这个东西，到目前为止我几乎没有找到一个标准来评判。这是个公说公有理，破说破理由的事情。有些人就是认为C++是最优秀的，并且是C++的忠实拥趸，而有些人认为python才是神器…..不一而足。去问这些人，为什么喜欢一门语言，你得到的答案无非关乎两个方面：</p>
+
+<ol>
+  <li>效率，压榨机器性能的能力怎么样</li>
+  <li>表现能力，用起来是不是顺手，能不能高效的表达自己的设计思想。</li>
+</ol>
+
+<p>效率这个事情，从语言的层面比较难衡量。因为，很多时候效率更多来自于一些和具体语言无关的东西，比如算法了，数据结构和设计模式了等等，甚至是编程人员的质量。虽然官方给出的数据说Swift比OC快1.3倍，但是没有说怎么去衡量的。于是有些人就用Swift来写算法题目，测速度。开发者Keith的<a href="http://www.techbrood.com/news/%E7%A7%BB%E5%8A%A8/swift%E3%80%81objective-c%E8%AF%AD%E8%A8%80%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.html">测试结果</a>却是另外的一个结论：OC比Swift要快不好。所以，到底效率的比较上面就有点不靠谱了。因为你说不准到底谁更快。</p>
+
+<p>所以我们就主要从表现能力层面上来比较Swift和OC。</p>
+
+<p>编程语言的主要思想大概经历了这么几个迭代：</p>
+
+<ol>
+  <li>助记符时代，简单粗暴有效</li>
+  <li>高级语言，以过程式和命令式为主的语言，比如C了之类。</li>
+  <li>面向对象时代。</li>
+</ol>
+
+<p>基本上程序语言设计方法论在出现了面向对象之后，就没再有一个质的改变。从Smaltalk开始，后来创造出来的大多数语言都是在面向对象上面变着法的玩，但终究没有跳出OOP这个大框架。OC如此，Swift也如此。同样是对象驱动的语言，另种语言从本质上讲，对于程序的基本模型都是对象。但是在表现能力上却有些不同。</p>
+
+<p>而语言这个东西，各有各的好。而且有些语言能够表达的概念，</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">一水的技术博客</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>一水的技术博客</li>
+          <li><a href="mailto:yishuiliunian@gmail.com">yishuiliunian@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/yishuiliunian"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">yishuiliunian</span></a>
+
+          </li>
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips。
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,1704 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>一水的技术博客</title>
+    <description>iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips。
+</description>
+    <link>http://dzpqzb.com/</link>
+    <atom:link href="http://dzpqzb.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Wed, 11 Nov 2015 01:26:55 +0800</pubDate>
+    <lastBuildDate>Wed, 11 Nov 2015 01:26:55 +0800</lastBuildDate>
+    <generator>Jekyll v3.0.0</generator>
+    
+      <item>
+        <title>有序构建之概念篇</title>
+        <description>&lt;h1 id=&quot;section&quot;&gt;有序构建&lt;/h1&gt;
+&lt;p&gt;我们应该都有过吃自助的经验，有些自助餐厅，果盘免费，但是只给一个盘子，你能装多少就是多少。所以这个时候，拼实力的时候到了。&lt;/p&gt;
+
+&lt;p&gt;一般的入门级的选手是这样的：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1exwdwim43pj20850643ym.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;水平稍微高一点的是这样的：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/7df22103jw1exwdwrm88ij20rq0ns41g.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;但是，这个时候高手来了：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/7df22103jw1exwdx5hznpj208c0b5752.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最后的高手的确惊艳，但是他是怎样把果盘垒成这个样子的——&lt;a href=&quot;http://www.blogbus.com/paradise-sugar-logs/27274140.html&quot;&gt;果盘堆砌之法&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;简单说就是：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;内圈抹平摆整齐以后再在外圈（胡萝卜条上）再整齐地摆上一圈菠萝。这步是第一层地基，一定要保证整齐，侧面看要正！！&lt;/li&gt;
+  &lt;li&gt;再放一层黄桃&lt;/li&gt;
+  &lt;li&gt;在黄桃的外面，外层菠萝的上面堆上黄瓜。为下一层菠萝做准备&lt;/li&gt;
+  &lt;li&gt;黄瓜放好后在表层撒点玉米粒火腿肠之类的小东西以使表面平一些&lt;/li&gt;
+  &lt;li&gt;再在黄瓜上堆一层菠萝&lt;/li&gt;
+  &lt;li&gt;如此往复，能堆多高，就要看你的功力了。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;从这个过程中我们发现了什么：&lt;strong&gt;我们吃过盘是有预谋的，而且是有预谋，有计划！&lt;/strong&gt;。目标是尽可能的堆更多的水果，计划是打地基、筑结构，多填充。这是典型的有序构建的过程。相比较一般入门级的人来，我们能够明显的看出，入门级的选手果盘堆得杂乱无章，完全没有秩序。他们要么是不在意能装多少水果，要么就是无计划，随意堆砌。&lt;/p&gt;
+
+&lt;p&gt;而所谓的有序构建就是：
+在明确构建目标的前提下，按照一定的规则来构建。&lt;/p&gt;
+
+&lt;p&gt;这个和架构的定义多少有些类似，只是架构的观念太大。一提起架构，脑子里面往往会冒出一些非常宏大的概念，比如三层架构，CS架构等等。而这里我们需要一个小的很多的概念，来指导日常的编码。一个小需求，我们可能不需要去设计那么宏大的架构。但是我们必须保持我们程序的构建过程有序。我们要明确我们的需求，这个需求可能是产品侧的，也可能是性能的，也可能是来自第三方使用者的。之后我们需要按照一定的规则或者秩序去构建我们的程序。&lt;/p&gt;
+
+&lt;p&gt;这些规则可能是软件工程层面的：瀑布流模型、螺旋上升模型、敏捷开发之类，也可能是编程范式：面向对象、切面范式、函数式、命令式之类的语言思想，也可能是设计模式之类的前人总结的最佳实践，也可能是一些我们通常挂在嘴边的一些经验：死程序不说谎，尽可能的减少重复之类，甚至我们在一起开发某个App的同学们自己一起制定的编码规范都是规则。这里有楼主之前写过的一篇关于编程思想的文章，里面也有不少规则:&lt;a href=&quot;http://km.oa.com/group/22128/articles/show/185307&quot;&gt;关于程序设计和思维的思考&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;那么问题来了：在真正日常的编码中，我们到底要遵循哪些规则去Coding？又有哪些规则使我们可以借鉴的?&lt;/p&gt;
+
+&lt;p&gt;其实你使用了哪些规则去Coding并不关键，最关键的是要有规则，断不可无序构建，让代码有序生长就好了。而规则各有优劣，又繁复庞杂，反正我是说不清楚应该用哪个不应该用哪个。只能是根据具体的业务与场景选择一个，并且尽可能的让其他人能够很容易的看出我使用了什么。之前和一个同事讨论过一个问题，在写某一个需求的时候，可以不用设计模式简单粗暴的去写，也可以使用策略模式，他说：简单粗暴的写，省时省力，用个设计模式以后又不一定会扩展，干嘛费哪个劲，我说：用个策略模式，别人看一眼代码就知道，你是按照什么思路写这个代码的了啊，他看起来改起来要省事多了。代码很多时候，写了不止是为了满足眼下的需求，也有很多是为了未来维护。而按照一定的规则和秩序去写，去有序构建，则能让代码有序生长。&lt;/p&gt;
+
+&lt;p&gt;下面是开脑洞的时间，之说IOS开发相关的东西。因为楼主目前是搞这个的。说一些在IOS上我们可能会用到的一些构建的规则。一般的东西比如：面向对象、敏捷开发、设计模式等等这些耳熟能像的，大家比我懂得多，我就不班门弄斧了。我们来看一些，没有那么高大上，但是非常实用的一些构建的规则。只是为了脑洞大开。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;语言特性&lt;/h1&gt;
+&lt;p&gt;##动态语言
+###切面范式&lt;/p&gt;
+
+&lt;p&gt;什么是切面范式？
+如果一个程序是一个管道系统，AOP就是在管道上钻一些孔，在每个孔中注入新的代码流。因此AOP实现的关键是将advice的代码嵌入到主体程序之中，术语称编织（weaving）。这是很自然的——将问题分解之后再合成，问题才得以还原。编织可分两种：一种是静态编织，通过修改源码或字节码（bytecode）在编译期（compile-time）、后编译期（post-compile）或加载期（load-time）嵌入代码——请注意，这里涉及到刚才提到的元编程和产生式编程；另一种是动态编织，通过代理（proxy）等技术在运行期（run-time）实现嵌入。具体的工具包括一些扩展性语言如AspectJ、AspectC++等和一些框架如AspectWerkz、Spring、Jboss AOP等。&lt;/p&gt;
+
+&lt;p&gt;在Java中切面范式可能比较常见，但是在OC中貌似比较少用。而往往，很多时候这种东西能够解决一些很大的问题。我们现在有这样的一个业务需求，就是用于提醒的各种样式的小红点。他可能出现在各式各样的地方上。比如“动态”tab里面的cell上面，在抽屉里面的cell上面，钱包里面的View上面……而这些cell或者view所属的类，繁复而众多。比如：QQTableViewCell，UITableViewCell,UIButton…..而我们的任务是给这些类的LayoutSubview方法中加上红点的布局信息，并在其他相关的地方加上红点相关的业务逻辑。
+无疑这里按照面向对象的思路去分析，最常见的一个策略就是让这些类都继承自同一个父类，然后在父类中添加相关的业务逻辑。但是这个方案的问题是，改动量太大，需要所有让所有使用的红点的地方都进行修改实现类继承。这个改动量不是一朝一夕能改完的，而且后续的需求也得注意类继承时候的一些问题。同时，已经有很多业务按照最笨的每个地方自己布局的方式接入到了红点系统中，让他们重新来过也是件很痛苦的事情。&lt;/p&gt;
+
+&lt;p&gt;那么问题来了：有没有一种方式可以做到：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;对现有的代码影响最小，可以删但是不要改和增加代码。&lt;/li&gt;
+  &lt;li&gt;对以后的业务逻辑扩展方便。包括引入新的红点类型和其他业务接入红点系统。&lt;/li&gt;
+  &lt;li&gt;不影响现有的类结构，而且能够让红点相关的业务逻辑对使用者透明。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果我们一直按照面向对象的方式去思考，那么这个问题会看起来很困难。何不换个思路，既然不让影响类结构，那么我能不能做到，动态注入业务逻辑呢？而这就是切面范式要做的事情，在现有代码的基础上，从某个关注点就将代码嵌入到主体程序之中。&lt;/p&gt;
+
+&lt;p&gt;我们就是以在layoutSubviews里面进行红点布局为关注点，进行编织。通过isa-swzzing和method-swizzing这两种得力于OC动态语言的技术来实现编织过程。最终实现了我们刚刚说的几个要求，具体的实现参见：&lt;a href=&quot;http://km.oa.com/group/21772/articles/show/196667&quot;&gt;红点系统UI层的重构&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;在使用切面范式之后，某个Cell接入红点就无需继承UItableViewCell，然后在子类Cell和UITableViewController里面写红点的业务逻辑。以前完全无序的业务方的代码，可以省去，在重构后的UI框架的控制之下逐步构建。&lt;/p&gt;
+
+&lt;p&gt;可能是以前接触到的编程思想大都基于OOP，导致在思考问题的时候，总是喜欢从OO出发。而OO并非万能的神药，某些时候换个角度，或者换种思路来思考问题，或许有不一定的解题之道。而切面范式的构建秩序与OOP明显不同，一种是从面到点，一种是从点到面。切面范式给我提供了一种能够从软件的某个功能横切面进行构建的规则。而这种规则在某些时候恰恰能够弥补OO的不足之处。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;元编程&lt;/h3&gt;
+
+&lt;p&gt;元编程是一个很有意思的概念，简单说就是用程序来写程序。颇有科幻电影里面，机器有了智能能够自我编程的意味。然而，其实不然：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+元编程是指某类计算机程序的编写，这类计算机程序编写或者操纵其它程序（或者自身）作为它们的数据，或者在运行时完成部分本应在编译时完成的工作。多数情况下，与手工编写全部代码相比，程序员可以获得更高的工作效率, 或者给与程序更大的灵活度去处理新的情形而无需重新编译。
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;元编程在很多动态语言中非常常见，比如Ruby中最出名的rails框架就大量使用了元编程。不过元编程在里面有了另外的一个名字——DSL，领域特定语言。而如C++之类的静态编译性的语言借助于模板也可实现元编程&lt;a href=&quot;http://book.douban.com/subject/4136223/&quot;&gt;C++模板元编程&lt;/a&gt;。那么对于OC或者IOS呢，元编程是否有些应用？&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;lua虚拟机操作OC&lt;/li&gt;
+  &lt;li&gt;调试界面的一些工具，比如reveal&lt;/li&gt;
+  &lt;li&gt;…..&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;其中lua虚拟机操作OC的框架&lt;a href=&quot;https://github.com/probablycorey/wax&quot;&gt;WAX&lt;/a&gt;在手Q中已经应用。其主要思路是，加载一个lua虚拟机执行lua代码，并通过WAX的OC&amp;lt;-&amp;gt;lua的双向桥接实现使用lua来控制OC的目的。而能够实现这种使用lua控制OC的元编程也是得益于OC的动态特性。关于更详细的WAX框架信息，可以看一下这片文章的总结&lt;a href=&quot;http://km.oa.com/group/21772/articles/show/205565?kmref=search&quot;&gt;LUA化总结&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;元编程是另外的一种构建规则，我们提供基础的构建规则之后，让程序按照既定的规则来构建另外的程序。&lt;/p&gt;
+
+&lt;h2 id=&quot;block&quot;&gt;Block闭包&lt;/h2&gt;
+
+&lt;p&gt;什么是block？
+Block是C语言的扩展功能，可以用一句话来表示Blocks的带来的扩充功能：带有自动变量的匿名函数。有些地方称之为lambda表达式或者闭包。IOS4.0之后引入了闭包的功能。而上文提到的WAX框架的作者当时写WAX的初衷就是为了给OC引入这个特性。而我们在另外一些现代语言中，频频见到闭包的影子，在ruby中，在swift中，在js中……那么闭包为什么会这么有吸引力呢？因为闭包是函数式编程的基础要素之一。(BTW:关于apple如何实现的闭包，可以参考&lt;a href=&quot;http://item.jd.com/11258970.html?utm_source=www.googleadservices.com&amp;amp;utm_medium=tuiguang&amp;amp;utm_campaign=t_50_s_sda1&amp;amp;utm_term=802e7d6365a04596b8b70cbf7ad6a221&quot;&gt;《Objective-C高级编程》&lt;/a&gt;第二章，blocks)。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;基本用法&lt;/h3&gt;
+&lt;p&gt;###函数式编程&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;函数式编程（英语：Functional programming）或者函数程序设计，又称泛函编程，是一种编程范型，它将电脑运算视为数学上的函数计算，并且避免使用程序状态以及易变对象。函数编程语言最重要的基础是λ演算（lambda calculus）。而且λ演算的函数可以接受函数当作输入（引数）和输出（传出值）。&lt;/p&gt;
+
+  &lt;p&gt;和命令式编程相比，函数式编程强调程序的执行结果比执行过程更重要，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。
+————————出自&lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B8%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80&quot;&gt;WIKI&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这是一种古老而又现代的编程范式，他所提供的构建规则，真是历久弥新。从古老如lisp，到心如swift之类的语言中，我们都能看到函数式编程的影子。有意思的是，在最近的一段的时间内不同各种主流语言都在加入这种构建规则，oc的blocks，switf原生支持，golang也是…….在多核的时代，函数式编程又生机勃发。还要多说句题外话，swift这门语言都说是OC的进化版和替代者，我是从函数式编程这个角度看出来的。OC可以实现函数式编程但是，会显得略微笨拙，而swift实现起来则是灰常优雅。写obc.io的那群人写了一本书&lt;a href=&quot;http://www.objc.io/books/&quot;&gt;Functional Programming in Swift&lt;/a&gt;，非常详细的阐述了函数式编程在swift中的应用。&lt;/p&gt;
+
+&lt;p&gt;言归正传，我们来看一下在OC中实现的函数式编程的案例。现在我们有这样的一个功能要实现，&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;./QQ20141126-1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;横向布局一些图片和文字，而且文字的颜色不同，点击之后还会有效果。你可能会说使用NSAttributeString，但是考虑到兼容性的问题，这个方案临时不考虑。我们就用最笨的方法展示：用UIImageView展示图片，用UILabel展示灰色的文字，用UIButton展示可点击的文字。那么问题来了，在给这些元素布局的时候，我们应该怎样code？一个一个的算frame然后赋值吗，那么代码将会丑陋不堪。这个时候何不尝试一下函数式编程。&lt;/p&gt;
+
+&lt;p&gt;```
+ CGFloat offsetY = IS_IPHONE5 ? 80 : 50;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CGFloat textOffsetY = CGRectGetMaxY(_urlImageView.frame) + offsetY;
+
+typedef UILabel*  (^GetLabel)(UIView* aView);
+void (^SetFameWithLabel)(CGFloat x, UIView* aView, GetLabel block) = ^(CGFloat x, UIView* aView, GetLabel block) {
+    
+    UILabel* label = block(aView);
+    
+    NSString* str = label.text;
+    CGSize size = [str sizeWithFont:label.font];
+    aView.frame = CGRectMake(x,
+                             textOffsetY,
+                             size.width, CGRectGetHeight(_checkButton.frame));
+    
+};
+
+GetLabel lableBlock =  ^(UIView* aview) {
+    return (UILabel*)aview;
+};
+
+
+GetLabel buttonBlock  =  ^(UIView* aview){
+    UIButton* button = (UIButton*) aview;
+    return button.titleLabel;
+};
+
+_checkButton.frame = CGRectMake(15, textOffsetY, 30, 30);
+SetFameWithLabel(CGRectGetMaxX(_checkButton.frame), _headLabel, lableBlock );
+SetFameWithLabel(CGRectGetMaxX(_headLabel.frame), _serviceContractButton, buttonBlock);
+SetFameWithLabel(CGRectGetMaxX(_serviceContractButton.frame), _tailLabel, lableBlock);
+SetFameWithLabel(CGRectGetMaxX(_tailLabel.frame), _userageButton, buttonBlock); ```
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们构建了几个基础的block，然后用这几个block之间的组合完成了上述的功能。而这正是函数式编程的精髓：利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。而这个思想同样可以应用在我们日常的编程之中——保持代码的简洁，尽量使用简单的规则祖曾退到负责的运算，而不是一上来就构建一个复杂的系统。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-4&quot;&gt;函数响应式编程&lt;/h4&gt;
+
+&lt;p&gt;函数响应式编程（RF）是最近一场火爆的一个编程范式。RP提高了代码的抽象层级，所以你可以只关注定义了业务逻辑的那些相互依赖的事件，而非纠缠于大量的实现细节。RP的代码往往会更加简明。
+特别是在开发现在这些有着大量与Data events相关的UI events的高互动性Webapps、Mobile apps的时候，RP的优势将更加明显。10年前，网页的交互就只是提交一个很长的表单到后端，而前端只有简单的渲染。Apps就表现得更加的实时了：修改一个表单域就能自动地把修改后的值保存到后端，为一些内容”点赞”时，会实时的反应到其它在线用户那里等等。&lt;/p&gt;
+
+&lt;p&gt;现在的Apps有着大量各种各样的实时Events，以给用户提供一个交互性较高的体验。我们需要工具去应对这个变化，而RP就是一个答案。&lt;/p&gt;
+
+&lt;p&gt;在IOS中的使用案例：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/ReactiveCocoa/ReactiveCocoa&quot;&gt;ReactiveCocoa&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;RF一直都缺少比较好的学习资料，终于一个国外的大神忍无可忍，自己动手写了一个：
+&lt;a href=&quot;https://gist.github.com/staltz/868e7e9bc2a7b8c1f754&quot;&gt;The introduction to Reactive Programming you’ve been missing&lt;/a&gt;
+&lt;a href=&quot;https://github.com/benjycui/introrx-chinese-edition&quot;&gt;中文版&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;混编&lt;/h2&gt;
+
+&lt;h3 id=&quot;c&quot;&gt;与C混编&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-6&quot;&gt;宏&lt;/h4&gt;
+
+&lt;p&gt;使用宏定义来简化输入，提高输入的效率。同时提高输入准确性。&lt;/p&gt;
+
+&lt;h5 id=&quot;property&quot;&gt;案例一 属性定义 @property&lt;/h5&gt;
+
+&lt;p&gt;我们在定义一个类的属性的时候，&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+@interface TestObject : NSObject
+@property (strong, nonatomic) NSString* title;
+@end
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;最起码要输入5个单词，四个符号和多个空格。写多了就会觉得这里重复输入的地方太多，为什么不想个办法优化一下输入呢。而且有些时候，中间的某个单词比如strong拼错了，还得会过头来继续修改。
+优化输入效率，有很多种方式。比如使用sinepts。而且xcode的snip支持也不错。直接拖拽代码块就能够生成snip。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+\\key is
+\\@propertystrongnonatomic
+@property (strong, nonatomic) &amp;lt;#type#&amp;gt;* &amp;lt;#name#&amp;gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;这样的确是可以，但是你需要定义大量的snip来适应不同的定义peroperty的情况。那有没有更简单的一点的方法呢。必须有啊，使用宏啊。&lt;/p&gt;
+
+&lt;p&gt;```
+#define DEFINE_PROPERTY(mnmKind, type , name)       @property (nonatomic, mnmKind)  type  name
+#define DEFINE_PROPERTY_ASSIGN(type, name)          DEFINE_PROPERTY(assign, type, name)
+#define DEFINE_PROPERTY_ASSIGN_Double(name) DEFINE_PROPERTY_ASSIGN(double, name)&lt;/p&gt;
+
+&lt;h1 id=&quot;define-definepropertystrongtype-name-definepropertystrong-type-name&quot;&gt;define DEFINE_PROPERTY_STRONG(type, name) DEFINE_PROPERTY(strong, type, name)&lt;/h1&gt;
+&lt;p&gt;#define DEFINE_PROPERTY_STRONG_NSString(name) DEFINE_PROPERTY_STRONG(NSString*, name)
+```&lt;/p&gt;
+
+&lt;p&gt;具体参见&lt;a href=&quot;https://github.com/yishuiliunian/DZProgrameDefines&quot;&gt;DZProgrameDefines&lt;/a&gt;
+我们完全可以通过使用宏定义，来扩展出一些列的定义属性的宏方法，借助于XCode的强大的自动补全来方便我们输入，少敲了非常多的字符。并且还减少了出错的情况，在可读性上，如果宏定义的名字起得好，可读性也不错。&lt;/p&gt;
+
+&lt;p&gt;同时，不得不说的一点是我们借助于这种宏定义的方式，还规范和统一了定义属性的格式，方便维护同一个工程的多个同事修改同一份代码。让他们的代码质量能够保持在一个比较整齐的水平。
+这种&lt;/p&gt;
+
+&lt;h4 id=&quot;section-7&quot;&gt;代码模板&lt;/h4&gt;
+
+&lt;p&gt;某些情况下，我们可能会写一些大量的重复代码，而这些代码又很难将其抽离出来做成一个独立的函数（甚至是lambda表达式），而这种时候宏的作用就体现出来了。考虑下述情况：&lt;/p&gt;
+
+&lt;p&gt;```
+NSString* a = infos[@”aKey”];
+if(!a) {
+        [self postError:@”need aKey”];
+        return;
+}&lt;/p&gt;
+
+&lt;p&gt;NSString* b = infos[@”bKey”];
+if(!b) {
+        [self postError:@”need bKey”];
+        return;
+}
+….
+```&lt;/p&gt;
+
+&lt;p&gt;上述代码中，我们需要从字典infos中取一批参数并且要判断这些参数是否为空，为空的时候报错并返回。其中有大量的代码是重复的。而这种重复又不太适合抽离成函数那么这个时候就可以这样做了：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+#define GetValueWithLocalNameAndKey(name , key) \
+\
+NSString* name = [infos getWBValueForKey:key error:&amp;amp;error];\
+if (!error) { [self postPayError:error]; return;}\
+\
+...
+GetValueWithLocalNameAndKey(a,aKey);
+GetValueWithLocalNameAndKey(b,bKey);
+...
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;这样做的时候，就将一段代码抽离成了模板。方便了使用和维护。&lt;/p&gt;
+
+&lt;h3 id=&quot;c-1&quot;&gt;与C++混编&lt;/h3&gt;
+
+&lt;p&gt;其实这个比较大的话题，OC中与C++混编使用，往往是因为C++的一些优秀的特性。当然这里有很多，我们也只能撷取一二。在code的时候，往往我们需要考虑我们需要用哪种语言来表达我们对于需求的认知：OC or c++ or c？这个时候，能帮助我们做最后决定的往往是一些简单的规则，比如保持代码有序，最大复用原则等等。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-8&quot;&gt;模板&lt;/h4&gt;
+
+&lt;p&gt;使用过JEC与后台通讯的同学可能有过，写接口的痛苦。构建发送包，接口回调消息，解析回调，然后向外传递内容。这个过程，是多么的类似啊。那么问题来了，有没有什么方法可以简化这个过程中的编码，让大多数接口通信过程开起来更有序呢？何不使用模板呢。&lt;/p&gt;
+
+&lt;p&gt;```
+template&lt;typename t=&quot;&quot;&gt;
+inline const int decodeForResponse(T&amp;amp; response , unsigned char* pData ,int nDataLen ,std::string key)
+{
+    .....
+}&lt;/typename&gt;&lt;/p&gt;
+
+&lt;p&gt;template&lt;typename t=&quot;&quot;&gt;
+inline const int getDecodedRespnse(T&amp;amp; response ,
+                                    unsigned char* pData ,
+                                  int nDataLen ,
+                                  std::string key,
+                                  int seq,
+                                  WBServiceCenter* self) {
+    ......
+}&lt;/typename&gt;&lt;/p&gt;
+
+&lt;p&gt;template&lt;typename t=&quot;&quot;&gt;
+inline int sendRequest(std::string funcName,
+                        std::string servantName,
+                        const std::string&amp;amp; dataKey,
+                        const T&amp;amp; data,
+                        WBServiceResponseBlock responseBlock,
+                        WBServiceErrorBlock errorBlock,
+                        WBServiceCenter* self,
+                        NSString* cmd)
+{
+  .....
+}
+```&lt;/typename&gt;&lt;/p&gt;
+
+&lt;p&gt;上述的过程中，把一直在变动的结构体，当成模板参数传进来，不就省事了很多嘛。（BTW：这里使用了一个重定义self的技巧。）&lt;/p&gt;
+
+&lt;h1 id=&quot;section-9&quot;&gt;改造&lt;/h1&gt;
+
+&lt;p&gt;这里还有一个比较有意思的想法，将Ruby的一些语法特性以语法糖的形式提供在了OC中。可以借鉴一下，很多时候一些优秀的东西是可以通用的。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/supermarin/ObjectiveSugar.git&quot;&gt;ObjectiveSugar&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;section-10&quot;&gt;总结&lt;/h1&gt;
+
+&lt;p&gt;上面只是在使用OC的过程中，总结出来的一些开脑洞的使用方式。而且这些方式，从某些意义上能够提高整个程序的质量，甚至在某些时候能够带来不一样的技术解决方案。本来，一直以为OC是一门神奇的语言，直到遇见了swift。上文中，提到的很多的构建方式，swift原生支持，函数式编程更加便捷，模板也不用和C++混编。这从另外一个角度，印证了swift的确是OC的升级版。
+言归正传，所谓有序构建其中的“序”，大家理解不一。但是，可能都同意的是，软件的构建过程，代码的增长过程应当保持一定的秩序和规则。那么你在coding的时候将会遵循什么样的“有序构建”？&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 11 Nov 2015 01:17:42 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/11/11/youxugoujian.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/youxugoujian.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>SWIFT与OC的比较</title>
+        <description>&lt;h1 id=&quot;swiftoc&quot;&gt;SWIFT与OC的比较&lt;/h1&gt;
+
+&lt;p&gt;废了半天劲，用蹩脚的英语终于把《The Swift Programming Language》看了个大概。在看过的过程中，的确发现有很多东西很惊艳。但是，做为一直使用OC多年的我来说，自然会冒出一个问题：Swift到底比OC优秀在什么地方？&lt;/p&gt;
+
+&lt;p&gt;还记得，当时从C和C++的世界，大跃进到OC的世界，对于”[]”的语法也是消耗不少时间才完全接受并弄懂。到了现在，接触Swift之后，回首OC，突然有种“曾经沧海难为水，除却巫山不是云”的感觉。现在的我并没有说想要抛弃OC，转向Swift的冲动，反而是我想继续使用OC。&lt;/p&gt;
+
+&lt;p&gt;在使用过很多语言之后，自然就会比较每种语言之间的差异。语言的优劣这个东西，到目前为止我几乎没有找到一个标准来评判。这是个公说公有理，破说破理由的事情。有些人就是认为C++是最优秀的，并且是C++的忠实拥趸，而有些人认为python才是神器…..不一而足。去问这些人，为什么喜欢一门语言，你得到的答案无非关乎两个方面：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;效率，压榨机器性能的能力怎么样&lt;/li&gt;
+  &lt;li&gt;表现能力，用起来是不是顺手，能不能高效的表达自己的设计思想。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;效率这个事情，从语言的层面比较难衡量。因为，很多时候效率更多来自于一些和具体语言无关的东西，比如算法了，数据结构和设计模式了等等，甚至是编程人员的质量。虽然官方给出的数据说Swift比OC快1.3倍，但是没有说怎么去衡量的。于是有些人就用Swift来写算法题目，测速度。开发者Keith的&lt;a href=&quot;http://www.techbrood.com/news/%E7%A7%BB%E5%8A%A8/swift%E3%80%81objective-c%E8%AF%AD%E8%A8%80%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.html&quot;&gt;测试结果&lt;/a&gt;却是另外的一个结论：OC比Swift要快不好。所以，到底效率的比较上面就有点不靠谱了。因为你说不准到底谁更快。&lt;/p&gt;
+
+&lt;p&gt;所以我们就主要从表现能力层面上来比较Swift和OC。&lt;/p&gt;
+
+&lt;p&gt;编程语言的主要思想大概经历了这么几个迭代：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;助记符时代，简单粗暴有效&lt;/li&gt;
+  &lt;li&gt;高级语言，以过程式和命令式为主的语言，比如C了之类。&lt;/li&gt;
+  &lt;li&gt;面向对象时代。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;基本上程序语言设计方法论在出现了面向对象之后，就没再有一个质的改变。从Smaltalk开始，后来创造出来的大多数语言都是在面向对象上面变着法的玩，但终究没有跳出OOP这个大框架。OC如此，Swift也如此。同样是对象驱动的语言，另种语言从本质上讲，对于程序的基本模型都是对象。但是在表现能力上却有些不同。&lt;/p&gt;
+
+&lt;p&gt;而语言这个东西，各有各的好。而且有些语言能够表达的概念，&lt;/p&gt;
+</description>
+        <pubDate>Wed, 11 Nov 2015 01:14:47 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/11/11/swift-compare-oc.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/swift-compare-oc.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Objective-C编码建议</title>
+        <description>&lt;h1 id=&quot;objective-c-&quot;&gt;Objective-C 编码建议&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;神在细节之中&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Objective-C 是 C 语言的扩展，增加了动态类型和面对对象的特性。它被设计成具有易读易用的，支持复杂的面向对象设计的编程语言。它是 Mac OS X 以及 iPhone 的主要开发语言。&lt;/p&gt;
+
+&lt;p&gt;Cocoa 是 Mac OS X 上主要的应用程序框架之一。它由一组 Objective-C 类组成，为快速开发出功能齐全的 Mac OS X 应用程序提供支持。&lt;/p&gt;
+
+&lt;p&gt;而在日常的编程中，我们除了要写代码，还需要去阅读别人的代码，熟悉过往的业务逻辑。不知，你可曾发过牢骚：这代码怎么能这么写呢？有些时候我们的代码，也会被别人去读，不知你可曾想过，当别人读到你的代码的时候会作何评价。诚然，“让代码能够工作”是做为开发者的头等大事。但是，代码的可维护性却是更加影响深远的一件事情。你的代码既有可能在下一个版本中被修改，也极有可能被交给另外的同事去修改。毕竟我们写代码，不止是在和机器沟通，而且也是在和人沟通——和其他的程序员沟通。大家都知道“学好普通话，走遍天下都不怕”，同样的道理：写出一手漂亮的代码，你和谁沟通都没问题。&lt;/p&gt;
+
+&lt;p&gt;即使你的原始代码修改之后，其代码风格和可读性仍会影响到可维护性和可扩展性。即使代码不复存在，你的风格和律条仍存活下来。&lt;/p&gt;
+
+&lt;p&gt;下面我们将围绕一些基本的准则展开讨论，目的是让我们写出一手漂亮的代码，更好的用代码与其他同事沟通，也为了提高我们代码的可维护性和可修改性，也是为了让我们自己工作的地方有一个愉悦的代码环境。&lt;/p&gt;
+
+&lt;p&gt;（PS：当你真的按照这些看似偏执的规则去做的时候，你就真的能够发现“伟大来自细节”，而且会受益匪浅。保剑锋自磨砺出，梅花香自苦寒来。）
+##总则&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Don’t repeat your self.&lt;/li&gt;
+  &lt;li&gt;代码自注释，依靠代码本身来表达你的设计意图，不要依赖注释。&lt;/li&gt;
+  &lt;li&gt;单一指责，无论是类、函数、模块、包尽可能令其指责纯净且单一。&lt;/li&gt;
+  &lt;li&gt;死程序不说谎，不要因为防止Crash写奇葩的代码。程序Crash了，反而更容易查找错误。&lt;/li&gt;
+  &lt;li&gt;借用美国童子军军规：让营地比你来时更干净。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;格式&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;任意函数长度不得超过50行。&lt;/li&gt;
+  &lt;li&gt;任意行代码不得超过80字符。可以在设置中设置超过80个字符的提醒。&lt;br /&gt;
+&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exwdqpzlbgj20ky0fdtci.jpg&quot; alt=&quot;&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;在定义函数的行前留白一行&lt;/li&gt;
+  &lt;li&gt;功能相近的代码要放在一起。&lt;/li&gt;
+  &lt;li&gt;使用#pragma来切分不同功能区域的代码。&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;二元运算符和参数之间需要放置一个空格，一元运算符、强制类型转换和参数之间不放置空格。关键字之后圆括号之前需要放置一个空格.&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; ```
+ void *ptr = &amp;amp;value + 10 * 3;
+ NewType a = (NewType)b;
+ for (int i = 0; i &amp;lt; 10; i++) {
+     doCoolThings();
+ }
+ ```
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;长的字面值应被拆分为多行。&lt;/p&gt;
+
+    &lt;pre&gt;&lt;code&gt; ```
+ NSArray *theShit = @[
+         @&quot;Got some long string objects in here.&quot;,
+         [AndSomeModelObjects too],
+         @&quot;Moar strings.&quot;
+ ];
+    
+ NSDictionary *keyedShit = @{
+ @&quot;this.key&quot;: @&quot;corresponds to this value&quot;,
+ @&quot;otherKey&quot;: @&quot;remoteData.payload&quot;,
+ @&quot;some&quot;: @&quot;more&quot;,
+ @&quot;JSON&quot;: @&quot;keys&quot;,
+ @&quot;and&quot;: @&quot;stuff&quot;,
+ };
+ ``` 8.
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;命名&lt;/h2&gt;
+&lt;p&gt;命名是编程中最基本的技能，我们给变量、函数、类、包等等命名。给他们以名字，让他们有意义，既能表示他们到底是做什么的，也能将其与其他变量区别开来。而通过，语言的发展史，我们也能够看到“方便编程人员理解和使用”一直都是编程语言发展的动力之一，而命名则是其最最核心的环节。像人一样娶一个好名字至关重要，“丁当”总比“狗蛋”来的好听。
+为什么要命名？命名代表着抽象，我们使用名字将一些没必要关系的细节隐去，减少我们自己的记忆成本，也更加方便我们理解。用过C语言的人都知道，一个变量名最终会转化成类似于&lt;code&gt;0x11111111&lt;/code&gt;之类的地址，相比去理解和记忆这些地址，用一个更加抽象的变量名来代表这些地址。无论从理解还是记忆上都要方便的。
+###命名一定要“名副其实”，尽可能使用有意的名称，而且这个意义和指称的变量真实意义相关。&lt;/p&gt;
+
+&lt;p&gt;尽量不要出现没有任何意义的命名类似于下述形式的命名：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    ```
+    int a = 1;
+    int b = 3;
+    CGPoint point = CGPointMake(a,b);
+    ``` 如果换成下面的形式是不是可读性强了很多：
+    
+    ```
+    int startX = 1;
+    int startY = 3;
+    CGPoint startPoint = CGPointMake(startX,startY);
+    ```
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;命名首字母大写，其他命名首字母小写。并且采用驼峰格式分割单词。&lt;/h3&gt;
+&lt;p&gt;例如：&lt;code&gt;BWTest&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;使用能够读出来的名称&lt;/h3&gt;
+&lt;p&gt;人类长于记忆和使用单词。大脑中的相当一部分就是用来容纳和处理单词的。单词如果能够读的出来，则非常方便我们阅读和理解。&lt;/p&gt;
+
+&lt;p&gt;错误的示例：
+&lt;code&gt;
+genymdhms （生成日期,年、月、日、时、分、秒）
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;正确的实例：
+&lt;code&gt;
+generationTimeStamp
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;使用可搜索的名称。&lt;/h3&gt;
+&lt;p&gt;单字母名称和数字常量有一个问题，就是很难在一大篇文字中找出来。试想一下，你找&lt;code&gt;MAX_CLASSES_PER_STUDENT&lt;/code&gt;容易还是找数字7容易。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;文件名&lt;/h3&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;文件名反映出了其实现了什么类（包括大小写），你需要遵循所参与醒目的约定。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;文件的扩展名及其意义如下：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;扩展名&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;意义&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;.h&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;C/C++/Objective-C 的头文件&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;.m&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;Ojbective-C 实现文件&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;.mm&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;Ojbective-C++ 的实现文件&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;.c&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;纯 C 的实现文件&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;.cpp&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;纯 C++ 的实现文件&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;section-6&quot;&gt;类别的扩展名以“被扩展的类名+自定义命名部分组成”&lt;/h4&gt;
+&lt;p&gt;例如：
+&lt;code&gt;
+NSSstring+Utils.h
+&lt;/code&gt;
+###缩略词&lt;/p&gt;
+
+&lt;p&gt;虽然方法命名不应使用缩略词，然而有些缩略词在过去被反复的使用，所以使用这些缩略词能更好的的表达代码的含义。下表列出了Cocoa可接受的缩略词。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;缩略词&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;含义和备注&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;alloc&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;分配，拨出&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;alt&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;轮流，交替&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;app&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;应用程序。比如NSApp表示全局程序对象。&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;calc&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;计算&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;dealloc&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;销毁、析构&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;func&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;函数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;horiz&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;水平的&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;info&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;信息&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;init&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;初始化&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;max&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;最大的&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;min&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;最小的&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;msg&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;消息&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;nib&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;Interface Builder文档&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;pboard&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;黏贴板（仅对常量）&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;rect&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;矩形&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;temp&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;临时、暂时&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;vert&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;垂直的&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;以下是一些常用的首字母缩略词：&lt;code&gt;ASCII,PDF,XML,HTML,URL,RTF,HTTP,TIFF,JPG,PNG,GIF,LZW,ROM,RGB,CMYK,MIDI,FTP...&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;define-bwdebug-1&quot;&gt;宏定义全部字母大写，例如:&lt;code&gt;#define BW_DEBUG 1&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;###常量定义，字符串定义以小写字母&lt;code&gt;k&lt;/code&gt;开头，随后首字母大写&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+static NSString* const kBWBarTitle = @&quot;动态&quot;;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;static-const&quot;&gt;如果要定义常量使用static const优于宏定义，前者会进行类型检查&lt;/h3&gt;
+
+&lt;h3 id=&quot;ocnsobjectns&quot;&gt;因为OC没有命名空间的概念，所以使用前两个或者多个字母来表示命名空间，例如”NSObject中的NS”，我们也使用自己的命名空间。比如&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;
+红点中使用了VAS:VASAddValueInfo...
+钱包中使用了QW:QWApplication....
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-7&quot;&gt;注释&lt;/h2&gt;
+&lt;p&gt;###让代码自注释，不要依赖注释来解释自己的设计或者编码意图。除了特殊情况外，代码中不要有多余的注释。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-8&quot;&gt;函数&lt;/h2&gt;
+&lt;p&gt;###函数长度不要超过50行，小函数要比大函数可阅读性和可复用性强。
+###零元函数最好，一元函数也不错，二元函数担心了，三元函数有风险，高于三元需重构。函数的参数越多，引起其变化的因素就越多。越不利于以后的修改。&lt;/p&gt;
+
+&lt;p&gt;不知道当你看到如下形式的函数的时候，是什么想法：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+- (void)RequestGetLocation:(int)lat lon:(int)lon alt:(int)alt isMars:(BOOL)yn bJiejingSOSO:(BOOL)bJiejingSOSO;
+&lt;/code&gt;
+###尽量少的写有副作用的函数
+###尽量不要出现火车链式的命名，如果可以尽量使用过程变量替代。
+反例例如：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+_needLogoutAccount = [[[[BWAppSetting GetInstance] appSetting] valueForKey:NeedLogoutAccounts] retain];
+&lt;/code&gt;
+考虑如果改成下述模样，是不是可读性一下子提高了很多：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+BWAppSetting* shareSetting = [BWAppSetting GetInstance];
+BWLockDictionary* defaultSettings = [shareSetting appSetting];
+_needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retain];
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;调用时所有参数应该在同一行&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;
+[myObject doFooWith:arg1 name:arg2 error:arg3];
+&lt;/code&gt;
+或者每行一个参数，以冒号对齐：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+[myObject doFooWith:arg1
+               name:arg2
+              error:arg3];
+&lt;/code&gt;
+对于参数过多的函数，尽量使用后面一种对其方式。&lt;/p&gt;
+
+&lt;p&gt;不要使用下面的缩进风格：&lt;/p&gt;
+
+&lt;p&gt;```
+[myObject doFooWith:arg1 name:arg2  // some lines with &amp;gt;1 arg
+              error:arg3];&lt;/p&gt;
+
+&lt;p&gt;[myObject doFooWith:arg1
+               name:arg2 error:arg3];&lt;/p&gt;
+
+&lt;p&gt;[myObject doFooWith:arg1
+          name:arg2  // aligning keywords instead of colons
+          error:arg3];
+```&lt;/p&gt;
+
+&lt;h3 id=&quot;ifobjc&quot;&gt;如果对传入参数进行数据保护尽量不要用&lt;code&gt;if(!objc)&lt;/code&gt;,使用断言来处理。&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;
+- (void) sendArgs:(NSDictionary*)args {
+        NSAssert(args, @&quot;args is nil&quot;);
+        .....   
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;theannew&quot;&gt;方法参数名前一般使用的前缀包括“the”、“an”、“new”。&lt;/h3&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+
+&lt;p&gt;```
+- (void)       setTitle:           (NSString *)   aTitle;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;(void)       setName:            (NSString *)   newName;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;(id)         keyForOption:       (CDCOption *)  anOption&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;(NSArray *)  emailsForMailbox:   (CDCMailbox *) theMailbox;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;(CDCEmail *) emailForRecipients: (NSArray *)    theRecipients;
+```&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;block&quot;&gt;Block相关&lt;/h4&gt;
+&lt;p&gt;######在block中使用到self变量的时候，一定要先weak再strong.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+__weak typeof(self) weakSelf = self;
+[self doABlockOperation:^{
+    __strong typeof(weakSelf) strongSelf = weakSelf;
+    if (strongSelf) {
+        ...
+    }
+}];
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-10&quot;&gt;控制结构&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-11&quot;&gt;顺序结构&lt;/h3&gt;
+&lt;p&gt;###分支结构
+####if-else结构超过四层的时候，要考虑重构。多层的ifelse结构极其难维护。
+####当需要满足一定条件时才执行某项操作时，最左边缘应该是愉快路径代码。不要将愉快路径代码内嵌到if语句中。多个return是正常合理的。
+良好的风格：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+- (void) someMethod {
+  if (![someOther boolValue]) {
+      return;
+  }
+  //Do something important
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;反面教材：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+- (void) someMethod {
+  if ([someOther boolValue]) {
+      //Do something important
+  }
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;section-12&quot;&gt;所有的逻辑块必须使用花括号包围，即使条件体只需编写一行代码也必须使用花括号。&lt;/h4&gt;
+
+&lt;p&gt;良好的风格：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+if (!error) {
+    return success;
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;反面教材：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+if (!error)
+    return success;
+...
+if (!error) return success;
+&lt;/code&gt;
+###循环结构
+####遍历可变容器之前，需要复制该容器，遍历该容器的Copy.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+//typeof(self.cells) is NSMutableArray
+NSArray* cellArrays = [self.cells copy];
+for(UITableViewCell* cell in cellArrays) {
+        ...
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-13&quot;&gt;尽量不要使用异常，尤其是不要将异常做为业务逻辑的一部分，在异常中尝试进行灾难恢复。&lt;/h3&gt;
+
+&lt;h2 id=&quot;section-14&quot;&gt;类与对象&lt;/h2&gt;
+&lt;p&gt;###明确指定构造函数
+&amp;gt; 注释并且明确指定你的类的构造函数。&lt;/p&gt;
+
+&lt;p&gt;对于需要继承你的类的人来说，明确指定构造函数十分重要。这样他们就可以只重写一个构造函数（可能是几个）来保证他们的子类的构造函数会被调用。这也有助于将来别人调试你的类时，理解初始化代码的工作流程。
+###重载指定构造函数&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;当你写子类的时候，如果需要 init… 方法，记得重载父类的指定构造函数。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;如果你没有重载父类的指定构造函数，你的构造函数有时可能不会被调用，这会导致非常隐秘而且难以解决的 bug。&lt;/p&gt;
+
+&lt;h3 id=&quot;nsobject-&quot;&gt;重载 NSObject 的方法&lt;/h3&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;如果重载了 NSObject 类的方法，强烈建议把它们放在 @implementation 内的起始处，这也是常见的操作方法。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;通常适用（但不局限）于 &lt;code&gt;init...，copyWithZone:&lt;/code&gt;，以及&lt;code&gt;dealloc&lt;/code&gt;方法。所有 &lt;code&gt;init...&lt;/code&gt;方法应该放在一起&lt;code&gt;，copyWithZone:&lt;/code&gt;紧随其后，最后才是&lt;code&gt;dealloc&lt;/code&gt;方法&lt;/p&gt;
+
+&lt;h3 id=&quot;section-15&quot;&gt;初始化&lt;/h3&gt;
+&lt;p&gt;####不要在 init 方法中，将成员变量初始化为 0 或者 nil；毫无必要。
+现代的 Ojbective-C 代码通过调用 alloc 和 init 方法来创建并 retain 一个对象。由于类方法 new 很少使用，这使得有关内存分配的代码审查更困难。
+####保持init函数简洁，不要让init函数成为千行的大函数，当超过50行的时候，适当考虑分拆一下。&lt;/p&gt;
+
+&lt;p&gt;良好的风格实例：&lt;/p&gt;
+
+&lt;p&gt;```
+- (void) commonInit
+{
+    _rightAppendImageView = [UIImageView new];
+    [self.contentView addSubview:_rightAppendImageView];
+}&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+  if (!self) {
+      return self;
+  }
+  [self commonInit];
+  return self;
+}
+```&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;uiviewlayoutsubviews&quot;&gt;UIView的子类初始化的时候，不要进行任何布局操作。布局操作在LayoutSubViews里面做。&lt;/h4&gt;
+&lt;p&gt;####UIView的子类布局必须在layoutSubViews里面进行，需要布局的时候调用&lt;code&gt;setNeedLayout&lt;/code&gt;来告诉系统，需要重新布局该View，不要直接调用&lt;code&gt;layoutSubViews&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;api-&quot;&gt;保持公共 API 简单&lt;/h3&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;保持类简单；避免 “厨房水槽（kitchen-sink）” 式的 API。如果一个函数压根没必要公开，就不要这么做。用私有类别保证公共头文件整洁。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;与 C++ 不同，Objective-C 没有方法来区分公共的方法和私有的方法 – 所有的方法都是公共的（译者注：这取决于 Objective-C 运行时的方法调用的消息机制）。因此，除非客户端的代码期望使用某个方法，不要把这个方法放进公共 API 中。尽可能的避免了你你不希望被调用的方法却被调用到。这包括重载父类的方法。对于内部实现所需要的方法，在实现的文件中定义一个类别，而不是把它们放进公有的头文件中。&lt;/p&gt;
+
+&lt;p&gt;```
+// GTMFoo.m
+#import “GTMFoo.h”&lt;/p&gt;
+
+&lt;p&gt;@interface GTMFoo (PrivateDelegateHandling)
+- (NSString *)doSomethingWithDelegate;  // Declare private method
+@end&lt;/p&gt;
+
+&lt;p&gt;@implementation GTMFoo(PrivateDelegateHandling)
+…
+- (NSString *)doSomethingWithDelegate {
+  // Implement this method
+}
+…
+@end
+```&lt;/p&gt;
+
+&lt;p&gt;在OC2.0以后，你可以在实现文件中使用，类扩展来生命你的私有类别：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+@interface GMFoo () { ... }
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-16&quot;&gt;每个文件中只创建或者实现一个类。同一个文件中不要存在多个类。&lt;/h3&gt;
+&lt;p&gt;###Protocol单独用一个文件来创建。尽量不要与相关类混在一个文件中。
+###类的私有变量以”_“开头。&lt;/p&gt;
+
+&lt;p&gt;创建私有变量，份两种情况。
+第一种情况子类需要继承的，在头文件中定义：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;```
+// BWTest.h
+@interface BWTest : NSObject
+{
+    NSString* _name;
+}
+```
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;第二种情况，不需要子类继承的，在实现文件中以Category的方式定义：
+     ```
+    // BWTest.m
+    @interface BWTest ()
+    {
+        NSString* _name;
+    }&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@implementation BWTest
+...
+@end
+``` ###公有变量在一般使用属性的方法定义```@property (....) ...```
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;delegatearcweakmrcretaindealloc&quot;&gt;使用委托模式，设置delegate的时候，在ARC下使用&lt;code&gt;weak&lt;/code&gt;;在MRC下使用&lt;code&gt;retain&lt;/code&gt;,并且在dealloc中将其指针置空。&lt;/h4&gt;
+&lt;p&gt;####外部引用对象，外部不会发生set操作的对象，比如在创建界面元素的时候，使用readonly属性。
+    ```
+    @interface BWView : UIView
+    @property (nonatomic, strong, readonly) UIView* backgoundView;
+    @end&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@implementation BWView
+@end
+```
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;class&quot;&gt;在类定义中使用到自己定义的类的时候，尽量不要在头文件中引入自己定义的类的同文件，使用&lt;code&gt;@class&lt;/code&gt;替换。在实现文件中引入相应头文件。&lt;/h3&gt;
+
+&lt;p&gt;例如：
+```
+//BWTest.h
+@class BWDataCenter;
+@interface BWTest : NSObject
+@property (nonatomic, strong) BWDataCenter* dataCenter;
+@end&lt;/p&gt;
+
+&lt;p&gt;//BWTest.m&lt;/p&gt;
+
+&lt;h1 id=&quot;import-bwdatacenterh&quot;&gt;import “BWDataCenter.h”&lt;/h1&gt;
+&lt;p&gt;@implementation BWTest
+@end
+```&lt;/p&gt;
+
+&lt;h3 id=&quot;dtodata-transfer-objectclass&quot;&gt;如果一个类只是DTO(data transfer object)，只是作为数据传输使用，可以不用引入使用的自定义的类的头文件，只是用&lt;code&gt;@class&lt;/code&gt;，表明相应的自定义的类型。&lt;/h3&gt;
+
+&lt;h3 id=&quot;dtokvc&quot;&gt;对于DTO类型的对象，在给其成员变量设置值的时候可以考虑使用KVC，实现下述函数：&lt;/h3&gt;
+
+&lt;p&gt;```
+- (void) setValue:(id)value forKey:(NSString *)key
+{
+    if ([key isEqualToString:kRedDotAppInfoPath]) {
+        ….
+    } else if …
+    ….
+}&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(id) valueForKey:(NSString *)key {
+….
+}
+```
+###点标记语法
+属性和幂等方法（多次调用和一次调用返回的结果相同）使用点标记语法访问，其他的情况使用方括号标记语法。
+良好的风格：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;
+view.backgroundColor = [UIColor orangeColor];
+[UIApplication sharedApplication].delegate;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;反面实例：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+[view setBackgroundColor:[UIColor orangeColor]];
+UIApplication.sharedApplication.delegate;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;cocoa&quot;&gt;Cocoa相关&lt;/h2&gt;
+&lt;p&gt;###每个NSObject都有其生命周期，要在其生命周期的合适的时机做合适的事情。
+例如：在初始化的时候，进行变量初始化，在销毁的时候，销毁变量等等。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-17&quot;&gt;尽量不要在界面布局的写任何死数字&lt;/h3&gt;
+&lt;p&gt;错误的示范：&lt;/p&gt;
+
+&lt;p&gt;```
+ CGFloat delta = SYSTEM_VERSION &amp;gt;= 7.0 ? 0.0f : -14.0f;
+ newFrame = CGRectMake(245 + delta,
+                              (self.frame.size.height - tipNewSize.height)/2,
+                              tipNewSize.width,
+                              tipNewSize.height);&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    dotFrame = CGRectMake(258.0 + delta,  (self.frame.size.height - tipDotSize.height)/2,
+                          tipDotSize.width,
+                          tipDotSize.height);
+    
+    iconFrame = CGRectMake(245 + delta,
+                           (self.frame.size.height - tipIconSize.height)/2,
+                           tipIconSize.width,
+                           tipIconSize.height);
+    numFrame = CGRectMake(245+delta, (self.frame.size.height - tipNumSize.height)/2, tipNumSize.width, tipNumSize.height); ``` 正确的示范：
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;
+CGFloat cellHeight = CGRectGetHeight(self.frame);
+CGFloat cellWidth = CGRectGetWidth(self.frame);
+CGRect numFrame = CGRectZero;
+numFrame.size = CGSizeMake(cellWidth,cellHeight);
+...
+&lt;/code&gt;
+###布局时尽量使用相对布局，比如使用子View在父View中的相对位置。&lt;/p&gt;
+
+&lt;h3 id=&quot;uitableviewuitableviewcellcellcell&quot;&gt;在使用UITableView和UITableViewCell的时候一定要考虑到cell被复用的情况，在合适的时机对重用的cell进行清除操作。&lt;/h3&gt;
+
+&lt;h3 id=&quot;uitableviewcellviewdelegatecellviewcellcellview&quot;&gt;为UITableViewCell功能或者子View的时候有限考虑子类化。尽量不要使用在delegate中为Cell添加View。子类化，利于Cell重用和对cell内新添加的子View的布局。&lt;/h3&gt;
+
+&lt;p&gt;良好的风格示例：&lt;/p&gt;
+
+&lt;p&gt;```
+@interface BWSettingCell : UITableViewCell
+@property (nonatomic, strong, readonly) UIImageView* rightAppendImageView;
+@end&lt;/p&gt;
+
+&lt;p&gt;@implementation BWSettingCell&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+  if (!self) {
+      return self;
+  }
+  _rightAppendImageView = [UIImageView new];
+  [self.contentView addSubview:_rightAppendImageView];
+  return self;
+}&lt;/li&gt;
+  &lt;li&gt;(void) layoutSubviews
+{
+  [super layoutSubviews];
+  CGSize rightImageSize = _rightAppendImageView.image.size;
+  _rightAppendImageView.frame = CGRectMake(CGRectGetWidth(self.frame) - rightImageSize.width,
+                                           (CGRectGetHeight(self.frame) - rightImageSize.height) /2,
+                                           rightImageSize.width,
+                                           rightImageSize.height);
+}
+@end
+```&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;反面教材：&lt;/p&gt;
+
+&lt;p&gt;```
+…
+- (UITableViewCell&lt;em&gt;) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString&lt;/em&gt; const settingCellIdentify = @”settingCellIdentify”;
+    UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:settingCellIdentify];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:settingCellIdentify];
+    }
+    static int kSettingCellSubViewTag = 90001;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//非常错误的地方，尽量不要这样写
+[cell.contentView removeAllSubviews];
+
+UIImageView* rightAppendingView = [UIImageView new];
+rightAppendingView.image = nil;
+rightAppendingView.frame = CGRectMake(230, 8, 30, 30);
+[cell.contentView addSubview:rightAppendingView];
+return cell; } ... ```
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;section-18&quot;&gt;设计模式相关&lt;/h2&gt;
+
+&lt;p&gt;使用设计模式的最基本原则，除非你明确知道自己要做件什么事情，而且知道使用特定设计模式带来的影响，否则不要刻意的使用设计模式。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-19&quot;&gt;单例模式&lt;/h3&gt;
+&lt;p&gt;创建一个单例模式可以使用dispatch_once&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
++ (instancetype)defaultManager
+{
+    if (!_defaultManager) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&amp;amp;onceToken, ^{
+            _defaultManager = [[FlappyEggManager alloc] init];
+        });
+    }
+    return _defaultManager;
+}
+&lt;/code&gt;
+###观察者模式
+####如果只是单纯的传递数据，不要使用观察者模式，容易导致逻辑链断裂。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-20&quot;&gt;抽象&lt;/h2&gt;
+&lt;p&gt;##逻辑连贯性&lt;/p&gt;
+
+&lt;h2 id=&quot;section-21&quot;&gt;参考资料&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;《&lt;a href=&quot;http://item.jd.com/10064006.html&quot;&gt;Clean Code&lt;/a&gt;》&lt;/li&gt;
+  &lt;li&gt;《&lt;a href=&quot;http://item.jd.com/11020839.html&quot;&gt;编写可阅读代码的艺术&lt;/a&gt;》&lt;/li&gt;
+  &lt;li&gt;《&lt;a href=&quot;http://zh-google-styleguide.readthedocs.org/en/latest/google-objc-styleguide/&quot;&gt;Google Objective-C Style Guide&lt;/a&gt;》&lt;/li&gt;
+  &lt;li&gt;《&lt;a href=&quot;https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html#//apple_ref/doc/uid/10000146-SW1&quot;&gt;Introduction to Coding Guidelines for Cocoa&lt;/a&gt;》&lt;/li&gt;
+  &lt;li&gt;《&lt;a href=&quot;http://www.cnblogs.com/xdream86/p/3309345.html&quot;&gt;iOS应用开发最佳实践系列一：编写高质量的Objective-C代码&lt;/a&gt;》&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;section-22&quot;&gt;版本修订记录&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;时间&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;修改内容&lt;/th&gt;
+      &lt;th style=&quot;text-align: right&quot;&gt;修改人&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;2014年8月27日&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;创建内容&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;stonedong&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;2015年6月26日&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;修改部分内容&lt;/td&gt;
+      &lt;td style=&quot;text-align: right&quot;&gt;stonedong&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+</description>
+        <pubDate>Wed, 11 Nov 2015 01:11:44 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/11/11/objective-c.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/objective-c.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>在设计SDK的时候应当注意的点</title>
+        <description>&lt;p&gt;在SDK设计的时候，不注意自己是嵌入到别人的运行环境中的一部分。还是按照原先做App的思路去处理，可以随意的更改运行时的实例的属性，甚至是修改很多全局变量的值。结果就是污染了宿主的环境，导致宿主无法正常运行。
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;sdk&quot;&gt;在设计SDK的时候应当注意到底点之污染问题（一）&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;运行时环境污染，内存污染，文件污染&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;切记不要污染宿主的环境，修改宿主环境中的变量&lt;/h2&gt;
+
+&lt;p&gt;在处理百度钱包集成到手机百度的过程中，发现了一个奇怪的问题：
+&amp;gt; 当进入钱包首页，再退出钱包的时候，手百中的手势滑动神奇的被禁掉了。&lt;/p&gt;
+
+&lt;p&gt;跟踪了半天，发现了问题所在。原来在钱包ViewController的基类，BaseVC中将self.navigationController.delegate设置成了nil。而钱包Push界面的时候，是用的手机百度传进来的navigationControoler。也就是说手机百度和钱包在公用一个UINavigationController的实例。这一下子所有原来的navigationController的delegate就真的成了nil了，尤其是推出之后。结果就导致了，手机百度写在delegate中的逻辑无法顺利执行,于是手百中的手势被干掉了。&lt;/p&gt;
+
+&lt;p&gt;这个问题，暴漏了一个非常常见的现象：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;在SDK设计的时候，不注意自己是嵌入到别人的运行环境中的一部分。还是按照原先做App的思路去处理，可以随意的更改运行时的实例的属性，甚至是修改很多全局变量的值。结果就是污染了宿主的环境，导致宿主无法正常运行。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这个问题让我们回到了一个老生常谈的问题上：隔离。之前我们注意到的是接口隔离和职责隔离，讲究在设计类和模块的时候高内聚低耦合的确保各个类或者模块之间的影响越小越好。而现在我们，我们延伸一步，除了在设计和编码阶段的需要注意到隔离的问题。而且我们仍然需要考虑到，程序运行时其运行环境的隔离。尤其是对于SDK而言，其和宿主共享同一个运行时环境。稍有不慎，你修改了环境，或者说的更甚一些：污染了环境。将会导致宿主程序无法正常运行。因而需切记！&lt;/p&gt;
+
+&lt;p&gt;但是问题来了，有些时候SDK的确需要对环境做出一些修改，来让SDK的逻辑能够正常运行，那么我们可以怎么去处理？&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;备忘录模式，快照与还原&lt;/h3&gt;
+
+&lt;p&gt;这是最直接的一个想法，既然要污染他的环境。修改他的变量，那么我可不可以在改动之前先做一个备份。等到推出SDK的时候进行还原呢。是啊，这是一个可行的方案。&lt;br /&gt;
+但是要求SDK要有明确的入口和出口。这样才能够保证你能够在合适的地方进行快照，也在合适的出口的地方进行还原操作。在设计并实践该方法的时候，本着职责单一的原则，尽量将这个快照与还原的功能设计成一个单独的功能模块。尽量不要放在原有业务逻辑处理模块中。否则将会带来维护上的灾难。&lt;/p&gt;
+
+&lt;p&gt;这个问题在钱包中所也是有所体现，将设置self.navigationController.delegate的代码写在了所有VC的基类之类。这样，就导致了现在钱包所有的VC都会执行这段代码。假设我现在有这么几个类：&lt;/p&gt;
+
+&lt;p&gt;```
+@interface BaseVC : ViewController
+- (void) viewDidLoad
+{
+  [super viewDidLoad];
+  self.navigationController.delegate = nil;
+}
+@end&lt;/p&gt;
+
+&lt;p&gt;@interface VC1 : BaseVC&lt;/p&gt;
+
+&lt;p&gt;@end&lt;/p&gt;
+
+&lt;p&gt;@interface VC2 : BaseVC&lt;/p&gt;
+
+&lt;p&gt;@end
+……..
+```&lt;/p&gt;
+
+&lt;p&gt;这段一是嵌入到了业务逻辑当中，二来由于是在基类中，所以当程序运行时VC1，VC2被实例化之后，而又由同一个NavigtionController来push的话，那么navigationController的delegate将会被重置好多次。oy my god！这样就更难理解和维护。虽然你可以拆东墙补西墙，发现BUG之后，在这里再继续写多余的逻辑来保证delegate能够被设置正确。但是为什么不修改一次，彻底杜绝类似的BUG发生呢？&lt;/p&gt;
+
+&lt;h3 id=&quot;vitualenviroment&quot;&gt;创建VitualEnviroment，搞一个自己的环境，不和宿主共享。&lt;/h3&gt;
+
+&lt;p&gt;这里说的VitrualEnviroment没有像VM那么高大上，只是一个比较贴切的说法。就是搞一个自己的环境，不和宿主共享。这样就直接做到了内存上的隔离。就拿刚才一直说的navigationController的例子来说吧。就是我们创建一个自己的navigationController来使用，不去使用宿主的那个实例。这样无论我们怎样&lt;code&gt;self.navigationController.delegate = nil;&lt;/code&gt;。也不会对原先的nav造成影响。让宿主出现莫名其妙的问题。&lt;/p&gt;
+
+&lt;p&gt;而这里所谓VitrualEnviroment的实现，主要是创建新实例避免与宿主混淆。其实现手段无非是&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;深拷贝&lt;/li&gt;
+  &lt;li&gt;创建并初始化&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;内存隔离也是非常重要的一个事情啊。&lt;/p&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;重中之重，是要识别&lt;/h1&gt;
+
+&lt;p&gt;其实，最关键的是，我们在改动的时候，需要识别出来，我们的改动是否对宿主的环境有所污染，是否修改了宿主的实例，是否修改了宿主的全局变量，是否动了宿主的某些文件。。。。。。重要的事情说三遍。一行代码虽小，影响却不知几何。尤其是在做SDK的时候，更要慎之又慎。考虑周全，从设计到编码，从编码到编译与链接，从连接到运行时，到整个变量的生命周期。&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 10 Nov 2015 12:00:37 +0800</pubDate>
+        <link>http://dzpqzb.com/sdk/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/sdk/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html</guid>
+        
+        
+        <category>SDK</category>
+        
+      </item>
+    
+      <item>
+        <title>全局变量漫谈</title>
+        <description>&lt;!--more--&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;什么是全局变量&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;在程序设计中，全局变量是在所有作用域都可访问的变量，与之对应的是局部变量。&lt;br /&gt;
+  —-&lt;a href=&quot;https://zh.wikipedia.org/wiki/%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F&quot;&gt;WIKI&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;我们可以从不同的角度来看待全局变量：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;从编程的角度来说，这是一个记录内容全局可”读写”的变量&lt;/li&gt;
+  &lt;li&gt;从编译和链接的角度来说，这是一个需要解析的符号表&lt;/li&gt;
+  &lt;li&gt;从内部来说，他是具有特殊意义的内存&lt;/li&gt;
+  &lt;li&gt;从语法语义上看使用Extern之后，他是暴露在文件或者模块外部的变量，给了其他类或者函数来查看和修改模块内部属性的机会。&lt;/li&gt;
+  &lt;li&gt;从生存周期上看，他贯穿整个程序运行期间。&lt;/li&gt;
+  &lt;li&gt;….&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;无论从我们用那种角度来看全局变量，都无可否认我们在实际编程中都在大规模使用这这种形式的变量。以击穿文件和模块的封装，向外暴漏修改文件或者模块内部的能力。而且在面向对象的编程方式下，我们更是以单例这种特殊的模式，来向外提供能力更加丰富的全局变量。不能有可读写的属性，而且还能执行某些操作。&lt;/p&gt;
+
+&lt;p&gt;然而，我们却非常遗憾的发现，全局变量和他的变种形式，其实是对我们一直信奉的”封装”，这个编程的基本原则的破坏。通过全局变量我们暴漏了过多的信息给外部模块，让原先模块的封装性变得弱。而之后会像引发了蝴蝶效应一样，在整个APP的代码维护上和运行时产生影响。&lt;/p&gt;
+
+&lt;p&gt;使用全局变量，当然有必须是它才能够完成的任务，然而它在完成功能的时候，也产生了一些副作用。于是，我们必然会思考：是够该使用全局变量。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;我们是否该使用全局变量&lt;/h2&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;全局变量的变种&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;单例&lt;/h3&gt;
+
+&lt;h3 id=&quot;strong&quot;&gt;被strong之后在实例之间传来传去的变量&lt;/h3&gt;
+
+&lt;h3 id=&quot;static&quot;&gt;函数内部的static变量&lt;/h3&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;使用全局变量的时候，请慎重，慎之又慎&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;该对象是否是真的需要在整个程序的生命周期内，常驻内存。&lt;/li&gt;
+  &lt;li&gt;如果该对象所对应的业务存在重入的情况，你能确保，第二次使用该对象的时候，该对象是一个干净的对象？如果不能，那请考虑使用其他的编程方式。&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Fri, 06 Nov 2015 15:17:58 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/11/06/quan-ju-bian-liang-man-tan.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/06/quan-ju-bian-liang-man-tan.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>机制与策略分离</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;提供机制，而不是策略
+            –《Unix编程艺术》&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;从事了大量业务逻辑层的开发之后，如果问我觉得最有用的一句话是什么。现在我可能会说是：机制与策略分析。为什么呢？因为这是一条可以让你的代码应对变化和修改的最好的方案。&lt;/p&gt;
+
+&lt;p&gt;最近看的一则笑话：”杀死一个程序员，只要改三次需求就好了”。改一次需求，就得改好几天的代码。甚至很多时候，原先的代码都得推到重来。ou，no！无数个加班到通宵的夜晚，是为了改产品或者产品的老大压下来的需求变更。你可还记得，那几个红牛加持的夜晚，浑浑噩噩，似睡还醒中键盘噼里啪啦。。。。。且慢，难道没有方法可以解决？当然最治本的方法是让产品能思量清楚，能够合理的提需求。但是什么是合理的需求，谁也没有标准啊。最后做为实现侧的开发还是得去实现。那么这个时候，就得考虑有没有更好的方式来应对这种改变。而机制与策略分离辨识这样一条妙招。&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 24 Oct 2015 19:23:01 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/10/24/ji-zhi-yu-ce-lue-fen-chi.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/10/24/ji-zhi-yu-ce-lue-fen-chi.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>IOS设计模式反思——六大原则</title>
+        <description>&lt;p&gt;在设计模式的江湖中，各种“牛逼”级的人物纷纷登场，你方唱罢我登场，我方唱罢你登场。有的修炼的是“行为型”的外功，有的练得一手“构件型”的内家子，还有的剑走偏锋玩的一套“创建型”的招式。就像所有的江湖一样，在高手如云的地方，总会出现一个高手中的高手，他融汇百家之长，他雄霸江湖，他号令群雄，在武侠中是少林——天下武功出少林。在设计模式的江湖中，他是“六大模式”——天下模式出原则。就像武功一样，招式千变万化，但万变不离其宗，剑谱千奇百怪，终究万剑归宗。今天就说说街巷间传言甚多的“六大原则”。&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;IOS设计模式反思——六大原则&lt;/p&gt;
+
+&lt;p&gt;在设计模式的江湖中，各种“牛逼”级的人物纷纷登场，你方唱罢我登场，我方唱罢你登场。有的修炼的是“行为型”的外功，有的练得一手“构件型”的内家子，还有的剑走偏锋玩的一套“创建型”的招式。就像所有的江湖一样，在高手如云的地方，总会出现一个高手中的高手，他融汇百家之长，他雄霸江湖，他号令群雄，在武侠中是少林——天下武功出少林。在设计模式的江湖中，他是“六大模式”——天下模式出原则。就像武功一样，招式千变万化，但万变不离其宗，剑谱千奇百怪，终究万剑归宗。今天就说说街巷间传言甚多的“六大原则”。&lt;/p&gt;
+
+&lt;p&gt;第一章 缘起
+是什么
+六大原则，是谁名什，师出何门，曾经做出过什么经天纬地的事情？大家众说纷纭，我这里只是说说坊间流传较多的一种说法。
+我们先不深究六大原则的细节，先看看他们都长了个什么模样。&lt;/p&gt;
+
+&lt;p&gt;单一指责
+里氏替换
+依赖倒置
+接口隔离
+迪米特法则
+开闭原则
+面向对象
+据说六大原则和面向对象（Object-Oriented）渊源很深。在某些场合下，人们经常会这样谈起：面向对象的六大原则有什么什么。也就是说六大原则，不是个石猴，凭空就变出来的。他是从面向对象的某些特质中演变而来。&lt;/p&gt;
+
+&lt;p&gt;面向对象是编程范式（关于编程范式的东西，看客可以出门左拐《关于程序设计和思维的思考》）的一种，而且是时下最流行的。面向对象其实是我们对于程序的一种理解方式，用“Object”的方式去理解程序。于是很关键的就有两个东西：&lt;/p&gt;
+
+&lt;p&gt;对象本身的特征
+对象之间的关系
+在对这两个东西研究的基础上发展出了面向对象的三个基础特征：封装、继承、多态。仔细看看，就觉得封装是说的怎么去处理对象本身的特质，而继承和多态处理的是对象之间的关系。人们自然就会问了，只知道了这些特征没有一些可以操作的东西怎么成啊。于是六大原则和设计模式来了，指导着面向对象的实践。告诉你一些在处理对象和对象之间的关系的时候，应当注意一些什么，又应当遵守一些什么，或者应当规避些什么。&lt;/p&gt;
+
+&lt;p&gt;鸡生蛋，蛋生鸡
+原则，故名思议就是本质，是设计模式的起源。他指导着怎么去创造设计模式。这个是比较直白的了。但是，我搜了半天也没有找到一个地方能够明确的说明白，到底是先有的设计模式，人们用着用着发现：唉，应该再抽象一层到原则；还是先有的六大原则，在其指导下有计划有预谋的搞出了设计模式。&lt;/p&gt;
+
+&lt;p&gt;但无论是哪一种，都在说明一个问题：设计模式和六大原则之间或许没有那么明显的界限。他们不过是用来处理实际的变成问题的时候的一种思路或者思想而已。只要在使用的过程中，能够很好的解决问题就OK了，何必纠结于疍与鸡的问题。&lt;/p&gt;
+
+&lt;p&gt;在其他范式中的应用
+既然是一种思路或者思想，他一旦出来后，可能就不局限于应用在面向对象这一种地方了。在其他的一些编程范式中，或许你也能够发现它的一些影子。&lt;/p&gt;
+
+&lt;p&gt;第二章 各显神通
+概述SOLID
+单一指责
+定义:就一个类而言，应该仅有一个引起它变化的原因。&lt;/p&gt;
+
+&lt;p&gt;解析:从定义来看，理解起来应该不困难，通俗点地说就是不存在多个原因使得一个类发生变化，也就是说一个类只负责一种职责工作，该原则是六大原则中最简单的一种，因此不必多说。&lt;/p&gt;
+
+&lt;p&gt;优点:让一个类只负责一种职责的好处有如下几种&lt;/p&gt;
+
+&lt;p&gt;(1)类的复杂度降低，一个类只负责一个功能&lt;/p&gt;
+
+&lt;p&gt;(2)可读性增强，复杂度降低，阅读起来自然轻松&lt;/p&gt;
+
+&lt;p&gt;(3)可维护性强，一个易读、简单的类当然也易维护&lt;/p&gt;
+
+&lt;p&gt;里氏替换
+定义:里氏替换原则的定义有两种，据说是由麻省理工的一位姓里的女士所提出，因此以其名所命名。&lt;/p&gt;
+
+&lt;p&gt;定义1:如果对一个类型为T1的对象o1，都有类型为T2的对象o2，使得以T1所定义的程序P中在o1全都替换成o2时，程序的行为不发生任何变化，那么T2为T1的子类。&lt;/p&gt;
+
+&lt;p&gt;定义2:所有引用父类的地方都必须能够透明地使用子类对象。&lt;/p&gt;
+
+&lt;p&gt;解析:其实两个定义所表达的意思都相同，大概是说，就是在所有父类出现的地方，子类都可以出现，并且将父类对象替换为子类对象的时候，程序不会抛出任何异常或者错误，因此我们需要注意的是，尽量不要重载或者重写父类的方法(抽象方法除外)，因为这样可能会改变父类原有的行为。&lt;/p&gt;
+
+&lt;p&gt;代码:&lt;/p&gt;
+
+&lt;p&gt;? 1 2 3 4 5 6 7 8 9 10 11 class Base{ publc void action{ System.out.println(“1+1=2”); } }&lt;/p&gt;
+
+&lt;p&gt;public class Client{ public static void main(String[] args){ Base b = new Base(); b.action(); } }&lt;/p&gt;
+
+&lt;p&gt;运行结果:1+1=2&lt;/p&gt;
+
+&lt;p&gt;? 1 2 3 4 5 6 7 8 9 10 11 12 class Concrete extends Base{ public void action{ System.out.println(“1+1=1”); } }&lt;/p&gt;
+
+&lt;p&gt;public class Client{ public static void main(String[] args){ Base b = new Concrete(); //将所有父类出现的地方都替换成子类 b.action(); } } 运行结果:1+1=1&lt;/p&gt;
+
+&lt;p&gt;由上可见，子类在扩展父类的功能时，重写了父类方法，导致了程序结果的错误。因此，对于里氏替换原则的更通俗的说法就是，子类可以扩展父类的功能，但不改变父类原有的功能。&lt;/p&gt;
+
+&lt;p&gt;优点:可扩展性与可维护性强&lt;/p&gt;
+
+&lt;p&gt;依赖倒置
+定义:抽象不应该依赖于细节，细节依赖于抽象。&lt;/p&gt;
+
+&lt;p&gt;解析:依赖倒置原则在程序编码中很常运用，其中心思想就是面向接口编程，高层模块不应该依赖底层模块(原子操作的模块)，两者都应该依赖于抽象。接触过Spring框架的朋友都知道，Spring框架就是一个很好的依赖倒置原则思想的体现。&lt;/p&gt;
+
+&lt;p&gt;接口隔离
+定义:一个类对另一个类的依赖应该建立在最小的接口上。&lt;/p&gt;
+
+&lt;p&gt;解析:一个接口代表一个角色，不应该将不同的角色都交给一个接口，这样会导致形成一个臃肿的大接口。听起来好像有些像单一职责原则，但是不尽然，在单一职责原则中，一个接口可能有多个方法，提供给多种不同的调用者所调用，但是它们始终完成同一种功能，因此它们符合单一原则，却不符合接口隔离原则，因为这个接口存在着多种角色，因此可以拆分成更多的子接口，以供不同的调用者所调用。&lt;/p&gt;
+
+&lt;p&gt;优点:符合高内聚低耦合的设计思想，意在设计一个短而小的接口和类，这个在代码重构中比较常见，可读性、可扩展性、可维护性等都不错，很受程序员们的欢迎。&lt;/p&gt;
+
+&lt;p&gt;迪米特法则
+定义:一个对象应该对其他对象有最少的了解。&lt;/p&gt;
+
+&lt;p&gt;解析:意思就是一个对象对其他对象知道得越少越好，其核心就是低耦合。迪米特法则又有一个解释，即是只与直接的朋友通信，何谓直接朋友?大家都知道，对象之间的交流必定是少不了耦合的，为了降低对象之间的耦合，我们可以设定一个中间者，让这个中间者给要通信的双方进行传话，这样的话，这两个对象耦合程度可以达到很小，而我所说的这个中间者，就是直接朋友。&lt;/p&gt;
+
+&lt;p&gt;优点:我们可以试想一下，两个对象之间的耦合越大，其维护起来就越是困难，假如我们需要改变其中一个对象，另外一个对象也要进行大量的修改，而迪米特法则，则让对象之间的耦合降到最小，符合高内聚低耦合的特性，这样维护起来当然就容易多咯~&lt;/p&gt;
+
+&lt;p&gt;开闭原则
+定义:一个软件实体(如类、模块、函数)应当对扩展开放，对修改关闭。&lt;/p&gt;
+
+&lt;p&gt;解析:该定义理解起来略微抽象，按照自己的理解就是，对于一个已经存在的类，如果我们需要继续去扩充其功能，不应该直接修改该类的内部实现，而是应该通过抽象类或者接口来进行功能的扩充，由此可见，实现开闭原则关键是抽象。至于为什么需要开闭原则，我们可以假想，一个网络游戏若需要更新，我们常做的方法是为该游戏打上一个补丁，或者是更新它仅需更新的模块，而不会把整个游戏卸载，然后再重新装上新版本的游戏。&lt;/p&gt;
+
+&lt;p&gt;优点:&lt;/p&gt;
+
+&lt;p&gt;(1)具有灵活性，通过拓展一个功能模块即可实现功能的扩充，不需修改内部代码。&lt;/p&gt;
+
+&lt;p&gt;(2)具有稳定性，表现在其基本功能类不允许被修改，使得被破坏的程度大大下降。&lt;/p&gt;
+
+&lt;p&gt;第三章 重剑无锋，大巧不工
+像武侠的世界中，最牛逼的人物，不止是会了什么降龙十八掌之类的绝世武功的主。而是少林寺中的扫地神僧——一无招胜有招。话说，剑术分三级：&lt;/p&gt;
+
+&lt;p&gt;手中有剑，心中无剑。此为初作者。虽然手握神兵利器，但是不知如何去用。刚刚知道有六大原则和设计模式这个东西，但是止步于知道，不知如何运用。
+手中有剑，心中亦有剑。这是大师，深谙剑谱，也有一把神兵利器。但是容易陷入刻意追求形式的境地。要么一心想苦练《辟邪剑谱》——欲练此功，必先自宫….；要么用剑的时候，一定要按照某种特定的套路去做。这个时候，已经熟谙六大原则和23中常用的设计模式。在设计或者编码的时候，刻意追求应用设计模式。
+手中无剑，心中有剑。这是已经做到人剑合一的境地了。其虚手中无剑，其实万物皆剑。一草一木，信手拈来，皆幻化做锋利的兵器。扫地神僧，扫把都是神器。郭靖用的那把剑不是也是看起来很笨重。所谓重剑无锋，大巧不工。
+这个时候，在设计或者编码的时候，不在可以的追求设计模式，也不再在乎形式。往往很多时候出来的方案：简单、粗暴、有效。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 24 Oct 2015 19:14:39 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/10/24/ios.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/10/24/ios.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>奇怪的动画</title>
+        <description>&lt;p&gt;在重构红点的UI过程中，发现一个奇怪的问题。使用block传进来的布局信息调用后会神奇的产生一个动画：
+&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;p&gt;在重构红点的UI过程中，发现一个奇怪的问题。使用block传进来的布局信息调用后会神奇的产生一个动画：
+```
+//扩展红点View
+QQExtendViewRedPoint(self.buttton, @”1000100”, YES, ^(UIView* originView, UIView* redPointView, RedPointShowInfo* showInfo) {
+        redPointView.frame = CGRectMake(CGRectGetMaxX(originView.frame), CGRectGetMinY(originView.frame), CGRectGetWidth(redPointView.frame), CGRectGetHeight(redPointView.frame) );
+})&lt;/p&gt;
+
+&lt;p&gt;….&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;```
+//红点View布局的代码&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(void) layout {
+      ….
+      case VASHintTypeDot:
+              redPointView = [self __layoutRedDot:showInfo]; //(1)第一次默认布局
+      ….
+          QQRedPointLayoutBlock layoutBlock = self.redPointLayoutBlock;
+          if(layoutBlock) {
+                      layoutBlock(self, redPointView, showInfo); //(2)用户自定义布局
+          }&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+
+&lt;p&gt;```&lt;/p&gt;
+
+&lt;p&gt;但是当给&lt;code&gt;self.button&lt;/code&gt;加上了一个调整frame的动画之后，开始变得神奇了：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+    [UIView animateWithDuration:1.0 delay:0.8 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        if (showOrHide) {
+        //动画部分，改变了accountButton的frame
+            self.accountButton.frame = CGRectMake(0, 1, self.bottomView.frame.size.width/2 -1 , self.bottomView.frame.size.height -1);
+            self.addCardButton.frame = CGRectMake(self.bottomView.frame.size.width/2, 1, self.bottomView.frame.size.width/2, self.bottomView.frame.size.height-1);
+            VIPDataReportWithOperationName(@&quot;bindbtnshow&quot;, nil, nil, nil, nil);
+        }else{
+            self.accountButton.frame = CGRectMake(0, 1, self.bottomView.frame.size.width, self.bottomView.frame.size.height -1);
+            self.addCardButton.frame = CGRectMake(self.bottomView.frame.size.width+1, 1, self.bottomView.frame.size.width/2, self.bottomView.frame.size.height-1);
+        }
+    } completion:^(BOOL finished){
+        [self updateAddCardButtonWithSubTitle:self.bindCardPromotion.promoWord];//动画完成后update一下
+        self.buttonIsAnimating = NO;
+    }];
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;红点产生了一个奇怪的动画:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103gw1excfefctlzj20cd044t8p.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;红点首先出现在（1）位置，然年跳动到（2），之后动画返回到(3).
+奇怪的地方在于，我们没有给红点添加任何动画，唯一可能添加动画的地方，就是给accountButton添加的动画。而预期的动画效果，不应该出现在用户布局位置和默认布局位置之间抖动的情况。那么问题到底出在了哪里？&lt;/p&gt;
+
+&lt;p&gt;而且有意思的是，同样的代码在IOS8上没有问题，在IOS7上才会有问题。所以我们就怀疑到了在动画处理上IOS系统版本之间可能会有差异。&lt;/p&gt;
+
+&lt;p&gt;仔细研究代码发现，在layout中对红点进行了两次frame设置，如上面代码中标注的（1）与（2）位置的代码。而IOS7一下的系统在处理父View的layout的时候，同事调用了1与2处的代码，对红点的View进行了两次布局。而又把这两个布局之间的过程处理成了动画，所以产生了抖动的问题。而在IOS8上面apple应该修正了这个问题，把在同一个layout中的布局处理成了一个无动画过程。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 24 Oct 2015 19:03:35 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/10/24/strage-animation.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/10/24/strage-animation.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>StyleSheet</title>
+        <description>&lt;!--more--&gt;
+&lt;p&gt;# StyleSheet&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/dongzhao/StyleSheet&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/dongzhao/StyleSheet.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
+&lt;a href=&quot;http://cocoapods.org/pods/StyleSheet&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/StyleSheet.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
+&lt;a href=&quot;http://cocoapods.org/pods/StyleSheet&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/StyleSheet.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
+&lt;a href=&quot;http://cocoapods.org/pods/StyleSheet&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/StyleSheet.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;usage&quot;&gt;Usage&lt;/h2&gt;
+
+&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
+
+&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;UIKit&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;StyleSheet is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
+it, simply add the following line to your Podfile:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ruby
+pod &quot;StyleSheet&quot;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;whats-wrong-with-origin-method&quot;&gt;What’s wrong with origin method?&lt;/h2&gt;
+&lt;p&gt;如果要实现下面这个效果，两个label，一个button，一个view
+&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1euv1c5pbvdj20k00zkq3f.jpg&quot; alt=&quot;image&quot; /&gt;
+基于原有的配置大概要写&lt;/p&gt;
+
+&lt;p&gt;```
+    self.label.layer.cornerRadius = 3;
+    self.label.textColor = [UIColor darkTextColor];
+    self.label.font = [UIFont systemFontOfSize:13];
+    self.label.backgroundColor = [UIColor greenColor];
+    self.label.layer.borderWidth = 2;
+    self.label.layer.borderColor = [UIColor redColor].CGColor;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;self.label2.layer.cornerRadius = 3;
+self.label2.textColor = [UIColor darkTextColor];
+self.label2.font = [UIFont systemFontOfSize:13];
+self.label2.backgroundColor = [UIColor greenColor];
+self.label2.layer.borderWidth = 2;
+self.label2.layer.borderColor = [UIColor redColor].CGColor;
+
+
+self.button.layer.cornerRadius = 3;
+self.button.backgroundColor = [UIColor greenColor];
+self.button.layer.borderWidth = 2;
+self.button.layer.borderColor = [UIColor redColor].CGColor;
+
+self.aView.layer.cornerRadius = 3;
+self.aView.backgroundColor = [UIColor greenColor];
+self.aView.layer.borderWidth = 2;
+self.aView.layer.borderColor = [UIColor redColor].CGColor; ```
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;所暴漏的问题：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;繁琐的代码，大量重复性的工作&lt;/li&gt;
+  &lt;li&gt;样式无法共享，每一个View都需要重新进行样式赋值。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;因而StyleSheet所要解决的问题就是：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;样式配置轻便化，能够使用更加少的代码来描述View的样式&lt;/li&gt;
+  &lt;li&gt;样式在View之间的共享&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;目前阶段使用StyleSheet完成上述样式：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+self.label.style = DZLabelStyleMake(
+                                        style.backgroundColor = [UIColor greenColor];
+                                        style.cornerRedius = 3;
+                                        style.borderColor = [UIColor redColor];
+                                        style.borderWidth = 2;
+                                        style.textStyle.textColor = [UIColor darkTextColor];
+                                        style.textStyle.font = [UIFont systemFontOfSize:13];
+    );
+    self.label2.style = self.label.style;
+    self.aView.style = self.label.style;
+    [self.button.style copyAttributesWithStyle:self.label.style];
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;how-to-use&quot;&gt;How to use?&lt;/h3&gt;
+&lt;p&gt;在设计StyleSheet的时候故意淡化了被渲染的View的类型的概念，任何一种类型的Style可以对任何类型的View进行渲染，但是必须是这种类型的View支持Style所指称的属性。比如你可以使用真对Button设计的DZButtonStateStyle来渲染一个UILabel，但由于UILabel不支持DZButtonStateStyle中的渲染属性，所以渲染结果是无效的。&lt;/p&gt;
+
+&lt;p&gt;但是当使用DZButtonStyle(继承自DZViewStyle)来渲染UILabel的时候，会使用DZButtonStyle中其父类的某些渲染属性，来渲染UILabel的父类UIView所支持的那些属性。
+####直接使用Style对View进行渲染：&lt;/p&gt;
+
+&lt;p&gt;```
+DZLabelStyle* style = DZLabelStyleMake(
+                                        style.backgroundColor = [UIColor greenColor];
+                                        style.cornerRedius = 3;
+                                        style.borderColor = [UIColor redColor];
+                                        style.borderWidth = 2;
+                                        style.textStyle.textColor = [UIColor darkTextColor];
+                                        style.textStyle.font = [UIFont systemFontOfSize:13];
+    );&lt;/p&gt;
+
+&lt;p&gt;[style decorateView:self.label];
+```
+直接渲染的好处是，不用再次生成Style对象，更加方便样式在多个View之间渲染。&lt;/p&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;赋值渲染&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;
+self.label.style = style;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;或者&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+self.label.style = DZLabelStyleMake(
+                                        style.backgroundColor = [UIColor greenColor];
+                                        style.cornerRedius = 3;
+                                        style.borderColor = [UIColor redColor];
+                                        style.borderWidth = 2;
+                                        style.textStyle.textColor = [UIColor darkTextColor];
+                                        style.textStyle.font = [UIFont systemFontOfSize:13];
+    );
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;当进行赋值渲染的时候，会将Style的Copy后的实例与当前View绑定，当更改Style的属性的时候，对应View的样式会立刻改变。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;通用样式的共享&lt;/h3&gt;
+&lt;p&gt;使用原有的配置，进行通用样式的共享是个非常困难的事情，基本上都是体力活，靠人力来维护。我们的代码中会掺杂大量的用于配置样式的代码，而且是独立且散在。&lt;/p&gt;
+
+&lt;p&gt;现在你可以通过StyleSheet解决：
+####定义共享的样式：&lt;/p&gt;
+
+&lt;p&gt;```
+EXTERN_SHARE_LABEL_STYLE(Content)&lt;/p&gt;
+
+&lt;p&gt;IMP_SHARE_LABEL_STYLE(Content,
+                      style.backgroundColor = [UIColor clearColor];
+                      style.cornerRedius = 2;
+                      style.textStyle.textColor = [UIColor redColor];
+                      )
+```&lt;/p&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;使用共享样式,方式一&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;
+self.label.style =  DZStyleContent();
+&lt;/code&gt;
+####使用共享样式，方式二（推荐）
+很多时候, 如果不需要进一步更改样式,可以不采复制赋值的方式来进行渲染，可以直接使用：&lt;/p&gt;
+
+&lt;p&gt;```
+[DZStyleContent() decorateView:self.label];&lt;/p&gt;
+
+&lt;p&gt;```
+只进行渲染，而不进行复制&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;支持的类型&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;UIView&lt;/li&gt;
+  &lt;li&gt;UILabel&lt;/li&gt;
+  &lt;li&gt;UITextView&lt;/li&gt;
+  &lt;li&gt;UITextField&lt;/li&gt;
+  &lt;li&gt;UIButton&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;计划中支持的类型&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;UISearchBar&lt;/li&gt;
+  &lt;li&gt;UINavigationBar&lt;/li&gt;
+  &lt;li&gt;…..&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
+
+&lt;p&gt;yishuiliunian@gmail.com&lt;/p&gt;
+
+&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
+
+&lt;p&gt;StyleSheet is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 10 Aug 2015 23:46:19 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/08/10/stylesheet.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/08/10/stylesheet.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>分层，那一刀切的是否精准？</title>
+        <description>&lt;!--more--&gt;
+
+&lt;p&gt;分层的核心目的在于：分离关注点。&lt;/p&gt;
+
+&lt;p&gt;我们所得到的模块，关键的不止是他能做什么，还有他不能做什么。而往往他不能做什么更加关键。&lt;/p&gt;
+
+&lt;p&gt;分层是表示将功能进行有序的分组：应用程序专用功能位于上层，跨越应用程序领域的功能位于中层，而配置环境专用功能位于低层。分层从逻辑上将子系统划分成许多集合，而层间关系的形成要遵循一定的规则。&lt;/p&gt;
+
+&lt;p&gt;分层是表示将功能进行有序的分组：应用程序专用功能位于上层，跨越应用程序领域的功能位于中层，而配置环境专用功能位于低层。分层从逻辑上将子系统划分成许多集合，而层间关系的形成要遵循一定的规则。通过分层，可以限制子系统间的依赖关系，使系统以更松散的方式耦合，从而更易于维护。子系统的分组标准包含以下几条规则可见度。各子系统只能与同一层及其下一层的子系统存在依赖关系。&lt;/p&gt;
+
+&lt;p&gt;可见度。各子系统只能与同一层及其下一层的子系统存在依赖关系。&lt;/p&gt;
+
+&lt;p&gt;易变性。最上层放置随用户需求的改变而改变的元素。最底层放置随实施平台（硬件、语言、操作系统、数据库等）的改变而改变的元素。中间的夹层放置广泛适用于各种系统和实施环境的元素。如果在这些大类中进一步划分有助于对模型进行组织，则添加更多的层。&lt;/p&gt;
+
+&lt;p&gt;通用性。一般将抽象的模型元素放置在模型的低层。如果它们不针对于具体的实施，则倾向于将其放置在中间层。 
+层数。对于小型系统，三层就足够了。对于复杂系统，通常需要 5-7 层。无论复杂程度如何，如果超过 10 层，就需要慎重考虑了。层数越多，越需慎重。以下列出了一些经验法则：&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;类的数量&lt;/th&gt;
+      &lt;th&gt;层数&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0 - 10&lt;/td&gt;
+      &lt;td&gt;无需分层&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;10 - 50&lt;/td&gt;
+      &lt;td&gt;2 层&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;25 - 150&lt;/td&gt;
+      &lt;td&gt;3 层&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;100 - 1000&lt;/td&gt;
+      &lt;td&gt;4 层&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;粒度问题&lt;/p&gt;
+</description>
+        <pubDate>Tue, 04 Aug 2015 17:24:59 +0800</pubDate>
+        <link>http://dzpqzb.com/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html</guid>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
