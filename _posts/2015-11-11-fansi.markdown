@@ -2,6 +2,7 @@
 layout: post
 title: "一个程序员的读书笔记：程序设计的反思"
 date: 2015-11-11T12:16:19+08:00
+categories:  设计思想
 ---
 
 刚开始编程的时候是在高中，那个时候计算机课上老师教的是pascal。一种典型的面相过程的语言。那个时候懵懵懂懂的认为：程序还是一个蛮神奇的东西，敲几个英文字符进去，就能够有反馈。即使这个反馈只是非常简单的输出了一个“Hello World!”。
@@ -25,4 +26,3 @@ c++之父Bjarne Stroustrup的《The Design and Evolution Of C++》中一句话�
 最后用一幅画与大家共勉：
 
 ![](http://ww2.sinaimg.cn/large/7df22103jw1exwwxcouh0j20c80ut0vd.jpg)
-

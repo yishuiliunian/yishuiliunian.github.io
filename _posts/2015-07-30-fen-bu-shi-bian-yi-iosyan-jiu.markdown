@@ -3,7 +3,7 @@ layout: post
 title: "分布式编译ios研究"
 date: 2015-07-30 14:19:50 +0800
 comments: true
-categories: 
+categories: iOS
 ---
 #分布式编译IOS研究
 
@@ -17,23 +17,23 @@ categories:
 
 解压后，通过以下命令安装
 
-```
+~~~
 ./configur --disable-Werror
-make 
+make
 make install
-```
+~~~
 
 编译distcc并且将其ln到XCode编译器目录
 
-```
+~~~
 #link to xcode
 sudo rm "$XcodePath/Toolchains/XcodeDefault.xctoolchain/usr/bin/distcc"
 sudo ln /usr/local/bin/distcc "$XcodePath/Toolchains/XcodeDefault.xctoolchain/usr/bin/distcc"
-```
+~~~
 
 通过以下命令将XCode默认编译器更换为distcc
 
-```
+~~~
 cd `dirname $0`
 XcodePath=`xcode-select --print-path`
 cd "$XcodePath/../PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins/Clang LLVM 1.0.xcplugin/Contents/Resources"
@@ -41,17 +41,17 @@ cd "$XcodePath/../PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/
 sudo sed -i "_backup" "s/ExecPath = \"clang\";/ExecPath = \"distcc\";/g" "./Clang LLVM 1.0.xcspec"
 ##可以通过使用这句命令替换上一条命令还原默认编译器Clang  
 ##sudo sed -i "" "s/ExecPath = \"distcc\";/ExecPath = \"clang\";/g" "./Clang LLVM 1.0.xcspec"
-```
+~~~
 
 ##二、配置和使用
 
 ###服务器配置
 启动服务器
 
-```
+~~~
 touch distccd.log
 distccd  --daemon --allow 127.0.0.1 --allow 10.64.68.102 -j 8 --stats --log-level info --log-file=distccd.log
-```
+~~~
 
 --allow后面跟着允许访问该机distcc服务的IP地址，即有效client的地址。
 
@@ -64,19 +64,20 @@ distccd  --daemon --allow 127.0.0.1 --allow 10.64.68.102 -j 8 --stats --log-leve
 
 2. 修改XCode的编译任务数量：
 
-```
+~~~
 defaults write com.apple.dt.XCodeIDEBuildOperationMaxNumberOfConcurrentCompileTasks 8
-```
+~~~
 
 现在可以在命令行CD到QQ主干下面通过一下命令来启动编译
 
-```
+~~~
 xcodebuild -target QQ
-```
+~~~
 
-在服务器端使用```./distccmon-text 5```可以实时监测编译的情况。
+在服务器端使用~~~./distccmon-text 5~~~可以实时监测编译的情况。
 
 ##三、实验数据和总结
+
 ###第一组对比数据（编译distcc源码）
 1. 使用原生单机编译约5秒左右
 2. 使用make CC="distcc gcc"时间为30s左右。
@@ -92,6 +93,7 @@ xcodebuild -target QQ
 
 
 中间出现的一个奇怪的现象是在使用了distcc之后编译性能不但没有提升，反而有所下降。此处存疑，后续就绪研究原因。
+
 ###参考资料：
 
 1. [加速Linux程序编译](http://www.freemindworld.com/blog/2010/100105_make_complie_process_faster.shtml)

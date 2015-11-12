@@ -3,7 +3,7 @@ layout: post
 title: "tmux配置"
 date: 2015-08-03 13:11:53 +0800
 comments: true
-categories: 
+categories: 工具链
 ---
 
 ##为什么要用tmux

@@ -2,6 +2,7 @@
 layout: post
 title: "SWIFT与OC的比较"
 date: 2015-11-11T01:14:47+08:00
+categories:  iOS
 ---
 
 #SWIFT与OC的比较

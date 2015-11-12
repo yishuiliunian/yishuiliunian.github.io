@@ -2,6 +2,7 @@
 layout: post
 title: "iOS设计模式之观察者模式"
 date: 2015-11-11T12:20:12+08:00
+categories: 设计思想
 ---
 
 

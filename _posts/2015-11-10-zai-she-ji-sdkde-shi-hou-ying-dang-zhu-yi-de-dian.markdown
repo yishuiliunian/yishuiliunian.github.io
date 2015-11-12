@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "在设计SDK的时候应当注意的点"
+title: "在设计SDK的时候应当注意的点 之运行时环境污染"
 date: 2015-11-10 12:00:37 +0800
 comments: true
-categories: SDK
+categories:  SDK设计
 ---
 在SDK设计的时候，不注意自己是嵌入到别人的运行环境中的一部分。还是按照原先做App的思路去处理，可以随意的更改运行时的实例的属性，甚至是修改很多全局变量的值。结果就是污染了宿主的环境，导致宿主无法正常运行。
 <!--more-->
@@ -34,7 +34,7 @@ categories: SDK
 
 这个问题在钱包中所也是有所体现，将设置self.navigationController.delegate的代码写在了所有VC的基类之类。这样，就导致了现在钱包所有的VC都会执行这段代码。假设我现在有这么几个类：
 
-```
+~~~
 @interface BaseVC : ViewController
 - (void) viewDidLoad
 {
@@ -51,14 +51,14 @@ categories: SDK
 
 @end
 ........
-```
+~~~
 
 这段一是嵌入到了业务逻辑当中，二来由于是在基类中，所以当程序运行时VC1，VC2被实例化之后，而又由同一个NavigtionController来push的话，那么navigationController的delegate将会被重置好多次。oy my god！这样就更难理解和维护。虽然你可以拆东墙补西墙，发现BUG之后，在这里再继续写多余的逻辑来保证delegate能够被设置正确。但是为什么不修改一次，彻底杜绝类似的BUG发生呢？
 
 
 ###创建VitualEnviroment，搞一个自己的环境，不和宿主共享。
 
-这里说的VitrualEnviroment没有像VM那么高大上，只是一个比较贴切的说法。就是搞一个自己的环境，不和宿主共享。这样就直接做到了内存上的隔离。就拿刚才一直说的navigationController的例子来说吧。就是我们创建一个自己的navigationController来使用，不去使用宿主的那个实例。这样无论我们怎样```self.navigationController.delegate = nil;```。也不会对原先的nav造成影响。让宿主出现莫名其妙的问题。
+这里说的VitrualEnviroment没有像VM那么高大上，只是一个比较贴切的说法。就是搞一个自己的环境，不和宿主共享。这样就直接做到了内存上的隔离。就拿刚才一直说的navigationController的例子来说吧。就是我们创建一个自己的navigationController来使用，不去使用宿主的那个实例。这样无论我们怎样~~~self.navigationController.delegate = nil;~~~。也不会对原先的nav造成影响。让宿主出现莫名其妙的问题。
 
 而这里所谓VitrualEnviroment的实现，主要是创建新实例避免与宿主混淆。其实现手段无非是
 
@@ -70,8 +70,3 @@ categories: SDK
 #重中之重，是要识别
 
 其实，最关键的是，我们在改动的时候，需要识别出来，我们的改动是否对宿主的环境有所污染，是否修改了宿主的实例，是否修改了宿主的全局变量，是否动了宿主的某些文件。。。。。。重要的事情说三遍。一行代码虽小，影响却不知几何。尤其是在做SDK的时候，更要慎之又慎。考虑周全，从设计到编码，从编码到编译与链接，从连接到运行时，到整个变量的生命周期。
-
-
-
-
-

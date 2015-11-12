@@ -14,18 +14,18 @@ author:
 
 # 站点信息
 title: 一水的技术博客
-description: 一水的技术博客
+description: iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips
 url: http://dzpqzb.com
 rss_url: /pages/atom.xml
 
 # avatar头像及Favicon
-avatar: http://7u2ho6.com1.z0.glb.clouddn.com/site-avatar.png
+avatar: http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg
 favicon: http://7u2ho6.com1.z0.glb.clouddn.com/site-favicon.ico
 
 # google analytics 设置
 ga:
-  id: UA-54767140-1
-  url: yansu.org
+  id: UA-33738381-1
+  url: dzpqzb.com
 
 # disqus 设置
 disqus:

@@ -3,27 +3,20 @@ layout: post
 title: "奇怪的动画"
 date: 2015-10-24 19:03:35 +0800
 comments: true
-categories: 
+categories: iOS
 ---
 在重构红点的UI过程中，发现一个奇怪的问题。使用block传进来的布局信息调用后会神奇的产生一个动画：
 <!--more-->
 
 
 在重构红点的UI过程中，发现一个奇怪的问题。使用block传进来的布局信息调用后会神奇的产生一个动画：
-```
+
+~~~
 //扩展红点View
 QQExtendViewRedPoint(self.buttton, @"1000100", YES, ^(UIView* originView, UIView* redPointView, RedPointShowInfo* showInfo) {
         redPointView.frame = CGRectMake(CGRectGetMaxX(originView.frame), CGRectGetMinY(originView.frame), CGRectGetWidth(redPointView.frame), CGRectGetHeight(redPointView.frame) );
 })
-
-....
-
-
-```
-
-```
 //红点View布局的代码
-
 - (void) layout {
         ....
         case VASHintTypeDot:
@@ -35,12 +28,11 @@ QQExtendViewRedPoint(self.buttton, @"1000100", YES, ^(UIView* originView, UIView
             }
 
 }
+~~~
 
-```
+但是当给~~~self.button~~~加上了一个调整frame的动画之后，开始变得神奇了：
 
-但是当给```self.button```加上了一个调整frame的动画之后，开始变得神奇了：
-
-```
+~~~
     [UIView animateWithDuration:1.0 delay:0.8 options:UIViewAnimationOptionCurveEaseOut animations:^{
         if (showOrHide) {
         //动画部分，改变了accountButton的frame
@@ -55,7 +47,7 @@ QQExtendViewRedPoint(self.buttton, @"1000100", YES, ^(UIView* originView, UIView
         [self updateAddCardButtonWithSubTitle:self.bindCardPromotion.promoWord];//动画完成后update一下
         self.buttonIsAnimating = NO;
     }];
-```
+~~~
 
 红点产生了一个奇怪的动画:
 

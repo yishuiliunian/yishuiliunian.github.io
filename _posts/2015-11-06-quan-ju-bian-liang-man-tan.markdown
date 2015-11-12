@@ -3,7 +3,7 @@ layout: post
 title: "全局变量漫谈"
 date: 2015-11-06 15:17:58 +0800
 comments: true
-categories: 
+categories:  设计思想
 ---
 <!--more-->
 

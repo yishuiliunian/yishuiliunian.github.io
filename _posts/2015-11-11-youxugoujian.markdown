@@ -2,6 +2,7 @@
 layout: post
 title: "有序构建之概念篇"
 date: 2015-11-11T01:17:42+08:00
+categories:  设计思想
 ---
 
 有序构建
@@ -47,7 +48,9 @@ date: 2015-11-11T01:17:42+08:00
 下面是开脑洞的时间，之说IOS开发相关的东西。因为楼主目前是搞这个的。说一些在IOS上我们可能会用到的一些构建的规则。一般的东西比如：面向对象、敏捷开发、设计模式等等这些耳熟能像的，大家比我懂得多，我就不班门弄斧了。我们来看一些，没有那么高大上，但是非常实用的一些构建的规则。只是为了脑洞大开。
 
 #语言特性
+
 ##动态语言
+
 ###切面范式
 
 什么是切面范式？
@@ -74,9 +77,9 @@ date: 2015-11-11T01:17:42+08:00
 
 元编程是一个很有意思的概念，简单说就是用程序来写程序。颇有科幻电影里面，机器有了智能能够自我编程的意味。然而，其实不然：
 
-```
+~~~
 元编程是指某类计算机程序的编写，这类计算机程序编写或者操纵其它程序（或者自身）作为它们的数据，或者在运行时完成部分本应在编译时完成的工作。多数情况下，与手工编写全部代码相比，程序员可以获得更高的工作效率, 或者给与程序更大的灵活度去处理新的情形而无需重新编译。
-```
+~~~
 
 
 
@@ -98,10 +101,11 @@ date: 2015-11-11T01:17:42+08:00
 Block是C语言的扩展功能，可以用一句话来表示Blocks的带来的扩充功能：带有自动变量的匿名函数。有些地方称之为lambda表达式或者闭包。IOS4.0之后引入了闭包的功能。而上文提到的WAX框架的作者当时写WAX的初衷就是为了给OC引入这个特性。而我们在另外一些现代语言中，频频见到闭包的影子，在ruby中，在swift中，在js中......那么闭包为什么会这么有吸引力呢？因为闭包是函数式编程的基础要素之一。(BTW:关于apple如何实现的闭包，可以参考[《Objective-C高级编程》](http://item.jd.com/11258970.html?utm_source=www.googleadservices.com&utm_medium=tuiguang&utm_campaign=t_50_s_sda1&utm_term=802e7d6365a04596b8b70cbf7ad6a221)第二章，blocks)。
 
 ###基本用法
+
 ###函数式编程
 
 > 函数式编程（英语：Functional programming）或者函数程序设计，又称泛函编程，是一种编程范型，它将电脑运算视为数学上的函数计算，并且避免使用程序状态以及易变对象。函数编程语言最重要的基础是λ演算（lambda calculus）。而且λ演算的函数可以接受函数当作输入（引数）和输出（传出值）。
-> 
+>
 > 和命令式编程相比，函数式编程强调程序的执行结果比执行过程更重要，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。
 > ————————出自[WIKI](http://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B8%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80)
 
@@ -113,40 +117,40 @@ Block是C语言的扩展功能，可以用一句话来表示Blocks的带来的�
 
 横向布局一些图片和文字，而且文字的颜色不同，点击之后还会有效果。你可能会说使用NSAttributeString，但是考虑到兼容性的问题，这个方案临时不考虑。我们就用最笨的方法展示：用UIImageView展示图片，用UILabel展示灰色的文字，用UIButton展示可点击的文字。那么问题来了，在给这些元素布局的时候，我们应该怎样code？一个一个的算frame然后赋值吗，那么代码将会丑陋不堪。这个时候何不尝试一下函数式编程。
 
-```
+~~~
  CGFloat offsetY = IS_IPHONE5 ? 80 : 50;
-    
+
     CGFloat textOffsetY = CGRectGetMaxY(_urlImageView.frame) + offsetY;
-    
+
     typedef UILabel*  (^GetLabel)(UIView* aView);
     void (^SetFameWithLabel)(CGFloat x, UIView* aView, GetLabel block) = ^(CGFloat x, UIView* aView, GetLabel block) {
-        
+
         UILabel* label = block(aView);
-        
+
         NSString* str = label.text;
         CGSize size = [str sizeWithFont:label.font];
         aView.frame = CGRectMake(x,
                                  textOffsetY,
                                  size.width, CGRectGetHeight(_checkButton.frame));
-        
+
     };
-    
+
     GetLabel lableBlock =  ^(UIView* aview) {
         return (UILabel*)aview;
     };
-    
-    
+
+
     GetLabel buttonBlock  =  ^(UIView* aview){
         UIButton* button = (UIButton*) aview;
         return button.titleLabel;
     };
-    
+
     _checkButton.frame = CGRectMake(15, textOffsetY, 30, 30);
     SetFameWithLabel(CGRectGetMaxX(_checkButton.frame), _headLabel, lableBlock );
     SetFameWithLabel(CGRectGetMaxX(_headLabel.frame), _serviceContractButton, buttonBlock);
     SetFameWithLabel(CGRectGetMaxX(_serviceContractButton.frame), _tailLabel, lableBlock);
     SetFameWithLabel(CGRectGetMaxX(_tailLabel.frame), _userageButton, buttonBlock);
-```
+~~~
 
 我们构建了几个基础的block，然后用这几个block之间的组合完成了上述的功能。而这正是函数式编程的精髓：利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。而这个思想同样可以应用在我们日常的编程之中——保持代码的简洁，尽量使用简单的规则祖曾退到负责的运算，而不是一上来就构建一个复杂的系统。
 
@@ -177,33 +181,32 @@ RF一直都缺少比较好的学习资料，终于一个国外的大神忍无可
 
 我们在定义一个类的属性的时候，
 
-```
+~~~
 @interface TestObject : NSObject
 @property (strong, nonatomic) NSString* title;
 @end
-```
+~~~
 
 最起码要输入5个单词，四个符号和多个空格。写多了就会觉得这里重复输入的地方太多，为什么不想个办法优化一下输入呢。而且有些时候，中间的某个单词比如strong拼错了，还得会过头来继续修改。
 优化输入效率，有很多种方式。比如使用sinepts。而且xcode的snip支持也不错。直接拖拽代码块就能够生成snip。
 
 
-```
+~~~
 \\key is
 \\@propertystrongnonatomic
 @property (strong, nonatomic) <#type#>* <#name#>
-```
+~~~
 
 这样的确是可以，但是你需要定义大量的snip来适应不同的定义peroperty的情况。那有没有更简单的一点的方法呢。必须有啊，使用宏啊。
 
 
-```
+~~~
 #define DEFINE_PROPERTY(mnmKind, type , name)       @property (nonatomic, mnmKind)  type  name
 #define DEFINE_PROPERTY_ASSIGN(type, name)          DEFINE_PROPERTY(assign, type, name)
 #define DEFINE_PROPERTY_ASSIGN_Double(name) DEFINE_PROPERTY_ASSIGN(double, name)
-
 #define DEFINE_PROPERTY_STRONG(type, name) DEFINE_PROPERTY(strong, type, name)
 #define DEFINE_PROPERTY_STRONG_NSString(name) DEFINE_PROPERTY_STRONG(NSString*, name)
-```
+~~~
 
 具体参见[DZProgrameDefines](https://github.com/yishuiliunian/DZProgrameDefines)
 我们完全可以通过使用宏定义，来扩展出一些列的定义属性的宏方法，借助于XCode的强大的自动补全来方便我们输入，少敲了非常多的字符。并且还减少了出错的情况，在可读性上，如果宏定义的名字起得好，可读性也不错。
@@ -215,7 +218,7 @@ RF一直都缺少比较好的学习资料，终于一个国外的大神忍无可
 
 某些情况下，我们可能会写一些大量的重复代码，而这些代码又很难将其抽离出来做成一个独立的函数（甚至是lambda表达式），而这种时候宏的作用就体现出来了。考虑下述情况：
 
-```
+~~~
 NSString* a = infos[@"aKey"];
 if(!a) {
         [self postError:@"need aKey"];
@@ -228,11 +231,11 @@ if(!b) {
         return;
 }
 ....
-```
+~~~
 
 上述代码中，我们需要从字典infos中取一批参数并且要判断这些参数是否为空，为空的时候报错并返回。其中有大量的代码是重复的。而这种重复又不太适合抽离成函数那么这个时候就可以这样做了：
 
-```
+~~~
 #define GetValueWithLocalNameAndKey(name , key) \
 \
 NSString* name = [infos getWBValueForKey:key error:&error];\
@@ -242,7 +245,7 @@ if (!error) { [self postPayError:error]; return;}\
 GetValueWithLocalNameAndKey(a,aKey);
 GetValueWithLocalNameAndKey(b,bKey);
 ...
-```
+~~~
 
 这样做的时候，就将一段代码抽离成了模板。方便了使用和维护。
 
@@ -254,7 +257,7 @@ GetValueWithLocalNameAndKey(b,bKey);
 
 使用过JEC与后台通讯的同学可能有过，写接口的痛苦。构建发送包，接口回调消息，解析回调，然后向外传递内容。这个过程，是多么的类似啊。那么问题来了，有没有什么方法可以简化这个过程中的编码，让大多数接口通信过程开起来更有序呢？何不使用模板呢。
 
-```
+~~~
 template<typename T>
 inline const int decodeForResponse(T& response , unsigned char* pData ,int nDataLen ,std::string key)
 {
@@ -283,7 +286,7 @@ inline int sendRequest(std::string funcName,
 {
   .....
 }
-```
+~~~
 
 上述的过程中，把一直在变动的结构体，当成模板参数传进来，不就省事了很多嘛。（BTW：这里使用了一个重定义self的技巧。）
 
@@ -297,6 +300,3 @@ inline int sendRequest(std::string funcName,
 
 上面只是在使用OC的过程中，总结出来的一些开脑洞的使用方式。而且这些方式，从某些意义上能够提高整个程序的质量，甚至在某些时候能够带来不一样的技术解决方案。本来，一直以为OC是一门神奇的语言，直到遇见了swift。上文中，提到的很多的构建方式，swift原生支持，函数式编程更加便捷，模板也不用和C++混编。这从另外一个角度，印证了swift的确是OC的升级版。
 言归正传，所谓有序构建其中的“序”，大家理解不一。但是，可能都同意的是，软件的构建过程，代码的增长过程应当保持一定的秩序和规则。那么你在coding的时候将会遵循什么样的“有序构建”？
-
-
-
