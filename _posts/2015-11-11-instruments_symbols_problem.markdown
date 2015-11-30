@@ -21,7 +21,3 @@ categories: iOS
 在调试的时候尽量，保持零优化的模式，这样能够保证符号表的完整性。关于具体调试选项的描述可以参考gcc的文档。
 
 ![](http://ww3.sinaimg.cn/large/7df22103jw1exxbqjncmrj20fk0b3aaq.jpg)
-
------
-欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注  
-![](http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)

@@ -3,7 +3,7 @@ layout: post
 title: "机制与策略分离"
 date: 2015-10-24 19:23:01 +0800
 comments: true
-categories:  设计思想 
+categories:  设计思想
 ---
 
 > 提供机制，而不是策略

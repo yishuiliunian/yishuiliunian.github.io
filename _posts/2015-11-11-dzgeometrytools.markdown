@@ -32,12 +32,3 @@ stonedong, yishuiliunian@gmail.com
 ## License
 
 DZGeometryTools is available under the MIT license. See the LICENSE file for more info.
-
-
-
-
-
-
------
-欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注  
-![](http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)

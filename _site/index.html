@@ -38,6 +38,8 @@
       
         <li id="BOOK" class="tags__li tags-btn">BOOK</li>
       
+        <li id="iOS-Tips" class="tags__li tags-btn">iOS-Tips</li>
+      
     </ul>
 
     <div id="tags__bottom">
@@ -54,6 +56,14 @@
     </form>
 
     <nav id="pl__container">
+    
+      <a class="iOS pl__all" href="/2015/11/27/zhishikuangjia.html"><span class="pl__circle"></span><span class="pl__title">iOS开发知识框架</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/19/bitcode-open.html"><span class="pl__circle"></span><span class="pl__title">Bitcode适配指南</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/17/kill-alipay.html"><span class="pl__circle"></span><span class="pl__title">是怎样干掉支付宝的界面的</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS-Tips pl__all" href="/2015/11/17/block-usage.html"><span class="pl__circle"></span><span class="pl__title">Block使用的陷阱</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="设计思想 pl__all" href="/2015/11/12/emun-usage-when-and-how.html"><span class="pl__circle"></span><span class="pl__title">什么时候该使用枚举类型</span><span class="pl__date">Nov 2015</span></a>
     
@@ -137,19 +147,18 @@
       <div id="pjax">
         <article id="post__content">
   
-    <h1 id="post__title" data-identifier="20151112">什么时候该使用枚举类型</h1>
-    <p><strong>在值可穷尽的情况下可使用枚举类型</strong>
-当场景能够全覆盖的时候才使用枚举类型，比如付款状态：付款前，付款中，付款后，中前后三个状态能够覆盖所有付款的时间场景。</p>
-
-<p><strong>值在不可穷尽的情况下不适合使用枚举。请考虑其他方式或者设计模式来解决当前问题</strong></p>
-
-<p>而付款失败的种类，则不适合使用枚举类型，因为枚举无法覆盖全量的失败场景，在1.0版本的时候可能只有2，3，5这几种失败code，到了2.0的时候又多了6，8，9，。。。。如此类推，你会面临着不停的往这个枚举中添加新的值的窘境。而且在处理这个枚举的switch-case语句也会不断的膨胀，带来维护灾难。</p>
-
-<p>而我们在使用枚举的时候，通常会伴随着switch-case这种变形的if语句，通常当一个if语句嵌套超过3层的时候，就考虑一下这里是否存在问题了。于是我们我们使用枚举加switch-case来判断场景的情况。也是值得商榷的。</p>
+    <h1 id="post__title" data-identifier="20151127">iOS开发知识框架</h1>
+    <p><img src="http://ww2.sinaimg.cn/large/7df22103jw1eyfwulrmn3j21ay3nihd3.jpg" alt="" /></p>
 
 
   
 </article> <!-- end #post__content -->
+<p>欢迎关注iOS开发公共账号 <strong> iOS开发知识 </strong>  ：扫描下方二维码关注<br />
+  <div style="text-align:center"><a href="http://www.imagechef.com/ic/make.jsp?tid=Beach" target="_blank"> <img src="http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg" alt="Beach custom comment codes for MySpace, Hi5, Friendster and more - ImageChef.com"/> </a> </div>
+</p>
+<p>
+  版权声明：转载请保留作者信息，恶意转载作者将保留追究法律责任的权利。BY:yishuiliunian
+</p>
 
 <div id="post__share">
   <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/&text=" target="_blank"></a>
