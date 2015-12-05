@@ -116,9 +116,279 @@
 
 &lt;p&gt;说了半天，总结一下。优化是在可控的范围内有目的性的对现有程序的修改。一般可以使用逻辑分析法和实验法来定位、分析、描述问题。或者定性或者定量。无论哪种，要想优化，你得先建立起对自己app运行的监控体系。&lt;/p&gt;
 
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号 &lt;strong&gt;iOS开发知识&lt;/strong&gt;：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>iOS开发知识框架</title>
+        <link>http://dzpqzb.com/2015/11/27/zhishikuangjia.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/27/zhishikuangjia.html</guid>
+        <pubDate>Fri, 27 Nov 2015 22:39:11 +0800</pubDate>
+        <description>&lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1eyfwulrmn3j21ay3nihd3.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+</description>
+      </item>
+    
+      <item>
+        <title>Bitcode适配指南</title>
+        <link>http://dzpqzb.com/2015/11/19/bitcode-open.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/19/bitcode-open.html</guid>
+        <pubDate>Thu, 19 Nov 2015 19:41:34 +0800</pubDate>
+        <description>&lt;p&gt;随着XCode7的发布，Apple提供了一项新的技术来支持App瘦身功能，那就是Bitcode。本文章将会结合自己在支持bitcode过程中遇到的问题，来阐述支持bitcode的过程。&lt;/p&gt;
+
+&lt;h2 id=&quot;bitcode&quot;&gt;BitCode是什么&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;Bitcode is an intermediate representation of a compiled program. Apps you upload to iTunes Connect that contain bitcode will be compiled and linked on the store. Including bitcode will allow Apple to re-optimize your app binary in the future without the need to submit a new version of your app to the store.
+
+Xcode hides symbols generated during build time by default, so they are not readable by Apple. Only if you choose to include symbols when uploading your app to iTunes Connect would the symbols be sent to Apple. You must include symbols to receive crash reports from Apple.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述引自Apple的文档&lt;a href=&quot;https://developer.apple.com/library/prerelease/ios/documentation/IDEs/Conceptual/AppDistributionGuide/AppThinning/AppThinning.html#//apple_ref/doc/uid/TP40012582-CH35&quot;&gt;App Thinning (iOS, tvOS, watchOS)&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;其大概意思是Bitcode类似于一个中间码，被上传到applestore之后，苹果会根据下载应用的用户的手机指令集类型生成只有该指令集的二进制，进行下发。从而达到精简安装包体积的目的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1ey79g6evsij20kb08rmxg.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;一点编译原理&lt;/h3&gt;
+
+&lt;p&gt;为了更好的理解什么是bitcode，我们简短的看一下编译器编译的过程：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Lexer&lt;/strong&gt; :读入源文件，并将其转化成字符流&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Parser&lt;/strong&gt; :将字符流转换成&lt;a href=&quot;https://en.wikipedia.org/wiki/Abstract_syntax_tree&quot;&gt;AST&lt;/a&gt;（抽象语法树）&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Semantic Analysis&lt;/strong&gt;: 对输入的AST进行语法检查。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Code Generation&lt;/strong&gt;: 代码生成，将AST转换成低层次的IR指令&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Optimization&lt;/strong&gt;: 分析IR指令，将其中潜在会拖慢运行速度的指令干掉。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;AsmPrinter&lt;/strong&gt;: 通过IR（中间码）生成特定CPU架构的汇编代码&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Assemble&lt;/strong&gt;: 将汇编代码转化成二进制&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Linker&lt;/strong&gt;: 通常程序会引用其他的二进制文件（.a或者framework)，但是这些链接在程序中没有正确的地址，只是个占位符。Linker的工作就是给这些占位符正确的地址。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;更多信息可以参考：&lt;a href=&quot;https://www.objc.io/issues/6-build-tools/compiler/&quot;&gt;The Compiler&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;一般情况下，在真实的编译器构架那种，会将上述过程分成前端和后端两部分来处理：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1eyd62a1opyj21f816sn5d.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在前后端之间传递的就是IR（中间码），而bitcode就是一种特殊形式的中间码。原本前后端的工作都是在本地LLVM中完成，虽然Apple没有给出具体的Bitcode实现，但是通过他们的文档可以猜测，是将一部分后端的工作移到了服务器进行。从Xcode上传IR到服务器，服务器来真对不同的机型进行后续操作。从而达到真对不同机型生成对应指令集的二进制，而减小报体积的目的。&lt;/p&gt;
+
+&lt;h2 id=&quot;bitcode-1&quot;&gt;打开bitcode设置&lt;/h2&gt;
+
+&lt;p&gt;实际上在Xcode 7中，我们新建一个iOS程序时，bitcode选项默认是设置为YES的。我们可以在”Build Settings”-&amp;gt;”Enable Bitcode”选项中看到这个设置。&lt;/p&gt;
+
+&lt;p&gt;不过，我们现在需要考虑的是三个平台：iOS，Mac OS，watchOS。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;对应iOS，bitcode是可选的。&lt;/li&gt;
+  &lt;li&gt;对于watchOS，bitcode是必须的。&lt;/li&gt;
+  &lt;li&gt;Mac OS不支持bitcode。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果我们开启了bitcode，在提交包时，下面这个界面也会有个bitcode选项：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1ey79j7ofbzj20lm0awmz1.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;但是如果其中包含第三方库，不支持bitcode时候。需要将”Enable BitCode”设置成NO。而且这个选项是，只要有一个第三方库不支持，就不能开的。否则连接错误。&lt;/p&gt;
+
+&lt;h2 id=&quot;fembed-bitcode-fembed-bitcode-maker&quot;&gt;确保打包的时候使用的是&lt;code&gt;fembed-bitcode&lt;/code&gt;, 而不是&lt;code&gt;fembed-bitcode-maker&lt;/code&gt;&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;You should be aware that a normal build with the -fembed-bitcode-marker option will produce minimal size embedded bitcode sections without any real content. This is done as a way of testing the bitcode-related aspects of your build without slowing down the build process. The actual bitcode content is included when you do an Archive build.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;fembed-bitcode-maker&lt;/code&gt;:只是简单的标记一下在archive出来的二进制中bitcdoe所在的位置。&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;fembed-bitcode&lt;/code&gt;: 真的会生成bitcode指令，并且嵌入到二进制中，这个设置不止要在app中设置，同样你也必须在编译静态链接库的时候使用。而且需要主题的是&lt;strong&gt;该参数系统只默认在archive模式下会添加&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;需要注意的是bitcode只默认在archive下编译。在debug和release下并不会。&lt;/p&gt;
+
+&lt;p&gt;如果您开发的是app那么走正常的打包archive流程就好了。如果你正在开发.a静态库或者framework，请注意打包方式设置为archive,或者在打包脚本中加入-fembed-bitcode参数。如果需要的话，需要在Build Settings中打开 DEPLOYMENT_POSTPROCESSING=YES，设置Strip Style为debugging。&lt;/p&gt;
+
+&lt;h2 id=&quot;bitcode-2&quot;&gt;检测是否打开Bitcode&lt;/h2&gt;
+
+&lt;p&gt;当打开bitcdoe选项之后，我们可以使用otool工具来检查二进制文件中是否包含bitcode段。&lt;/p&gt;
+
+&lt;h3 id=&quot;a&quot;&gt;针对于静态链接库.a文件&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;otool -arch armv7 -l xxxx.a | grep __bitcode | wc -l
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果是当前库支持.a文件则会输出一个数字&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/7df22103jw1ey7d1wkb9aj21a7032gmo.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果不支持bitcode则不会出现该数字。&lt;/p&gt;
+
+&lt;p&gt;上述命令只检查了armv7架构，同时，也必须使用改指令检查其他的指令集是否包含bitcode如：arm64，armv7s等等&lt;/p&gt;
+
+&lt;h3 id=&quot;appframeworkbitcode&quot;&gt;检查app或者framework中是否包含bitcode&lt;/h3&gt;
+
+&lt;p&gt;由于app中二进制和framework中二进制文件与.a文件存在差异，因为需要检查的是__LLVM段，当出现该段的时候，则表示支持bitcdoe，否则不支持。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;otool -l xxxx | grep __LLVM | wc -l
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里otool有个bug，当你的framework使用过lipo命令，进行拆解和合并之后，需要指定指令集进行检查才可以。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;otool -arch armv7 -l xxxx | grep __LLVM | wc -l
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;BUT, 上述检查过了之后，也不一定是真的支持bitcode，在实际的测试中，发现上述检测命令通过之后，某个使用的第三方库，依然报错不支持bitcode。因而最终结果，还是需要以是否能够连接成功为准。重要事情说三遍，上述网上流传的检测方法只做参考，最终还是要以实际效果为准。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;最终结果检查&lt;/h3&gt;
+
+&lt;p&gt;如果您是一个APP，可以直接进行Archive打包，如果是一个库，则建议建一个Demo工程进行打包，记得要打开bitcode设置。&lt;/p&gt;
+
+&lt;h4 id=&quot;checkpoint1--&quot;&gt;CheckPoint1  连接是否报错&lt;/h4&gt;
+
+&lt;p&gt;如果有任何一个库没有打开bitcode链接，将会出现类似下方的错误。只要链接过了，那么恭喜了，基本上是OK了。
+&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1eyc7gbmexbj21fy04o7as.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;checkpoint2-&quot;&gt;CheckPoint2 检查最终效果&lt;/h4&gt;
+
+&lt;h5 id=&quot;ipa&quot;&gt;使用开发模式导出ipa&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/7df22103jw1eyc7nexdfbj206t07qmxo.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1eyc7o22jrtj20g409qmyv.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;section-2&quot;&gt;选择出包的方式&lt;/h5&gt;
+
+&lt;p&gt;这里建议使用第二种，生成真对具体机型的包&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1eyc7occxdqj20g409q408.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;compiling-bitcode&quot;&gt;出现了，Compiling Bitcode，这个过程！！！！！&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1eyc7pqgxolj20g409q3ys.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;section-3&quot;&gt;最终结果&lt;/h5&gt;
+
+&lt;p&gt;在最后输出的文件中，你能够看到一个App Thinning的结果，里面有针对各个机型的ipa包。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1eyc7r9u55sj20b809575p.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在App Thinning Size Report中能够明显看到，由于使用了bitcode等技术之后，所带来的收益：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+App Thinning Size Report for All Variants of Black
+
+Variant: Black-iPad (4th generation)-etc.ipa
+Supported devices: iPad (3rd generation) and iPad (4th generation)
+App + On Demand Resources size: 368 KB compressed, 737 KB uncompressed
+App size: 368 KB compressed, 737 KB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
+....
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>是怎样干掉支付宝的界面的</title>
+        <link>http://dzpqzb.com/2015/11/17/kill-alipay.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/17/kill-alipay.html</guid>
+        <pubDate>Tue, 17 Nov 2015 22:25:03 +0800</pubDate>
+        <description>&lt;p&gt;这边的产品需求，需要在某些场景下进行清场操作，将所有的ViewController堆栈清空，页面回滚到首页。我们内部的页面都能够完成这个操作。但是有些第三方的页面，怎么都搞不掉。比如支付宝的页面。因为是引入的SDK，没有代码，所以第一方案，向支付宝侧提出需求，要求提供一个函数接口，能够清退他们的界面，但是他们说不能满足该需求。所以，我们只能开始了黑科技之旅。&lt;/p&gt;
+
+&lt;h2 id=&quot;view&quot;&gt;首先寻找支付宝的View&lt;/h2&gt;
+
+&lt;p&gt;因为我们的目标是干掉支付宝SDK自己弹出来的页面，那么我们第一件事情就是找到该页面。我们使用Xcode7.1的视图查看功能，找到了支付宝的View：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1ey5jykdse8j20b80a0dh4.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;一个叫做APayH5WebViewProgressView的东西，一看就是支付宝WebView上的进度条。他的父View是个UIView，很明显这个是某个UIViewController的根view。而且这个View很奇怪的是直接加载了Window上面。好霸道！！！怪不得我们的界面都被盖住了。&lt;/p&gt;
+
+&lt;p&gt;也就是说现在我们只要把这个VC的view给remove掉就可以干掉支付宝的霸道的页面了。而现在这个页面没有什么特异性的信息。但是可以推理那个UIViewController一定是某个特殊的类，自有其类名。而且因为是直接addSubView在keywindow上的，则必然在某个地方会持有该VC的实例。发现支付宝的AlipaySDK是个单例，这可是个常驻内存的东西。如果什么东西要被持有的话，肯定和他脱不了干系。要不看看这个类的实例变量吧。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+- (void) printClassIVar:(NSString*)name
+{
+    unsigned int count ;
+    Ivar *list = class_copyIvarList(NSClassFromString(name), &amp;amp;count);
+    for (int i = 0; i &amp;lt; count; i++) {
+        Ivar p = *list;
+        const char* name = ivar_getName(p);
+        NSLog(@&quot;name is %s \t  type is  %s&quot;, name, ivar_getTypeEncoding(p));
+        list++;
+    }
+}
+- (void) testAlipay
+{
+    [self printClassIVar:@&quot;AlipaySDK&quot;];
+//
+//    id value = [[AlipaySDK defaultService] valueForKey:@&quot;bizContext&quot;];
+//    
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+ name is _schemeStr        type is  @&quot;NSString&quot;
+ name is _executingOrderStr        type is  @&quot;NSString&quot;
+ name is _completionBlock          type is  @?
+ name is _route    type is  @&quot;APayRoute&quot;
+ name is _processor        type is  @&quot;APayProcessor&quot;
+ name is _alertOkAction    type is  @&quot;NSDictionary&quot;
+ name is _alertCancelAction        type is  @&quot;NSDictionary&quot;
+ name is _bizContext       type is  @&quot;APayBizContext&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看到AlipaySDK这个单例持有的变量实例中有几个比较特殊：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;APayRoute&lt;/li&gt;
+  &lt;li&gt;APayBizContext&lt;/li&gt;
+  &lt;li&gt;APayProcessor&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这三个类一看就是支付宝的类，我们用上面类似的方法，查看这三个类的属性变量，就真的发现了一个webViewController。&lt;/p&gt;
+
+&lt;p&gt;APayRoute的属性变量结构：
+~~~
+ name is _infostr          type is  @”nsstring”
+ name is _schemestr        type is  @”nsstring”
+ name is _resultblock      type is  @?
+ name is _wapviewcontroller        type is
+~~~&lt;/p&gt;
+
+&lt;p&gt;没错就是那个wapviewcontroller。不管怎样我们找到这个VC了。那么剩下的就是干掉他了。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;删掉界面&lt;/h2&gt;
+
+&lt;p&gt;其实就是从AlipaySDK的单例这段内存开始，一直往下找实例。直到找到这个VC为止。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    id cla = NSClassFromString(@&quot;AlipaySDK&quot;);
+    if ([cla respondsToSelector:@selector(defaultService)]) {
+        id defaultService = [cla performSelector:@selector(defaultService)];
+        id value = [defaultService valueForKey:@&quot;route&quot;];
+        if ([value isKindOfClass:NSClassFromString(@&quot;APayRoute&quot;)]) {
+            if ([value respondsToSelector:@selector(wapViewController)]) {
+                UIViewController* vc = [value performSelector:@selector(wapViewController)];
+                if (vc) {
+                    [vc.view removeFromSuperview];
+                }
+            }
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后直接用removeFromSuperview删掉这个霸道的页面。&lt;/p&gt;
+
+&lt;p&gt;-&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>Block使用的陷阱</title>
+        <link>http://dzpqzb.com/2015/11/17/block-usage.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/17/block-usage.html</guid>
+        <pubDate>Tue, 17 Nov 2015 12:16:47 +0800</pubDate>
+        <description>&lt;p&gt;使用block的使用，一定要考虑到对象的生命周期，block会延长对象的生命，延迟释放，由此可能会造成逻辑上时序的问题。我自己在使用的时候命中了这样的一个问题，因为对象延迟释放导致逻辑有问题。block的时候留意一下。&lt;/p&gt;
 </description>
       </item>
     
@@ -234,10 +504,6 @@ typedef void(^OCDeferBlock)(void);
 }
 
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -335,9 +601,7 @@ GetValueWithLocalNameAndKey(b,bKey);
 
 &lt;p&gt;这样做的时候，就将一段代码抽离成了模板。方便了使用和维护。&lt;/p&gt;
 
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;-&lt;/p&gt;
 </description>
       </item>
     
@@ -386,10 +650,6 @@ NSLog(@&quot;%x&quot;,errPtr);
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;这个问题，在使用NSError或者使用指针在ARC下进行数据传递的时候，需要注意和小心。&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -480,10 +740,6 @@ NSLog(@&quot;%x&quot;,errPtr);
 
 &lt;p&gt;iExplorer（本来是ios设备管理工具，但是能够从设备中导出别人的程序，导出之后的事情，就自己想象了）
 其他：事情MAC OS很多系统自带的应用都非常好用，日历，邮件什么的能用原生的尽量用原生的。能买个正版就买个正版吧，大家改BUG都挺不容易的。&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -508,10 +764,6 @@ NSLog(@&quot;%x&quot;,errPtr);
 &lt;p&gt;在调试的时候尽量，保持零优化的模式，这样能够保证符号表的完整性。关于具体调试选项的描述可以参考gcc的文档。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/7df22103jw1exxbqjncmrj20fk0b3aaq.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -523,10 +775,6 @@ NSLog(@&quot;%x&quot;,errPtr);
         <description>&lt;h1 id=&quot;dzpulldownviewcontrollerhttpsgithubcomyishuiliuniandzpulldownviewcontroller&quot;&gt;&lt;a href=&quot;https://github.com/yishuiliunian/DZPullDownViewController&quot;&gt;DZPullDownViewController&lt;/a&gt;&lt;/h1&gt;
 
 &lt;p&gt;两层结构的视图控制器，下拉的时候，上层的视图滑动，显示出下层的视图。如果上层视图控制器的rootView是UIScrollView或其子类（比如UITableView），在滑到头的时候，继续往下拉，会显示出下面的视图。&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -565,10 +813,6 @@ it, simply add the following line to your Podfile:&lt;/p&gt;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZCDNFiles is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -607,10 +851,6 @@ pod &quot;MSHttpRPC&quot;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;MSHttpRPC is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -648,10 +888,6 @@ pod &quot;MSInputScrollViewController&quot;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;MSInputScrollViewController is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -688,10 +924,6 @@ it, simply add the following line to your Podfile:&lt;/p&gt;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZCache is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -728,10 +960,6 @@ it, simply add the following line to your Podfile:&lt;/p&gt;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZSinglonFactory is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -769,10 +997,6 @@ pod &quot;DZSilkKit&quot;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZSilkKit is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -810,10 +1034,6 @@ pod &quot;DZLayoutTable&quot;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZLayoutTable is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     
@@ -850,559 +1070,6 @@ it, simply add the following line to your Podfile:&lt;/p&gt;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZGeometryTools is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>DZAdjustFrame</title>
-        <link>http://dzpqzb.com/2015/11/11/dzadjustframe.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/dzadjustframe.html</guid>
-        <pubDate>Wed, 11 Nov 2015 19:34:22 +0800</pubDate>
-        <description>&lt;h1 id=&quot;dzadjustframe&quot;&gt;DZAdjustFrame&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/stonedong/DZAdjustFrame&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/stonedong/DZAdjustFrame.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZAdjustFrame&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/DZAdjustFrame.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZAdjustFrame&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/DZAdjustFrame.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZAdjustFrame&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/DZAdjustFrame.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;usage&quot;&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;DZAdjustFrame is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
-it, simply add the following line to your Podfile:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;pod &quot;DZAdjustFrame&quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
-
-&lt;p&gt;stonedong, yishuiliunian@gmail.com&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;DZAdjustFrame is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>ARC(甚至是代码行数)与安装包体积之间的关系</title>
-        <link>http://dzpqzb.com/2015/11/11/arcmrccompare.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/arcmrccompare.html</guid>
-        <pubDate>Wed, 11 Nov 2015 19:23:40 +0800</pubDate>
-        <description>&lt;p&gt;此文的目的就是通过一些列的逻辑推理来推测出ARC语安装包体积之间的关系，或者说ARC对于安装包体积的一些影响。&lt;/p&gt;
-
-&lt;p&gt;两个事物之间的关系主要存在两种关系：相关性和因果性。相关性，表现为当一个事物发生改变的时候，另外一个事物同时也会跟着发生改变。而因果性则表现为，一个事物的变化会引起另外一个事物的变化。&lt;/p&gt;
-
-&lt;p&gt;如果我们决定因为安装包体积而抛弃ARC的话，我们就必须非常明确的确定，ARC与安装包增大之间有因果性关系。即，使用ARC是安装包体积增长的一个原因。而非使用ARC与否和安装包体积之间呈现出相关性，而且。&lt;/p&gt;
-
-&lt;p&gt;在《ARC对安装包影响的分析（高清、多图》一文中，使用“单因变量“试验，确定了使用非ARC之后，安装包体积有下降的趋势。这种方法，存在的缺陷是，事先已经假定了ARC与安装包体积之间是线性相关的关系，即通过一个简单的f(x)=kx，这样的一个公式就能够表示ARC与安装包体积之间的关系。然后，在这个假设之上去找支撑这个观点的依据。很幸运的找到了。但是，其前提假设正确与否没有给出详细的说明。&lt;/p&gt;
-
-&lt;p&gt;但是实际情况是，ARC与安装包体积之间绝对不是简单的线性关系。而是非线性的。ARC通过不同的层面在影响着安装包体积大小。也就是说我们要确定ARC是怎样影响安装包体积的，才能去讨论ARC与安装包体积之间的关系。&lt;/p&gt;
-
-&lt;p&gt;在开篇我很明白的告诉读者，最后不会得出一个类似于f(x)=kx的公式来，不会有20行ARC对应1KB的结论。因为在以下阐述的ARC对于安装包体积的影响中，有很多因素是非线性且不可量化的。在手Q或者任何一个软件，这样一个复杂性系统中，很多原始的简单的基于线性可量化的理论已经显得捉襟见肘。我们应当无奈的而且坦诚的承认，在很多复杂性系统中，或者根本就没有微观规律可言。&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;直接影响，直接作用于安装包体积&lt;/h2&gt;
-
-&lt;p&gt;所谓直接影响就是代码是否使用ARC和安装包内二进制可执行文件间的具有直接关系（前提是代码行数与二进制文件大小存在直接关系）。首先我们先假定，上述结论成立。我们再来分析。&lt;/p&gt;
-
-&lt;h3 id=&quot;arcmrc&quot;&gt;ARC与MRC之间指令差异&lt;/h3&gt;
-
-&lt;p&gt;参考Clang 3.5 documentation OBJECTIVE-C AUTOMATIC REFERENCE COUNTING (ARC)。我们了解到，Clang实现ARC的主要方式就是将内存管理转变成对象关系处理，并通过在runtime中增加了一些列的函数来支持这些关系处理：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;id objc_autorelease(id value);
-void objc_autoreleasePoolPop(void *pool);
-void *objc_autoreleasePoolPush(void);
-id objc_autoreleaseReturnValue(id value);
-void objc_copyWeak(id *dest, id *src);
-void objc_destroyWeak(id *object);
-id objc_initWeak(id *object, id value);
-id objc_loadWeak(id *object);
-id objc_loadWeakRetained(id *object);
-void objc_moveWeak(id *dest, id *src);
-void objc_release(id value);
-id objc_retain(id value);
-id objc_retainAutorelease(id value);
-id objc_retainAutoreleaseReturnValue(id value);
-id objc_retainAutoreleasedReturnValue(id value);
-id objc_retainBlock(id value);
-id objc_storeStrong(id *object, id value);
-id objc_storeWeak(id *object, id value);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;并且，在很多处理内存的方式上并像很多网上流传的材料所说的那样——在编译器帮助开发者插入retain与release这么简单。虽然他们的基础性技术都是retain count。但是在具体处理上所使用的模型已经发生改变。所以参照MRC的二进制文件，查找ARC的二进制文件指令的增长数量，或者参照ARC的二进制文件去查找MRC减少的指令。就不太靠谱了，他们使用的指令都不一样。怎么去对比。&lt;/p&gt;
-
-&lt;p&gt;线性拟合&lt;/p&gt;
-
-&lt;p&gt;通过与手Q基础侧的人了解到得出：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;20行ARC = 1kb
-30行MRC = 1kb
-100行C++ = 1KB
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这个结论时，采样的文件只有几个使用ARC更改过的文件。首先抛开结果是否正确不讲，第一采样空间的代表性值得怀疑，第二样本空间是否够大也是值得怀疑。有了怀疑于是就就用整个手Q中的.o文件的大小与代码行数之间进行多项式拟合。之所以采用.o文件是因为，直接测量当个文件对于安装包大小的影响非常困难。退而求其次，算单个文件与.o文件之间的关系。采样空间为手Q项目中的所有*.m文件。样本量约为1500+-。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;import os
-from os.path import getsize, join
-import numpy as np
-import scipy as sp
-from scipy.optimize import leastsq
-import pylab as pl
-
-m = 9
-
-def fake_func(p, x):
-    f = np.poly1d(p)
-    return f(x)
-
-def residuals(p, y, x):
-    return y - fake_func(p, x)
-
-
-
-
-class OCFile:
-    def __init__(self, linescount, arc):
-        self.linescount = linescount
-        self.arc = arc
-
-def get_all_file(floder_path):
-    dic = {}
-    if floder_path is None:
-        raise Exception(&quot;floder_path is None&quot;)
-    for dirpath, dirnames, filenames in os.walk(floder_path):
-        if len(dirpath) &amp;gt;= 6:
-            if dirpath[0:6] == &#39;./.svn&#39;:
-                continue
-        for name in filenames:
-            p = dirpath + &#39;/&#39; + name
-            if name[-2:] == &#39;.m&#39;:
-                arc = 0
-                if &quot;[super dealloc]&quot; in open(p).read():
-                    arc = 0
-                else:
-                    arc = 1
-                count = len(open(p,&#39;rU&#39;).readlines())
-                tf = OCFile(count, arc)
-                key = name[0:-2]+&quot;.o&quot;
-                dic[key] = tf
-
-    return dic
-
-rclinesDic = get_all_file(&#39;/Users/stonedong/Documents/TencentWork/master&#39;)
-
-
-arcf = open(&quot;arc.txt&quot;, &quot;w&quot;)
-mrcf = open(&quot;mrc.txt&quot;, &quot;w&quot;)
-
-
-arcx= []
-arcy = []
-mrcx = []
-mrcy = []
-
-for item in  os.listdir(&#39;.&#39;):
-    if item[-2:] == &#39;.o&#39;:
-        size = getsize(join(&quot;.&quot;, item))
-        if item in rclinesDic.keys():
-            of = rclinesDic[item]
-            fp = mrcf
-            if of.arc == 1:
-                fp =arcf
-                arcx.append(of.linescount)
-                arcy.append(size/1024)
-            else:
-                fp = mrcf
-                mrcx.append(of.linescount)
-                mrcy.append(size)
-            fp.write(item)
-            fp.write(&#39;\t&#39;)
-            fp.write(str(size))
-            fp.write(&#39;\t&#39;)
-            fp.write(str(of.linescount))
-            fp.write(&quot;\n&quot;)
-
-fp.close()
-
-
-
-x_show = np.linspace(0, 3000, 1000)
-
-p0 = np.random.randn(m)
-
-plsq = leastsq(residuals, p0, args=(mrcy, mrcx))
-print plsq[0]
-print &quot;\n&quot;
-pl.plot(x_show, fake_func(plsq[0], x_show), label=&#39;fitted curve&#39;)
-pl.plot(mrcx, mrcy, &#39;bo&#39;, label=&#39;with noise&#39;)
-pl.legend()
-pl.show()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;拟合结果：&lt;/h3&gt;
-
-&lt;h4 id=&quot;arc&quot;&gt;ARC&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/7df22103jw1exx9bd2n76j20fk0bomxq.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;拟合的多项式参数为：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx9bupyuvj20ev02qjrw.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;mrc&quot;&gt;MRC&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx9ciiwjtj20fk0bo3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;拟合的多项式参数为：
-&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1exx9ctbty7j20e10283yz.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;通过上图很明显看出，使用线性的多现实拟合的时候，结果极度欠拟合。拟合出的特征多项式完全没有意义。从而更加直观的可以看出，ARC或者MRC对于安装包大小的影响绝非线性关系。并且通过上述结果页可以看出，找不出一个合理的多项式用来表征ARC与安装包体积的关系，也找不出一个多项式来表征MRC与安装包体积的关系。最直接的结论就是，代码行数与安装包体积之间的关系不是线性关系。宏观上看，的确代码行数增加安装包体积增加。但是两者之间不存在线性关系。&lt;/p&gt;
-
-&lt;p&gt;因而所得出上述ARC或者MRC与安装包体积之间存在20行ARC对应1KB是存疑的。可能这是一个均值，但是均值在很多情况下是不具有普适性的。不能将使用均值来断定，我们实际在编程中代码行数对于安装包体积的影响。&lt;/p&gt;
-
-&lt;p&gt;同时计算了其均值和方差：&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx9d9gwbbj20b502j3yo.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;在方差如此之大的情况下，均值的意义就非常小了。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;间接影响，通过影响程序员来影响安装包体积的大小&lt;/h2&gt;
-
-&lt;p&gt;通过上面的讨论，我们已经初步得出结论，ARC对于安装包体积的影响绝不是一个简单的线性关系。在手Q这样一个复杂系统当中，ARC甚至是代码行数，对于安装包体积的影响绝对不是简单粗暴的，不是可以使用一个函数表达式就能说明的。&lt;/p&gt;
-
-&lt;p&gt;《技术的本质》一书中指出，技术通过影响人然后影响一切。同样的道理，ARC设计出来之后，首先影响的是我们的编程方式。而后通过我们编程方式的改变去影响其他，包括安装包体积的大小。&lt;/p&gt;
-
-&lt;p&gt;比如block的使用方式，在定义变量的时候使用strong关键字。甚至是设计模式的设计方式都会发生改变。&lt;/p&gt;
-
-&lt;p&gt;这些都是不可量化的影响。试问当这些因素加入到我们考量ARC与安装包体积之间的关系的时候，你如何去用数值度量这种影响？谁有能说清楚一个设计模式设计方式的改变对于安装包体积的影响有多大？&lt;/p&gt;
-
-&lt;p&gt;还有即使同样的一个算法，不同的编程人员也会写出不一样的代码来，这又如何去度量？&lt;/p&gt;
-
-&lt;p&gt;人是在整个软件过程中最不稳定的因素。前辈们常说，出问题的时候首先怀疑自己，然后去怀疑工具，甚至你都不需要怀疑工具。在我们没有解决好自己的问题之前，去怀疑工具，避免有点过了。&lt;/p&gt;
-
-&lt;p&gt;纯粹个人见解的是：对于安装包体积影响最大的可能就是编程人员了把。如果能够减少逻辑冗余，能够尽可能的抽出公共组件，控制安装包体积大小不是没有可能的。&lt;/p&gt;
-
-&lt;p&gt;同时，在上述的论述中，我们还没有牵扯到，文件之间的引用，函数之间的调用，类之间的交互等更复杂的关系。将之考量进去之后，ARC与安装包体积之间的关系将会更加错综复杂不可度量。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;结论&lt;/h2&gt;
-
-&lt;p&gt;通过上述，直接影响的定量分析手段和间接影响的定性分析的手段，我们初步得出了代码行数与安装包体积大小不存在线性关系。ARC对于安装包体积的影响也不是线性关系。代码行数、ARC、MRC以一种复杂且不可度量的方式影响着安装包体积大小。我们只能说有一个宏观趋势：代码增多，安装包体积增大。但是是如何影响安装包体积增大了，这个真的说不清楚了。太复杂了。已不是20arc-&amp;gt;1kb这样简单。&lt;/p&gt;
-
-&lt;p&gt;还有一点，ARC正在不断的变化之中，我们根据当前的ARC这种工具的的状态做出的判断，很可能只是因为Xcode和Clang的一次升级，就会变成谬误。语言和工具在发展，他们发展出了更多更好用的工具（包括ARC）在内，辅助我们控制整个软件过程中的复杂性。我们编程不止要实现产品的需求，同样也需要控制整个工程的复杂性，包括代码质量（可维护性和可阅读性等）、包括项目进度、包括安装包体积。。。。如果单纯因为一个简单的一个没有可靠理论依据的与安装包体积间线性相关性的现象就鲁莽的怀疑ARC，未免有点一叶障目不见泰山。&lt;/p&gt;
-
-&lt;p&gt;当摩尔定律让机器的性能不断提升的时候，我们可能不像以前，机器资源紧缺的时候那么去关注优化机器的性能，优化CPU消耗，优化内存、优化IO、优化存储….这个时候，我们是否应该关注一下怎样去优化人的时间。优化我们苦逼的程序员那宝贵的时间。而ARC就是这么一个好东西能够优化，我们程序员的时间。强烈支持ARC。&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注&lt;br /&gt;
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>iOS设计模式反思之单例模式的进化</title>
-        <link>http://dzpqzb.com/2015/11/11/danlimoshiios.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/danlimoshiios.html</guid>
-        <pubDate>Wed, 11 Nov 2015 15:25:12 +0800</pubDate>
-        <description>&lt;h1 id=&quot;section&quot;&gt;单例模式&lt;/h1&gt;
-
-&lt;p&gt;什么是单例模式？ 单例模式想一个大独裁者，他规定在他的国度里面，所有数据的访问和请求都得经过他，甚至你要调用相关的函数也得经过它。学术一点就是，单例模式，为某一类需求和数据提供了统一的程序接口。主要的实现技术就是，确保全局只有一个对象的实例存在。举个例子把，比如NSNotificationCenter 中的 defaultCenter 负责全局的消息分发、NSFileManager 的 defaultManager 统一负责物理文件的管理、NSUserDefaults 的 standardUserDefaults 统一管理用户的配置文件……不一而足。在整个iOS框架中，可以说是大规模使用了单例模式。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;单例模式的原理及实现&lt;/h2&gt;
-
-&lt;h3 id=&quot;arc&quot;&gt;在非ARC情况下实现一个单例&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;@implementation DZSinglonNoARC
-+ (DZSinglonNoARC*) shareInstance
-{
-    static DZSinglonNoARC* share = nil;
-    @synchronized(self)
-    {
-        if (!share) {
-            share = [[super allocWithZone:NULL] init];
-        }
-    }
-    return share;
-}
-+ (instancetype) allocWithZone:(struct _NSZone *)zone
-{
-    return [self shareInstance];
-}
-- (instancetype) copyWithZone:(NSZone*)zone
-{
-    return self;
-}
-- (id) retain
-{
-    return [DZSinglonNoARC shareInstance];
-}
-- (oneway void) release
-{
- 
-}
-- (instancetype) autorelease
-{
-    return self;
-}
-- (unsigned) retainCount
-{
-    return UINT_MAX;
-}
-@end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;首先要初始化一个该类的静态化变量&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;static DZSinglonNoARC* share = nil;
-    @synchronized(self)
-    {
-        if (!share) {
-            share = [[super allocWithZone:NULL] init];
-        }
-    }
-    return share;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;在这里进行了加锁处理，是为了防止多线程重入的情况下，造成静态变量多次分配内存和初始化，从而会导致数据混乱。这里加锁的对象是self，实际上是&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;[DZSinglonNoARC class]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;类DZSinglonNoARC的class对象，也就是说加锁对象是全局唯一的一个Class对象。而且在这里share的定义放在了函数shareInstance之内，是要让share变成一个函数内的局部变量这样可以防止，外部的异常访问。看到网上有些教程中，把share的定义放在函数之外，变成了文件内的一个全局静态变量，这样会存在其他函数异常操作share的情况。&lt;/p&gt;
-
-&lt;p&gt;注意在初始化share的时候我们使用的是&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;share = [[super allocWithZone:NULL] init];
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;之所以这样做，是为了防止想用[DZSinglonNoARC alloc]等函数的时候，会与allocWithZone引起的死锁和死循环。&lt;/p&gt;
-
-&lt;p&gt;而关于此处加锁的处理还有一个优化版本，在4.0以上的SDK有了闭包之后，我们可以这么做&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;+ (DZSinglonNoARC*) share2
-{
-    static DZSinglonNoARC* share = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&amp;amp;amp;onceToken, ^{    
-        share = [[super allocWithZone:NULL] init];
-    });    
-    return share;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;使用dispatch_once体带原来的加锁操作，这样做的好处就是可以减少每次加锁的时间，优化了程序性能。dispatch_once函数接收一个dispatch_once_t用于检查该代码块是否已经被调度的谓词（是一个长整型，实际上作为BOOL使用）。它还接收一个希望在应用的生命周期内仅被调度一次的代码块，对于本例就用于share实例的实例化。dispatch_once不仅意味着代码仅会被运行一次，而且还是线程安全的。完全可以替代相对低效的加锁操作。&lt;/p&gt;
-
-&lt;p&gt;然后是重载了一些列的函数，重载这些函数的目的，就是修改原有的NSOjbect的内存操作相关的函数，保持内存中有且只有一个该类的对象。&lt;/p&gt;
-
-&lt;h3 id=&quot;arc-1&quot;&gt;arc下的实现&lt;/h3&gt;
-
-&lt;p&gt;我们先看一个例子&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;@implementation DZSinglonARC
-+  (DZSinglonARC*) shareInstance
-{
-    static DZSinglonARC* share = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&amp;amp;amp;onceToken, ^{
-        share = [[super allocWithZone:NULL] init];
-    });
-    return share;
-}
-+ (instancetype) allocWithZone:(struct _NSZone *)zone
-{
-    return [self shareInstance];
-}
-@end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;通过上面的代码我们能够看出其实在ARC下单例的实现方式与非ARC下大同小异，只不过是没有重载内存管理的函数而已。而这也得益于ARC这种技术。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;单例工厂&lt;/h2&gt;
-
-&lt;p&gt;在实际的编程工作中，随着项目规模的不断扩大，我们往往发现在整个项目中存在着大量的单例。于是我们就会遇到一个问题如何去管理这些单例。 同时，也会遇到每一次都要按照上面的实现方式从头来一遍来实现一个单例，从编程效率上看难免有些低下，毕竟很多代码都是相同的。使用设计模式的目标之一就是合理的干掉重复的代码。那么有没有一个好的方式来管理这些单例呢，我们很自然的想到了工厂模式。&lt;/p&gt;
-
-&lt;p&gt;工厂方法模式（英语：Factory method pattern）是一种实现了“工厂”概念的面向对象设计模式。就像其他创建型模式一样，它也是处理在不指定对象具体类型的情况下创建对象的问题。工厂方法模式的实质是“定义一个创建对象的接口，但让实现这个接口的类来决定实例化哪个类。工厂方法让类的实例化推迟到子类中进行。” 创建一个对象常常需要复杂的过程，所以不适合包含在一个复合对象中。创建对象可能会导致大量的重复代码，可能会需要复合对象访问不到的信息，也可能提供不了足够级别的抽象，还可能并不是复合对象概念的一部分。工厂方法模式通过定义一个单独的创建对象的方法来解决这些问题。由子类实现这个方法来创建具体类型的对象。(引用自WIKI)&lt;/p&gt;
-
-&lt;p&gt;工厂模式解决的就是这种，重建同类型对象的问题。而这里，我们可以把单例看成同类型的一系列对象。那就创建一个单例工厂吧。 项目地址：https://github.com/yishuiliunian/DZSinglonFactory.git&lt;/p&gt;
-
-&lt;p&gt;先看一下如何实现一个简单的单例工厂&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;@interface DZSingletonFactory()
-{
-    NSMutableDictionary* data;
-}
-@end
-@implementation DZSingletonFactory
-- (id) init
-{
-    self = [super init];
-    if (self) {
-        data = [[NSMutableDictionary alloc] init];
-    }
-    return self;
-}
-+ (DZSingletonFactory*) shareFactory
-{
-    static DZSingletonFactory* share = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&amp;amp;amp;onceToken, ^{
-        share = [[DZSingletonFactory alloc] init];
-    });
-    return share;
-}
-- (id) copyWithZone:(NSZone*)zone
-{
-    return self;
-}
-//over singlong
-- (void) setShareData:(id)shareData  forKey:(NSString*)key
-{
-        if (shareData == nil) {
-            return;
-        }
-        [data setObject:shareData forKey:key];
-}
-- (id) shareDataForKey:(NSString*)key
-{
-        return [data objectForKey:key];
-}
-- (id) shareInstanceFor:(Class)aclass
-{
-    NSString* className = [NSString stringWithFormat:@&quot;%@&quot;,aclass];
-     @synchronized(className)
-    {
-        id shareData = [self shareDataForKey:className];
-        if (shareData == nil) {
-            shareData = [[NSClassFromString(className) alloc] init];
-            [self setShareData:shareData forKey:className];
-        }
-        return shareData;
-    }
- 
-}
-- (id) shareInstanceFor:(Class)aclass category:(NSString *)key
-{
-    NSString* className = [NSString stringWithFormat:@&quot;%@&quot;,aclass];
-    NSString* classKey = [NSString stringWithFormat:@&quot;%@-%@&quot;,aclass,key];
-    @synchronized(classKey)
-    {
-        id shareData = [self shareDataForKey:classKey];
-        if (shareData == nil) {
-            shareData = [[NSClassFromString(className) alloc] init];
-            [self setShareData:shareData forKey:classKey];
-        }
-        return shareData;
-    }
-}
-@end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;其实单例工厂类也是一个实例，之所以这么做，是因为我们所生产的单例总得有个仓库存着吧。而这个单例工厂类除了有生产单例的功能，也担负着仓库存储生产的单例的功能。私有变量NSMutableDictionary* data;就是仓库。&lt;/p&gt;
-
-&lt;p&gt;而生产的车间是&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;- (id) shareInstanceFor:(Class)aclass
-{
-    NSString* className = [NSString stringWithFormat:@&quot;%@&quot;,aclass];
-     @synchronized(className)
-    {
-        id shareData = [self shareDataForKey:className];
-        if (shareData == nil) {
-            shareData = [[NSClassFromString(className) alloc] init];
-            [self setShareData:shareData forKey:className];
-        }
-        return shareData;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这个函数及其简单，我们使用了Objective-C一些动态语言的特性，直接通过类Class对象来生成实例，如果你对objc的底层有些了解的话，应该知道其实Class也是一个对象，他也能够执行objc的方法。也就是说，如果我们要生成类A的一个实例，只要我们有了类A的类型对象（Class）实例就OK，然后通过[(Class*)aClass new]你就能轻而易举的生成一个实例。&lt;/p&gt;
-
-&lt;p&gt;在我们通过这种技术生成了一个单例的实例之后，将其存储在仓库data里面，下次再次请求这个类的实例的时候，只要从仓库中取出来用就行了。&lt;/p&gt;
-
-&lt;p&gt;我们甚至为了编程时再少写点代码可以写一个函数和宏：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;id  DZSingleForClass(Class a)
-{
-    return [DZShareSingleFactory shareInstanceFor:a];
-}
-..........
-#define DZShareSingleFactory [DZSingletonFactory shareFactory]
-#ifdef __cplusplus
-extern &quot;C&quot; {
-#endif
-    id  DZSingleForClass(Class a);
-#ifdef __cplusplus
-}
-#endif
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这样我们在需要创建单例的时候一句话就能搞定：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;+ (DZSingletonFactory*) shareInstance
-{
-    return DZSingleForClass([DZShareSingleFactory class]);
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;不过这只是一个极度简化版的单例工厂，很多保护性的措施还都没做。比如对于allocWithZone的重载等，还有一些单例注销的操作。&lt;/p&gt;
-
-&lt;p&gt;其实这是一种这种的策略，我们没有重载内存管理函数，是为了能够在后面为了节省内存，在单例较长时间不用的时候将其销毁掉，等下次用的时候再创建。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;- (void) destoryInstanceFor:(Class)aclass
-{
-    NSString* className = [NSString stringWithFormat:@&quot;%@&quot;,aclass];
-    @synchronized(className) {
-        if ([self shareDataForKey:className]) {
-            [data removeObjectForKey:className];
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;当然这中使用方式，看起来不太像是严格意义上的单例模式，但是他却完成单例模式最根本的意图，把接口和功能统一。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;模块管理系统&lt;/h2&gt;
-
-&lt;p&gt;还记得文章的标题吗？单例模式的进化，那么这里单例模式要进化到什么地步呢？在实际的编码过程中，随着工程规模的不断扩大，我们可能会在我们的项目中大规模的时候单例模式。就像是世界中，有了N多个独裁者，协调这些独裁者，对任何一个系统来说都是困难的。这个时候，就会遇到一个问题：如何有效的管理数量较多的单例。虽然我们使用单例工厂的方式，解决了单例统一构建的问题，但是没有能够解决统一管理的问题。这里统一管理的问题包括：&lt;/p&gt;
-
-&lt;p&gt;单例初始化的控制，不同的单例在初始化的时候可能需要不同的参数。甚至有些单例可以延迟加载。
-单例注销的统一管理。
-能够让开发者或者SDK使用者，直接了当的看到整个工程中使用了多少单例，每个单例的大概模样是怎么样子的。
-管理各个单例之间的依赖关系。比如地理位置信息单例可能会依赖数据库的一个单例。
-根据不同的需求，动态的加载某些单例。
-其他等等……
-这些需求一列，你会感觉怎么像是在说一个包管理系统比如debian的apt-get或者node的npm之类的东西呢，甚至还有点像windows的动态链接库或者linux的模块化机制。&lt;/p&gt;
-
-&lt;p&gt;其实如果我们剖析一下的话，其实单例模式是一种实现程序架构模块化的有利工具。他将某些内聚性非常高的功能，聚合在其一起，通过单一实例与外界交互。同时也降低了与其他单例之间的耦合性。从宏观的角度来看，我们可以把一个个单例看成一个个功能性模块，用一个形象的比喻就是插件。这样，一个充斥着大量单例，并且能够对这些单例有效管理的系统，从宏观的角度看，就像是一个插件系统（准确说是模块管理系统）。&lt;/p&gt;
-
-&lt;p&gt;而上面提到的项目&lt;a href=&quot;https://github.com/yishuiliunian/DZSinglonFactory.git&quot;&gt;DZSinglonFactory&lt;/a&gt;只是这个插件系统开了个头。有兴趣的可以一起来玩上一个iOS上的简单的插件管理系统。&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>通过实现一个TableView来理解iOS UI编程</title>
-        <link>http://dzpqzb.com/2015/11/11/tongguoshixiantableview.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/tongguoshixiantableview.html</guid>
-        <pubDate>Wed, 11 Nov 2015 14:59:31 +0800</pubDate>
-        <description>&lt;p&gt;通过实现一个TableView来理解iOS UI编程&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;阅读&lt;/h2&gt;
-&lt;p&gt;本书可以通过GitBook阅读，请移步：&lt;a href=&quot;https://www.gitbook.com/book/yishuiliunian/implementate-tableview-to-understand-ios/details&quot;&gt;通过实现TableView来理解IOS编程&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;查看源码&lt;/h2&gt;
-&lt;p&gt;源码请查看&lt;a href=&quot;https://github.com/yishuiliunian/DZTableView&quot;&gt;GitHUb&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注
-&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 </description>
       </item>
     

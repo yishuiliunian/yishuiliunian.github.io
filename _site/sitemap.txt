@@ -7,9 +7,19 @@
 
   /sitemap.txt
 
+  /sitemap.xml
+
 
 
   /2015/11/28/optime-logic-method.html
+
+  /2015/11/27/zhishikuangjia.html
+
+  /2015/11/19/bitcode-open.html
+
+  /2015/11/17/kill-alipay.html
+
+  /2015/11/17/block-usage.html
 
   /2015/11/12/emun-usage-when-and-how.html
 

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
+
+<title>是怎样干掉支付宝的界面的 | 一水的技术博客</title>
+<meta name="author" content="董朝">
+
+
+
+
+<link rel="shortcut icon" href="http://7u2ho6.com1.z0.glb.clouddn.com/site-favicon.ico" />
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+
+<link href="/pages/rss.xml" rel="alternate" title="一水的技术博客" type="application/atom+xml">
+
+  </head>
+
+  <body>
+    <aside id="sidebar">
+  <nav id="tags">
+    <a href="/index.html" id="avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+
+    <ul id="tags__ul">
+      <li id="pl__all" class="tags__li tags-btn active">全部</li>
+      
+        <li id="iOS" class="tags__li tags-btn">iOS</li>
+      
+        <li id="设计思想" class="tags__li tags-btn">设计思想</li>
+      
+        <li id="工具链" class="tags__li tags-btn">工具链</li>
+      
+        <li id="开源组件" class="tags__li tags-btn">开源组件</li>
+      
+        <li id="SDK设计" class="tags__li tags-btn">SDK设计</li>
+      
+        <li id="BOOK" class="tags__li tags-btn">BOOK</li>
+      
+        <li id="iOS-Tips" class="tags__li tags-btn">iOS-Tips</li>
+      
+    </ul>
+
+    <div id="tags__bottom">
+      <a href="mailto:yishuiliunian@gmail.com" id="icon-email" class="tags-btn fontello"></a>
+      <a href="/pages/rss.xml" id="icon-feed" class="tags-btn fontello"></a>
+    </div>
+  </nav> <!-- end #tags -->
+
+  <div id="posts-list">
+    <form action="" id="search-form">
+      <a href="/index.html" id="mobile-avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+      <!-- NOTE: input field is disabled by default -->
+      <input id="search-input" type="text" placeholder="Search..." disabled >
+    </form>
+
+    <nav id="pl__container">
+    
+      <a class="iOS pl__all" href="/2015/11/28/optime-logic-method.html"><span class="pl__circle"></span><span class="pl__title">如何进行技术方案优化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/27/zhishikuangjia.html"><span class="pl__circle"></span><span class="pl__title">iOS开发知识框架</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/19/bitcode-open.html"><span class="pl__circle"></span><span class="pl__title">Bitcode适配指南</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/17/kill-alipay.html"><span class="pl__circle"></span><span class="pl__title">是怎样干掉支付宝的界面的</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS-Tips pl__all" href="/2015/11/17/block-usage.html"><span class="pl__circle"></span><span class="pl__title">Block使用的陷阱</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/12/emun-usage-when-and-how.html"><span class="pl__circle"></span><span class="pl__title">什么时候该使用枚举类型</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/defer-ios-caozuo.html"><span class="pl__circle"></span><span class="pl__title">OC中使用defer操作</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/macro-defines.html"><span class="pl__circle"></span><span class="pl__title">使用宏来减少代码重复</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arc-error.html"><span class="pl__circle"></span><span class="pl__title">ARC的一些细节之NSError的使用</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcdnfiles.html"><span class="pl__circle"></span><span class="pl__title">DZCDNFiles</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/mshttprpc.html"><span class="pl__circle"></span><span class="pl__title">MSHttpRPC</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/msinputscrollviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">MSInputScrollViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcache.html"><span class="pl__circle"></span><span class="pl__title">DZCache</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsinglonfactory.html"><span class="pl__circle"></span><span class="pl__title">DZSinglonFactory</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsilkkit.html"><span class="pl__circle"></span><span class="pl__title">DZSilkKit</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzlayouttable.html"><span class="pl__circle"></span><span class="pl__title">DZLayoutTable</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzgeometrytools.html"><span class="pl__circle"></span><span class="pl__title">DZGeometryTools</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzadjustframe.html"><span class="pl__circle"></span><span class="pl__title">DZAdjustFrame</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arcmrccompare.html"><span class="pl__circle"></span><span class="pl__title">ARC(甚至是代码行数)与安装包体积之间的关系</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/danlimoshiios.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式反思之单例模式的进化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="BOOK pl__all" href="/2015/11/11/tongguoshixiantableview.html"><span class="pl__circle"></span><span class="pl__title">通过实现一个TableView来理解iOS UI编程</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/11/zaishejisdkdeshihoumingmingkongjianwuran.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之命名空间污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/shejimoshizhiguanchazhemoshi.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式之观察者模式</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/fansi.html"><span class="pl__circle"></span><span class="pl__title">一个程序员的读书笔记：程序设计的反思</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/make-bugs-correct.html"><span class="pl__circle"></span><span class="pl__title">如何合理的制造BUG</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之运行时环境污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/06/quan-ju-bian-liang-man-tan.html"><span class="pl__circle"></span><span class="pl__title">全局变量漫谈</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ji-zhi-yu-ce-lue-fen-chi.html"><span class="pl__circle"></span><span class="pl__title">机制与策略分离</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ios.html"><span class="pl__circle"></span><span class="pl__title">IOS设计模式反思——六大原则</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/10/24/strage-animation.html"><span class="pl__circle"></span><span class="pl__title">奇怪的动画</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html"><span class="pl__circle"></span><span class="pl__title">由Runtime想到的几个问题</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/07/30/you-xu-gou-jian-zhi-ji-ben-fang-fa-pian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之基本方法篇</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/fen-bu-shi-bian-yi-iosyan-jiu.html"><span class="pl__circle"></span><span class="pl__title">分布式编译ios研究</span><span class="pl__date">Jul 2015</span></a>
+    
+    </nav>
+  </div> <!-- end #posts-list -->
+</aside> <!-- end #sidebar -->
+
+    <div id="post">
+      <div id="pjax">
+        <article id="post__content">
+  <h1 id="post__title" data-identifier="20151117">是怎样干掉支付宝的界面的</h1>
+  <p>这边的产品需求，需要在某些场景下进行清场操作，将所有的ViewController堆栈清空，页面回滚到首页。我们内部的页面都能够完成这个操作。但是有些第三方的页面，怎么都搞不掉。比如支付宝的页面。因为是引入的SDK，没有代码，所以第一方案，向支付宝侧提出需求，要求提供一个函数接口，能够清退他们的界面，但是他们说不能满足该需求。所以，我们只能开始了黑科技之旅。</p>
+
+<h2 id="view">首先寻找支付宝的View</h2>
+
+<p>因为我们的目标是干掉支付宝SDK自己弹出来的页面，那么我们第一件事情就是找到该页面。我们使用Xcode7.1的视图查看功能，找到了支付宝的View：</p>
+
+<p><img src="http://ww1.sinaimg.cn/large/7df22103jw1ey5jykdse8j20b80a0dh4.jpg" alt="" /></p>
+
+<p>一个叫做APayH5WebViewProgressView的东西，一看就是支付宝WebView上的进度条。他的父View是个UIView，很明显这个是某个UIViewController的根view。而且这个View很奇怪的是直接加载了Window上面。好霸道！！！怪不得我们的界面都被盖住了。</p>
+
+<p>也就是说现在我们只要把这个VC的view给remove掉就可以干掉支付宝的霸道的页面了。而现在这个页面没有什么特异性的信息。但是可以推理那个UIViewController一定是某个特殊的类，自有其类名。而且因为是直接addSubView在keywindow上的，则必然在某个地方会持有该VC的实例。发现支付宝的AlipaySDK是个单例，这可是个常驻内存的东西。如果什么东西要被持有的话，肯定和他脱不了干系。要不看看这个类的实例变量吧。</p>
+
+<pre><code>
+- (void) printClassIVar:(NSString*)name
+{
+    unsigned int count ;
+    Ivar *list = class_copyIvarList(NSClassFromString(name), &amp;count);
+    for (int i = 0; i &lt; count; i++) {
+        Ivar p = *list;
+        const char* name = ivar_getName(p);
+        NSLog(@"name is %s \t  type is  %s", name, ivar_getTypeEncoding(p));
+        list++;
+    }
+}
+- (void) testAlipay
+{
+    [self printClassIVar:@"AlipaySDK"];
+//
+//    id value = [[AlipaySDK defaultService] valueForKey:@"bizContext"];
+//    
+
+}
+</code></pre>
+
+<p>输出为：</p>
+
+<pre><code>
+ name is _schemeStr        type is  @"NSString"
+ name is _executingOrderStr        type is  @"NSString"
+ name is _completionBlock          type is  @?
+ name is _route    type is  @"APayRoute"
+ name is _processor        type is  @"APayProcessor"
+ name is _alertOkAction    type is  @"NSDictionary"
+ name is _alertCancelAction        type is  @"NSDictionary"
+ name is _bizContext       type is  @"APayBizContext"
+</code></pre>
+
+<p>看到AlipaySDK这个单例持有的变量实例中有几个比较特殊：</p>
+
+<ol>
+  <li>APayRoute</li>
+  <li>APayBizContext</li>
+  <li>APayProcessor</li>
+</ol>
+
+<p>这三个类一看就是支付宝的类，我们用上面类似的方法，查看这三个类的属性变量，就真的发现了一个webViewController。</p>
+
+<p>APayRoute的属性变量结构：
+~~~
+ name is _infostr          type is  @”nsstring”
+ name is _schemestr        type is  @”nsstring”
+ name is _resultblock      type is  @?
+ name is _wapviewcontroller        type is
+~~~</p>
+
+<p>没错就是那个wapviewcontroller。不管怎样我们找到这个VC了。那么剩下的就是干掉他了。</p>
+
+<h2 id="section">删掉界面</h2>
+
+<p>其实就是从AlipaySDK的单例这段内存开始，一直往下找实例。直到找到这个VC为止。</p>
+
+<pre><code>    id cla = NSClassFromString(@"AlipaySDK");
+    if ([cla respondsToSelector:@selector(defaultService)]) {
+        id defaultService = [cla performSelector:@selector(defaultService)];
+        id value = [defaultService valueForKey:@"route"];
+        if ([value isKindOfClass:NSClassFromString(@"APayRoute")]) {
+            if ([value respondsToSelector:@selector(wapViewController)]) {
+                UIViewController* vc = [value performSelector:@selector(wapViewController)];
+                if (vc) {
+                    [vc.view removeFromSuperview];
+                }
+            }
+        }
+    }
+</code></pre>
+
+<p>然后直接用removeFromSuperview删掉这个霸道的页面。</p>
+
+<p>-</p>
+
+
+</article> <!-- end #post__content -->
+
+<p>欢迎关注iOS开发公共账号 <strong> iOS开发知识 </strong>  ：扫描下方二维码关注<br />
+  <div style="text-align:center"><a href="http://www.imagechef.com/ic/make.jsp?tid=Beach" target="_blank"> <img src="http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg" alt="Beach custom comment codes for MySpace, Hi5, Friendster and more - ImageChef.com"/> </a> </div>
+</p>
+<p>
+  版权声明：转载请保留作者信息，恶意转载作者将保留追究法律责任的权利。BY:yishuiliunian
+</p>
+
+
+<div id="post__share">
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/11/17/kill-alipay.html&text=是怎样干掉支付宝的界面的" target="_blank"></a>
+  <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/11/17/kill-alipay.html&title=是怎样干掉支付宝的界面的" target="_blank"></a>
+</div> <!-- end #post__share -->
+
+<!-- <div id="disqus_thread" name="yishuiliunian">
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink" target="_blank">Loading Disqus comments...</a>
+</div> -->
+<!-- 多说评论框 start -->
+
+<div class="ds-thread" data-thread-key=/2015/11/17/kill-alipay data-title=是怎样干掉支付宝的界面的 data-url="www.dzpqzb.com/2015/11/17/kill-alipay.html"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+    (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+
+
+        <p id="copyright">Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Theme <a href="https://github.com/P233/3-Jekyll" target="_blank">3-Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Hosted on <a href="https://pages.github.com" target="_blank">Github</a></p>
+      </div> <!-- end #pjax -->
+
+      <div id="post__toc-trigger">
+        <div id="post__toc">
+          <span id="post__toc-title">Table of Contents</span>
+          <ul id="post__toc-ul"></ul>
+        </div>
+      </div>
+    </div> <!-- end #post -->
+
+    <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
+
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.pjax.js"></script>
+<script src="/assets/js/nprogress.js"></script>
+<script src="/assets/js/script.js"></script>
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-33738381-1', 'dzpqzb.com');
+  ga('send', 'pageview');
+</script>
+
+  </body>
+</html>

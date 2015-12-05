@@ -42,7 +42,7 @@ categories: iOS
 }
 - (oneway void) release
 {
- 
+
 }
 - (instancetype) autorelease
 {
@@ -183,7 +183,7 @@ share = [[super allocWithZone:NULL] init];
         }
         return shareData;
     }
- 
+
 }
 - (id) shareInstanceFor:(Class)aclass category:(NSString *)key
 {
@@ -283,10 +283,3 @@ extern "C" {
 其实如果我们剖析一下的话，其实单例模式是一种实现程序架构模块化的有利工具。他将某些内聚性非常高的功能，聚合在其一起，通过单一实例与外界交互。同时也降低了与其他单例之间的耦合性。从宏观的角度来看，我们可以把一个个单例看成一个个功能性模块，用一个形象的比喻就是插件。这样，一个充斥着大量单例，并且能够对这些单例有效管理的系统，从宏观的角度看，就像是一个插件系统（准确说是模块管理系统）。
 
 而上面提到的项目[DZSinglonFactory](https://github.com/yishuiliunian/DZSinglonFactory.git)只是这个插件系统开了个头。有兴趣的可以一起来玩上一个iOS上的简单的插件管理系统。
-
-
-
-
------
-欢迎关注iOS开发公共账号iOS_Tips：扫描下方二维码关注
-![](http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)

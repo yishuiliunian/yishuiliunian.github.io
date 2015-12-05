@@ -118,6 +118,3 @@ but，我们仔细分析一下，我们要进行优化必须能够：
 
 
 
------
-欢迎关注iOS开发公共账号 **iOS开发知识**：扫描下方二维码关注  
-![](http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)
