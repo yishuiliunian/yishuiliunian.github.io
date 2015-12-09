@@ -13,7 +13,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 <!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
 
-<title>ARC的一些细节之NSError的使用 | 一水的技术博客</title>
+<title>Objective-c-memory-layout | 一水的技术博客</title>
 <meta name="author" content="董朝">
 
 
@@ -159,47 +159,8 @@
     <div id="post">
       <div id="pjax">
         <article id="post__content">
-  <h1 id="post__title" data-identifier="20151111">ARC的一些细节之NSError的使用</h1>
-  <p>首先看一下这段代码会输出一些什么：</p>
-
-<pre><code>NSError* error;
-NSError** errPtr = &amp;error;
-NSLog(@"%x",errPtr);
-</code></pre>
-
-<p>如果你认为，能够输出error的地址的话，也是情有可原的。但是，实际情况是：</p>
-
-<p><img src="http://ww4.sinaimg.cn/large/7df22103jw1exxcepvhjrj20fk00zt8r.jpg" alt="" /></p>
-
-<p>编译器直接报错，编译都不通过，也就谈不上运行输出结果了。为什么会这样呢？</p>
-
-<p>在ARC下每个变量都有一个所有权修饰符默认是__strong，而在定义OC对象的指针变量的时候，需要注意其所有权修饰符需要与其所指向的对象的所有权修饰符保持一致。于是上面的代码需要改成这个样子：</p>
-
-<pre><code>    NSError* error;
-    NSError* __strong * errPtr = &amp;error;
-    NSLog(@"%x",errPtr);
-</code></pre>
-<p>看到这你也许会问，经常遇到到使用NSError来返回错误信息的函数，比如:</p>
-
-<pre><code>- (BOOL)verifyPassword:(NSString *)inPassword error:(NSError **)outError
-</code></pre>
-
-<p>为什么调用他的时候没有报错呢？</p>
-
-<p>因为在函数使用的时候，会默认的将outError的所有权变成__autoreleasing.并且在调用函数之前编译器回补齐一个临时变量，从而达到了所有权修饰符保持一致的效果：</p>
-
-<pre><code>- (BOOL)verifyPassword:(NSString *)inPassword error:(NSError *__autoreleasing*)outError {
-    ....
-}
-....
-{
-    NSError __strong* error;
-    NSError __autoreleasing* tmp = error;
-    [anObject verifyPassword:@"a" error:&amp;tmp];
-}
-</code></pre>
-
-<p>这个问题，在使用NSError或者使用指针在ARC下进行数据传递的时候，需要注意和小心。</p>
+  <h1 id="post__title" data-identifier="20151130">Objective-c-memory-layout</h1>
+  
 
 
 </article> <!-- end #post__content -->
@@ -213,9 +174,9 @@ NSLog(@"%x",errPtr);
 
 
 <div id="post__share">
-  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/11/11/arc-error.html&text=ARC的一些细节之NSError的使用" target="_blank"></a>
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/11/30/objective-c-memory-layout.html&text=Objective-c-memory-layout" target="_blank"></a>
   <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
-  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/11/11/arc-error.html&title=ARC的一些细节之NSError的使用" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/11/30/objective-c-memory-layout.html&title=Objective-c-memory-layout" target="_blank"></a>
 </div> <!-- end #post__share -->
 
 <!-- <div id="disqus_thread" name="yishuiliunian">
@@ -224,7 +185,7 @@ NSLog(@"%x",errPtr);
 </div> -->
 <!-- 多说评论框 start -->
 
-<div class="ds-thread" data-thread-key=/2015/11/11/arc-error data-title=ARC的一些细节之NSError的使用 data-url="www.dzpqzb.com/2015/11/11/arc-error.html"></div>
+<div class="ds-thread" data-thread-key=/2015/11/30/objective-c-memory-layout data-title=Objective-c-memory-layout data-url="www.dzpqzb.com/2015/11/30/objective-c-memory-layout.html"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"dzpqzb"};
     (function() {

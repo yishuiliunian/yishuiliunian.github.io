@@ -6,6 +6,15 @@
     <description>iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips</description>
     
       <item>
+        <title>Objective-c-memory-layout</title>
+        <link>http://dzpqzb.com/2015/11/30/objective-c-memory-layout.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/30/objective-c-memory-layout.html</guid>
+        <pubDate>Mon, 30 Nov 2015 21:58:31 +0800</pubDate>
+        <description>
+</description>
+      </item>
+    
+      <item>
         <title>如何进行技术方案优化</title>
         <link>http://dzpqzb.com/2015/11/28/optime-logic-method.html</link>
         <guid isPermaLink="true">http://dzpqzb.com/2015/11/28/optime-logic-method.html</guid>
@@ -1034,42 +1043,6 @@ pod &quot;DZLayoutTable&quot;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZLayoutTable is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>DZGeometryTools</title>
-        <link>http://dzpqzb.com/2015/11/11/dzgeometrytools.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/dzgeometrytools.html</guid>
-        <pubDate>Wed, 11 Nov 2015 19:37:22 +0800</pubDate>
-        <description>&lt;h1 id=&quot;dzgeometrytools&quot;&gt;DZGeometryTools&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/stonedong/DZGeometryTools&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/stonedong/DZGeometryTools.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZGeometryTools&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/DZGeometryTools.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZGeometryTools&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/DZGeometryTools.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZGeometryTools&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/DZGeometryTools.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;usage&quot;&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;DZGeometryTools is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
-it, simply add the following line to your Podfile:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;pod &quot;DZGeometryTools&quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
-
-&lt;p&gt;stonedong, yishuiliunian@gmail.com&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;DZGeometryTools is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
 </description>
       </item>
     
