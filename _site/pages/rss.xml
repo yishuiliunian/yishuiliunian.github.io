@@ -6,6 +6,336 @@
     <description>iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips</description>
     
       <item>
+        <title>写于2016，那个2015年的尾巴</title>
+        <link>http://dzpqzb.com/2016/01/09/xieyu2016.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2016/01/09/xieyu2016.html</guid>
+        <pubDate>Sat, 09 Jan 2016 00:16:48 +0800</pubDate>
+        <description>&lt;p&gt;这一年自己从深圳回了北京，从腾讯到了百度，也算是阴差阳错。没有那么的计较和思量，就这样回来了。在一个雾霾严重的城市，从六月份呆到了下一年。中间有段时间莫名奇妙的咳嗽，以为是北京的霾的缘故，所以去微信看了一下。只是，过了面试之后，自己又拒掉了offer。事后，发现这一年自己做的一些事情，大多如此，有头无尾。2015这一年就这样平平淡淡的过来了。事后，想想多少有些后悔，错过了一次非常不错的机会，那又如何，人总要为自己的事情的负责。无论好坏。总结一下自己的2015，在平淡中敲敲打打，码出了365个日落。&lt;/p&gt;
+
+&lt;p&gt;这一年开始认真维护自己的博客，写一点关于iOS的技术文章和对技术与生活的感悟。&lt;/p&gt;
+
+&lt;p&gt;这一年写了一本Gitbook的书《通过实现TableView理解iOS编程》。&lt;/p&gt;
+
+&lt;p&gt;这一年维护了 iOS开发知识 公众账号，并拥有了很珍贵的800用户。&lt;/p&gt;
+
+&lt;p&gt;这一年帮朋友在业余时间写了几个app。&lt;/p&gt;
+
+&lt;p&gt;这一年在Github上终于有了第一个start过200的项目，也提交了很多自己有意思的项目。&lt;/p&gt;
+
+&lt;p&gt;这一年开始认真的思考架构这个东西，对iOS的底层有了深一步的了解。&lt;/p&gt;
+
+&lt;p&gt;不过，这一年依旧漂泊，依旧在寻找远方。而年岁渐长，也渐渐模糊了对于未来的概念。有很长一段时间，没有认真的思考过未来要去哪里，将来作何打算了。只愿下一年2016，能够过得有意义。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>类的外部初始化</title>
+        <link>http://dzpqzb.com/2015/12/14/design-class-header-detail1.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/12/14/design-class-header-detail1.html</guid>
+        <pubDate>Mon, 14 Dec 2015 14:35:39 +0800</pubDate>
+        <description>&lt;p&gt;当在进行类的设计的时候，遇到传值的问题的时候，比如下述问题，我们通过VC1获取了用户的姓名，要向VC2进行传递。现在的一般做法是在定义VC2的时候，在头文件中暴漏name变量。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface B : UIViewController
+@property (strong) NSString* name;
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种做法，封装性很差，任何持有VC2实例的地方都能够修改这个name值，导致一些很奇怪的逻辑。&lt;/p&gt;
+
+&lt;p&gt;其实这种情况应当属于外部初始化的典型应用。更好的方式就是我们就把name当成对象初始化必须的一个变量，需要对其进行初始化，那么就应当提供相应的函数来进行初始化。这样可以保持比较好的封装性。&lt;/p&gt;
+
+&lt;p&gt;建议以后采取这样的方式&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// .h
+@interface VC2 ： UIViewController
+- （instancetype） init UNAVAILABLE;
+-   （instancetype）initWithName:(NSString*)name;
+@end
+
+//.m
+@interface VC2 ： UIViewController ()
+{
+     NSString* _name;
+}
+@end
+@implatation VC2: UIViewController
+-   （instancetype）initWithName:(NSString*)name
+{
+     self = [super init];
+     if(!self) return self;
+     _name = name;
+     return self;
+}
+@end
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在.h文件中进行变量声明的时候，如果不需要外部多次修改的变量，就不要暴漏了，做成私有变量，如果该变量初始化时所需的，那么就写成初始化函数哈。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
+        <title>通过ViewController的关键流程来理解流程建模</title>
+        <link>http://dzpqzb.com/2015/12/10/view-life-circle.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/12/10/view-life-circle.html</guid>
+        <pubDate>Thu, 10 Dec 2015 13:13:36 +0800</pubDate>
+        <description>&lt;p&gt;在最近解决某个问题的时候，发现在ViewDidDisappear中去获取self.navigationController为空。猛然间意识到，原来在VC的生命周期中存在一些细节问题需要注意。而且，最近一段时间，对基于流程（生命周期是特殊的流程）建模的编程思想也开始有些反思。所以就总结了一下VC生命周期的一些问题。&lt;/p&gt;
+
+&lt;p&gt;先说点比较抽象的东西，关于流程建模的。对于同一个对象而言，往往在不同的业务场景中其有不一样的流程。换句话说，对于一个对象而言其可能出在多个流程中。比如我们拿一个VC来说：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;每一个OC的实例都有其本身的生命周期——创建、使用、销毁&lt;/li&gt;
+  &lt;li&gt;而对于VC来讲在处理内存问题的时候，还有其特有的ViewDidLoad，等过程&lt;/li&gt;
+  &lt;li&gt;在处理页面展示的时候，也有ViewWillAppear等过程&lt;/li&gt;
+  &lt;li&gt;….&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;而在一个流程当中，每一个过程（一般会以函数表示）都有其特殊的职责。比如alloc用于非配内存，init用于初始化内存。而我们在这些函数中做的事情，也必须尽可能的和该函数的职责所匹配。一个被设计好的流程（通常会以一组函数的形式呈现），就像是一个插排。上面的每个插口都有自己适配的类型，如果你乱插，可能会有烧掉保险丝的危险。比如你在alloc中硬要做dealloc的事情。从设计模式的角度来说，这种思想叫做『控制反转』，是设计框架的时候常用的技巧，通过约束使用者的使用方式，来完成功能。而我们在使用UIKit等框架的时候，我们作为使用方，自然要接受这种『控制反转』。且能够在正确的地方做正确的事情。一句话说就是：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;恰如其分&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;同时，我希望通过阐释VC的一些生命流程和其使用细节的事情。也能激发读者对于基于流程建模的编程思想的反思。通过这种思想去反思在日常编程中，其他库中一些流程的使用。甚至是在自己进行程序设计的时候，能够也注意使用一下这种方式。&lt;/p&gt;
+
+&lt;p&gt;好了下面我们就开始看看一个VC都有哪些流程需要注意的.btw，穷举所有的流程是一个费时费力的事情，所以会只摘几个比较关键的流程来描述和讲解。最重要的目的还是在于能够启发各位用流程建模这个视角来思考编程的一些问题：），偷懒了。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;内存使用流程&lt;/h2&gt;
+&lt;p&gt;VC的实例在内存使用上面，打的流程和其他对象实例的使用类似,都要经过下述的一些过程：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;创建-&amp;gt;初始化-&amp;gt;使用-&amp;gt;销毁
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;后面的阐述也是类似，我们先说流程。然后再具体到函数的使用。因为我们在使用一个库或者框架的时候，首先要关注的是他的模型。尤其是流程模型。而具体的函数往往是在该模型基础上，实践下来的产物。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;(1)创建&lt;/h3&gt;
+
+&lt;p&gt;苹果在内存处理上使用的是&lt;strong&gt;两段式&lt;/strong&gt;构造的思想：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;将创建和初始化分两步走&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;创建的核心关注点在于内存分配。从堆栈上批出一块内存给对象使用。至于该对象，如何使用该内存（初始化）则是另外的函数的事情。经过创建和初始化两步之后，才能够给出一个干净可以使用的对象实例。&lt;/p&gt;
+
+&lt;p&gt;在创建的时候，一般涉及到的函数为：
+~~~
++ (instancetype)alloc
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+~~~
+这两个函数为系统函数，我们不能重载该函数。这点是苹果在文档中格外强调的。因而，对于创建我们也只是调用一下系统函数的事情，没有太多自定义的工作需要我们去做。&lt;/p&gt;
+
+&lt;h3 id=&quot;raiihttpbaikebaiducomitemraii&quot;&gt;(2)初始化 (&lt;a href=&quot;http://baike.baidu.com/item/RAII&quot;&gt;RAII&lt;/a&gt;)&lt;/h3&gt;
+&lt;p&gt;初始化是两段式构造的第二步，对象实例只有经过该步骤之后，才是一个干净可以使用的对象。这种思想在很多编程语言中我们可以看到，比如C++。当然也有很多一段式构造的例子比如C语言。&lt;/p&gt;
+
+&lt;p&gt;而在OC中，初始化使我们进行对象自定义操作的开始。这里我们需要初始化一些当前类特有的属性的值，以保证后续业务逻辑能够够正常。比如当我们从xib文件中加载VC的使用我们会使用到函数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (instancetype _Nonnull)initWithNibName:(NSString * _Nullable)nibName bundle:(NSBundle * _Nullable)nibBundle
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;该函数将会通过传入的xib文件名和bundle来加载界面，并且初始化相关的数据。当然这是系统的函数。而我们更关注的是我们在这里应该做什么和可以做什么。&lt;/p&gt;
+
+&lt;p&gt;说句废话：要做对象实例的初始化。主要是变量的赋值操作。&lt;/p&gt;
+
+&lt;p&gt;For Exmaple:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (!self) {
+        return self;
+    }
+    _payHandler = [BDWalletPayWebHandler new];
+    _payHandler.enviromentWebViewController = self;
+    return self;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面的例子中我们在该函数中初始化了一个_payHandler的变量。而且细心的读者可能发现，我们用于初始化这个变量的值还不是外部传进来的，而是内部新生成的。这种方式我们称之为内部初始化。自然也会有外部初始化。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;内部初始化：变量的值在内部生成&lt;/li&gt;
+  &lt;li&gt;外部初始化：用于初始化成员变量的值是在外部生成，然后传给&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;而在实际的初始化场景中我们经常会发现这样的情况：在进行类的设计的时候，遇到传值的问题的时候，比如下述问题，我们通过VC1获取了用户的姓名，要向VC2进行传递。现在的一般做法是在定义VC2的时候，在头文件中暴漏name变量。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface B : UIViewController
+@property (strong) NSString* name;
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后使用的时候这个样子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+B* vc = [B new];
+vc.name = @&quot;xx&quot;;
+[self.navigationController push:vc];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种做法，封装性很差，任何持有VC2实例的地方都能够修改这个name值，导致一些很奇怪的逻辑。而且往往是那种不可预期的变动。一旦出现bug查找起来极其困难。&lt;/p&gt;
+
+&lt;p&gt;其实这种情况应当属于外部初始化的典型应用。更好的方式就是我们就把name当成对象初始化必须的一个变量，需要对其进行初始化，那么就应当提供相应的函数来进行初始化。这样可以保持比较好的封装性。&lt;/p&gt;
+
+&lt;p&gt;建议以后采取这样的方式&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// .h
+@interface VC2 ： UIViewController
+- （instancetype） init UNAVAILABLE;
+-   （instancetype）initWithName:(NSString*)name;
+@end
+
+//.m
+@interface VC2 ： UIViewController ()
+{
+     NSString* _name;
+}
+@end
+@implatation VC2: UIViewController
+-   （instancetype）initWithName:(NSString*)name
+{
+     self = [super init];
+     if(!self) return self;
+     _name = name;
+     return self;
+}
+@end
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在.h文件中进行变量声明的时候，如果不需要外部多次修改的变量，就不要暴漏了，做成私有变量，如果该变量初始化时所需的，那么就写成初始化函数哈。因为@property这种语法的存在，削弱了OC中作用域的概念，从而导致了大家对于publick，private，protected等概念不是很清晰，从初始化这个事情上可见一斑。然，这些概念对于程序的健壮性又是多么的至关重要。还是应该拾起来的。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;常用的函数&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;- init;
+- (instancetype _Nonnull)initWithNibName:(NSString * _Nullable)nibName bundle:(NSBundle * _Nullable)nibBundle
+- (instancetype _Nonnull) initWith****
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其中&lt;code&gt;init&lt;/code&gt;函数为所有OC对象都有的&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;(3)使用&lt;/h3&gt;
+
+&lt;p&gt;关于使用这个其实是最重要的部分，而对象一旦创建并初始化完成之后，就可以嵌入到除了内存使用流程之外的流程之中。而在内存流程中我们所谓的使用，就是在其他流程中，对该内存对象进行的一系列的操作，包括且不止于：增删改查。&lt;/p&gt;
+
+&lt;p&gt;对于使用的细节，可参考其他流程的介绍。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;(4)销毁&lt;/h3&gt;
+
+&lt;p&gt;对象在完成使命之后，自然要被销毁，来释放其持有的资源。所谓有借有还再借不难，在创建过程中占用的内存，在初始化过程中持有的其他系统资源，在这个时候要做统一的释放。而且这是最后的释放时机，不然这个对象就成了小偷，会永久性的把资源偷走，比如在传统MRC的情境下，在init中分配是有了一个array，但是在dealloc中没有release，那么这个数组所占用的内存就写漏掉了。&lt;/p&gt;
+
+&lt;p&gt;这里我们重提RAII，资源获取就是初始化。因为你获取了，你得释放啊。谁污染谁治理。所以申请和释放，创建和销毁是必须成对存在的。RAII是一个广义的资源管理概念，不至于内存。&lt;/p&gt;
+
+&lt;p&gt;这个问题我们在Notification的使用中，经常会碰到crash的情况，一般都是因为没有正确的removeObser导致的脏内存引起的。我们可以把addObserve看成资源持有，而removeObserver看成资源释放。实际上也是如此，这对函数会对observe的引用计数进行加减操作。那么对于Notification这个事情也可以参考上述的流程来考虑。但这得和业务场景匹配才行，有些情况下接受通知可以伴随着对象的生命周期，建议在init-dealloc这对中注册取消。如果是伴随着UI显示而接收通知，则在didappear和diddisappear中进行最好（and在dealloc补充个取消，因为在navigation poptoroot的时候，中间的一些VC不会出发disappear等函数）。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;(5)异常&lt;/h3&gt;
+
+&lt;p&gt;这个没有罗列在最初的那么内存流程模型当中，因为这样的，在建模的时候，首先要做的是让整个模型Work起来，而后再去处理各种边界问题。如果一上来就把精力集中在边界问题的处理上，就会无限制的放大问题的复杂度，增加处理的麻烦。&lt;/p&gt;
+
+&lt;p&gt;而我们在看了基础的内存使用流程模型之后，在看在异常情况下apple是怎样处理的。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-6&quot;&gt;初始化内存不足&lt;/h4&gt;
+
+&lt;p&gt;直接返回nil&lt;/p&gt;
+
+&lt;h4 id=&quot;section-7&quot;&gt;使用期间内存不足&lt;/h4&gt;
+&lt;p&gt;我们这里之说iOS6.0以上的情况，6.0之后viewDidUnload等被废弃，而且目前市面上6.0以下的机器也快成古董了。&lt;/p&gt;
+
+&lt;p&gt;当系统遭遇内存警告的时候，会调用VC的下述函数，在该函数内存，我们可以释放一些能够再次被创建的资源，比如维持的从网络或者数据库来的数据等等。
+~~~&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(void)didReceiveMemoryWarning {
+  [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
+}
+~~~&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-8&quot;&gt;视图管理流程&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1ez0b3hn5jmj207o0egwf8.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;先来看一张比较大的图，这是apple目前提供的和View控制相关的一些函数的摘录（UIViewController中的函数).而这也是一个调用的时序关系图。VC的view还有其子View的创建使用，都在这个流程之中。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;流程解释&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-10&quot;&gt;创建根视图&lt;/h4&gt;
+&lt;p&gt;当VC.view为空的时候，并且第一次调用vc.view的时候，会调用loadView函数来加载跟视图。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void) loadView
+{
+    self.view = [UIView new];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在这个函数中你可以使用self.view = **来对根视图进行赋值，而且建议也是只在这里进行根视图的赋值操作。因为一旦根视图确定后，外部会对根视图进行一些布局了之类的操作，如果在使用过程中随意的更换根视图，上述的这些操作将很难重放。导致界面的一些异常。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-11&quot;&gt;初始化根视图上子视图&lt;/h4&gt;
+&lt;p&gt;当调用了loadView加载了根视图之后，系统会触发VC的ViewDidLoad函数。这个使用self.view已经有值，可以在其上addSubView了。&lt;/p&gt;
+
+&lt;p&gt;在这里我们一般会做一些处理初始化子视图，并且addSubView之类的操作。注意布局的事情，就不要在这里做了，因为系统为我们提供了专门的函数来做这个事情。而且这个地方你拿到的self.view的frame信息是不准确的。比如刚才我们在loadView中没有对view进行布局初始化，给他设置一个frame。到了这个ViewDidLoad的地方的时候，你拿到的self.view.frame就是{0,0,0,0}。也就是说，你在这里进行布局的话，非常有可能是乱的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void)viewDidLoad {
+    [super viewDidLoad];
+    _subView = [DZView new];
+    _subView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:_subView];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-12&quot;&gt;布局&lt;/h4&gt;
+&lt;p&gt;一般情况下，对于VC的根视图的操作是外部进行的，比如UINavigationController去push一个VC的时候，就会对vc.view.frame进行赋值，来控制VC的布局。而系统的这些试图控制器（导航了，之类的东西），都实现了CALayer的delegate，当vc的根视图的frame发生变化的时候会接受到通知&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- layoutSublayersOfLayer:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;系统的视图控制器会在这里面调用这两个函数来通知其当前的子VC去做布局的工作：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- viewWillLayoutSubviews
+- viewDidLayoutSubviews
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;而这个子VC一般是我们创建的。在这两个函数里面我们去做布局的操作。这两个函数一个是在view本身的布局做完之前调用，一个是之后。无论哪个函数，这里面渠道的根视图的frame或者bounds信息都是准确的。&lt;/p&gt;
+
+&lt;p&gt;而且，如果在这两个函数里面进行相对布局操作的话，将会让VC的根视图拥有适配不同屏幕的能力，同时当调整根视图的frame的时候，整个视图的布局也能够作出相应的变化。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-13&quot;&gt;显示流程&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;- viewWillAppear:
+– viewDidAppear:
+- viewWillDisappear:
+- viewDidDisappear:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从上述函数的字面意思理解：当视图被加载之后，要在window上显示出来，处于用户可见区域，或者离开用户可见区域的时候。系统将会调用VC相关函数来通知这种变化。&lt;/p&gt;
+
+&lt;p&gt;我们去看viewWillDisappear的文档：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;This method is called in response to a view being removed from a view hierarchy. This method is called before the view is actually removed and before any animations are configured.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;而上述显示流程能够被触发是依赖系统的这套机制的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    [vc willMoveToParentViewController:self];
+    [self addChildViewController:vc];
+    [self.view addSubview:vc.view];
+    vc.view.frame = self.view.bounds;
+    [vc didMoveToParentViewController:self];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;而现在系统集中默认的试图管理器UINavitionController，UITabBarController,还有present方式，都是可以保证会使用上述机制来触发响应的显示逻辑的。在这些函数里面，我们可以做一些和显示相关的业务逻辑了。&lt;/p&gt;
+
+&lt;p&gt;但是当你做业务逻辑的时候，一定要考虑这个函数在整个流程中的时序关系和他所代表的涵义。尤其是在每个视图管理器中的控制流程中，比如最开始提到的去获取self.navigationController为空的问题。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-14&quot;&gt;总结&lt;/h2&gt;
+
+&lt;p&gt;关于ViewController的关键的流程，先谈内存和视图管理这两个。当然其还有其他的一些流程，要说完有点太复杂了。希望通过上述的两个例子，能够展示一下流程建模在理解框架和使用框架上的一些的裨益。能够使用这种思想来思考日常的编程问题。&lt;/p&gt;
+
+</description>
+      </item>
+    
+      <item>
         <title>如何进行技术方案优化</title>
         <link>http://dzpqzb.com/2015/11/28/optime-logic-method.html</link>
         <guid isPermaLink="true">http://dzpqzb.com/2015/11/28/optime-logic-method.html</guid>
@@ -960,116 +1290,6 @@ it, simply add the following line to your Podfile:&lt;/p&gt;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZSinglonFactory is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>DZSilkKit</title>
-        <link>http://dzpqzb.com/2015/11/11/dzsilkkit.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/dzsilkkit.html</guid>
-        <pubDate>Wed, 11 Nov 2015 19:40:06 +0800</pubDate>
-        <description>&lt;h1 id=&quot;dzsilkkit&quot;&gt;DZSilkKit&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/stonedong/DZSilkKit&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/stonedong/DZSilkKit.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZSilkKit&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/DZSilkKit.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZSilkKit&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/DZSilkKit.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZSilkKit&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/DZSilkKit.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;usage&quot;&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;DZSilkKit is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
-it, simply add the following line to your Podfile:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;ruby
-pod &quot;DZSilkKit&quot;
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
-
-&lt;p&gt;stonedong, yishuiliunian@gmail.com&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;DZSilkKit is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>DZLayoutTable</title>
-        <link>http://dzpqzb.com/2015/11/11/dzlayouttable.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/dzlayouttable.html</guid>
-        <pubDate>Wed, 11 Nov 2015 19:38:54 +0800</pubDate>
-        <description>&lt;h1 id=&quot;dzlayouttable&quot;&gt;DZLayoutTable&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/stonedong/DZLayoutTable&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/stonedong/DZLayoutTable.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZLayoutTable&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/DZLayoutTable.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZLayoutTable&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/DZLayoutTable.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/DZLayoutTable&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/DZLayoutTable.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;usage&quot;&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;DZLayoutTable is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
-it, simply add the following line to your Podfile:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;ruby
-pod &quot;DZLayoutTable&quot;
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
-
-&lt;p&gt;stonedong, yishuiliunian@gmail.com&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;DZLayoutTable is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>DZGeometryTools</title>
-        <link>http://dzpqzb.com/2015/11/11/dzgeometrytools.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/dzgeometrytools.html</guid>
-        <pubDate>Wed, 11 Nov 2015 19:37:22 +0800</pubDate>
-        <description>&lt;h1 id=&quot;dzgeometrytools&quot;&gt;DZGeometryTools&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/stonedong/DZGeometryTools&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/stonedong/DZGeometryTools.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZGeometryTools&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/DZGeometryTools.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZGeometryTools&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/DZGeometryTools.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZGeometryTools&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/DZGeometryTools.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;usage&quot;&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;DZGeometryTools is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
-it, simply add the following line to your Podfile:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;pod &quot;DZGeometryTools&quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
-
-&lt;p&gt;stonedong, yishuiliunian@gmail.com&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;DZGeometryTools is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
 </description>
       </item>
     
