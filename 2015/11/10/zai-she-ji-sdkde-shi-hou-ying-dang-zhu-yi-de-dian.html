@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
+
+<title>在设计SDK的时候应当注意的点 之运行时环境污染 | 一水的技术博客</title>
+<meta name="author" content="董朝">
+
+
+
+
+<link rel="shortcut icon" href="http://7u2ho6.com1.z0.glb.clouddn.com/site-favicon.ico" />
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+
+<link href="/pages/rss.xml" rel="alternate" title="一水的技术博客" type="application/atom+xml">
+
+  </head>
+
+  <body>
+    <aside id="sidebar">
+  <nav id="tags">
+    <a href="/index.html" id="avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+
+    <ul id="tags__ul">
+      <li id="pl__all" class="tags__li tags-btn active">全部</li>
+      
+        <li id="iOS" class="tags__li tags-btn">iOS</li>
+      
+        <li id="设计思想" class="tags__li tags-btn">设计思想</li>
+      
+        <li id="工具链" class="tags__li tags-btn">工具链</li>
+      
+        <li id="开源组件" class="tags__li tags-btn">开源组件</li>
+      
+        <li id="SDK设计" class="tags__li tags-btn">SDK设计</li>
+      
+        <li id="BOOK" class="tags__li tags-btn">BOOK</li>
+      
+        <li id="iOS-Tips" class="tags__li tags-btn">iOS-Tips</li>
+      
+        <li id="碎念" class="tags__li tags-btn">碎念</li>
+      
+    </ul>
+
+    <div id="tags__bottom">
+      <a href="mailto:yishuiliunian@gmail.com" id="icon-email" class="tags-btn fontello"></a>
+      <a href="/pages/rss.xml" id="icon-feed" class="tags-btn fontello"></a>
+    </div>
+  </nav> <!-- end #tags -->
+
+  <div id="posts-list">
+    <form action="" id="search-form">
+      <a href="/index.html" id="mobile-avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+      <!-- NOTE: input field is disabled by default -->
+      <input id="search-input" type="text" placeholder="Search..." disabled >
+    </form>
+
+    <nav id="pl__container">
+    
+      <a class="碎念 pl__all" href="/2016/01/09/xieyu2016.html"><span class="pl__circle"></span><span class="pl__title">写于2016，那个2015年的尾巴</span><span class="pl__date">Jan 2016</span></a>
+    
+      <a class="iOS pl__all" href="/2015/12/14/design-class-header-detail1.html"><span class="pl__circle"></span><span class="pl__title">类的外部初始化</span><span class="pl__date">Dec 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/12/10/view-life-circle.html"><span class="pl__circle"></span><span class="pl__title">通过ViewController的关键流程来理解流程建模</span><span class="pl__date">Dec 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/28/optime-logic-method.html"><span class="pl__circle"></span><span class="pl__title">如何进行技术方案优化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/27/zhishikuangjia.html"><span class="pl__circle"></span><span class="pl__title">iOS开发知识框架</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/19/bitcode-open.html"><span class="pl__circle"></span><span class="pl__title">Bitcode适配指南</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/17/kill-alipay.html"><span class="pl__circle"></span><span class="pl__title">是怎样干掉支付宝的界面的</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS-Tips pl__all" href="/2015/11/17/block-usage.html"><span class="pl__circle"></span><span class="pl__title">Block使用的陷阱</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/12/emun-usage-when-and-how.html"><span class="pl__circle"></span><span class="pl__title">什么时候该使用枚举类型</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/defer-ios-caozuo.html"><span class="pl__circle"></span><span class="pl__title">OC中使用defer操作</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/macro-defines.html"><span class="pl__circle"></span><span class="pl__title">使用宏来减少代码重复</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arc-error.html"><span class="pl__circle"></span><span class="pl__title">ARC的一些细节之NSError的使用</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcdnfiles.html"><span class="pl__circle"></span><span class="pl__title">DZCDNFiles</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/mshttprpc.html"><span class="pl__circle"></span><span class="pl__title">MSHttpRPC</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/msinputscrollviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">MSInputScrollViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcache.html"><span class="pl__circle"></span><span class="pl__title">DZCache</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsinglonfactory.html"><span class="pl__circle"></span><span class="pl__title">DZSinglonFactory</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsilkkit.html"><span class="pl__circle"></span><span class="pl__title">DZSilkKit</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzlayouttable.html"><span class="pl__circle"></span><span class="pl__title">DZLayoutTable</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzgeometrytools.html"><span class="pl__circle"></span><span class="pl__title">DZGeometryTools</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzadjustframe.html"><span class="pl__circle"></span><span class="pl__title">DZAdjustFrame</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arcmrccompare.html"><span class="pl__circle"></span><span class="pl__title">ARC(甚至是代码行数)与安装包体积之间的关系</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/danlimoshiios.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式反思之单例模式的进化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="BOOK pl__all" href="/2015/11/11/tongguoshixiantableview.html"><span class="pl__circle"></span><span class="pl__title">通过实现一个TableView来理解iOS UI编程</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/11/zaishejisdkdeshihoumingmingkongjianwuran.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之命名空间污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/shejimoshizhiguanchazhemoshi.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式之观察者模式</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/fansi.html"><span class="pl__circle"></span><span class="pl__title">一个程序员的读书笔记：程序设计的反思</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/make-bugs-correct.html"><span class="pl__circle"></span><span class="pl__title">如何合理的制造BUG</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之运行时环境污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/06/quan-ju-bian-liang-man-tan.html"><span class="pl__circle"></span><span class="pl__title">全局变量漫谈</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ji-zhi-yu-ce-lue-fen-chi.html"><span class="pl__circle"></span><span class="pl__title">机制与策略分离</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ios.html"><span class="pl__circle"></span><span class="pl__title">IOS设计模式反思——六大原则</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/10/24/strage-animation.html"><span class="pl__circle"></span><span class="pl__title">奇怪的动画</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html"><span class="pl__circle"></span><span class="pl__title">由Runtime想到的几个问题</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/07/30/you-xu-gou-jian-zhi-ji-ben-fang-fa-pian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之基本方法篇</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/fen-bu-shi-bian-yi-iosyan-jiu.html"><span class="pl__circle"></span><span class="pl__title">分布式编译ios研究</span><span class="pl__date">Jul 2015</span></a>
+    
+    </nav>
+  </div> <!-- end #posts-list -->
+</aside> <!-- end #sidebar -->
+
+    <div id="post">
+      <div id="pjax">
+        <article id="post__content">
+  <h1 id="post__title" data-identifier="20151110">在设计SDK的时候应当注意的点 之运行时环境污染</h1>
+  <p>在SDK设计的时候，不注意自己是嵌入到别人的运行环境中的一部分。还是按照原先做App的思路去处理，可以随意的更改运行时的实例的属性，甚至是修改很多全局变量的值。结果就是污染了宿主的环境，导致宿主无法正常运行。
+<!--more--></p>
+
+<h1 id="sdk">在设计SDK的时候应当注意到底点之污染问题（一）</h1>
+
+<blockquote>
+  <p>运行时环境污染，内存污染，文件污染</p>
+</blockquote>
+
+<h2 id="section">切记不要污染宿主的环境，修改宿主环境中的变量</h2>
+
+<p>在处理百度钱包集成到手机百度的过程中，发现了一个奇怪的问题：
+&gt; 当进入钱包首页，再退出钱包的时候，手百中的手势滑动神奇的被禁掉了。</p>
+
+<p>跟踪了半天，发现了问题所在。原来在钱包ViewController的基类，BaseVC中将self.navigationController.delegate设置成了nil。而钱包Push界面的时候，是用的手机百度传进来的navigationControoler。也就是说手机百度和钱包在公用一个UINavigationController的实例。这一下子所有原来的navigationController的delegate就真的成了nil了，尤其是推出之后。结果就导致了，手机百度写在delegate中的逻辑无法顺利执行,于是手百中的手势被干掉了。</p>
+
+<p>这个问题，暴漏了一个非常常见的现象：</p>
+
+<blockquote>
+  <p>在SDK设计的时候，不注意自己是嵌入到别人的运行环境中的一部分。还是按照原先做App的思路去处理，可以随意的更改运行时的实例的属性，甚至是修改很多全局变量的值。结果就是污染了宿主的环境，导致宿主无法正常运行。</p>
+</blockquote>
+
+<p>这个问题让我们回到了一个老生常谈的问题上：隔离。之前我们注意到的是接口隔离和职责隔离，讲究在设计类和模块的时候高内聚低耦合的确保各个类或者模块之间的影响越小越好。而现在我们，我们延伸一步，除了在设计和编码阶段的需要注意到隔离的问题。而且我们仍然需要考虑到，程序运行时其运行环境的隔离。尤其是对于SDK而言，其和宿主共享同一个运行时环境。稍有不慎，你修改了环境，或者说的更甚一些：污染了环境。将会导致宿主程序无法正常运行。因而需切记！</p>
+
+<p>但是问题来了，有些时候SDK的确需要对环境做出一些修改，来让SDK的逻辑能够正常运行，那么我们可以怎么去处理？</p>
+
+<h3 id="section-1">备忘录模式，快照与还原</h3>
+
+<p>这是最直接的一个想法，既然要污染他的环境。修改他的变量，那么我可不可以在改动之前先做一个备份。等到推出SDK的时候进行还原呢。是啊，这是一个可行的方案。<br />
+但是要求SDK要有明确的入口和出口。这样才能够保证你能够在合适的地方进行快照，也在合适的出口的地方进行还原操作。在设计并实践该方法的时候，本着职责单一的原则，尽量将这个快照与还原的功能设计成一个单独的功能模块。尽量不要放在原有业务逻辑处理模块中。否则将会带来维护上的灾难。</p>
+
+<p>这个问题在钱包中所也是有所体现，将设置self.navigationController.delegate的代码写在了所有VC的基类之类。这样，就导致了现在钱包所有的VC都会执行这段代码。假设我现在有这么几个类：</p>
+
+<pre><code>@interface BaseVC : ViewController
+- (void) viewDidLoad
+{
+  [super viewDidLoad];
+  self.navigationController.delegate = nil;
+}
+@end
+
+@interface VC1 : BaseVC
+
+@end
+
+@interface VC2 : BaseVC
+
+@end
+........
+</code></pre>
+
+<p>这段一是嵌入到了业务逻辑当中，二来由于是在基类中，所以当程序运行时VC1，VC2被实例化之后，而又由同一个NavigtionController来push的话，那么navigationController的delegate将会被重置好多次。oy my god！这样就更难理解和维护。虽然你可以拆东墙补西墙，发现BUG之后，在这里再继续写多余的逻辑来保证delegate能够被设置正确。但是为什么不修改一次，彻底杜绝类似的BUG发生呢？</p>
+
+<h3 id="vitualenviroment">创建VitualEnviroment，搞一个自己的环境，不和宿主共享。</h3>
+
+<p>这里说的VitrualEnviroment没有像VM那么高大上，只是一个比较贴切的说法。就是搞一个自己的环境，不和宿主共享。这样就直接做到了内存上的隔离。就拿刚才一直说的navigationController的例子来说吧。就是我们创建一个自己的navigationController来使用，不去使用宿主的那个实例。这样无论我们怎样~~~self.navigationController.delegate = nil;~~~。也不会对原先的nav造成影响。让宿主出现莫名其妙的问题。</p>
+
+<p>而这里所谓VitrualEnviroment的实现，主要是创建新实例避免与宿主混淆。其实现手段无非是</p>
+
+<ol>
+  <li>深拷贝</li>
+  <li>创建并初始化</li>
+</ol>
+
+<p>内存隔离也是非常重要的一个事情啊。</p>
+
+<h1 id="section-2">重中之重，是要识别</h1>
+
+<p>其实，最关键的是，我们在改动的时候，需要识别出来，我们的改动是否对宿主的环境有所污染，是否修改了宿主的实例，是否修改了宿主的全局变量，是否动了宿主的某些文件。。。。。。重要的事情说三遍。一行代码虽小，影响却不知几何。尤其是在做SDK的时候，更要慎之又慎。考虑周全，从设计到编码，从编码到编译与链接，从连接到运行时，到整个变量的生命周期。</p>
+
+
+</article> <!-- end #post__content -->
+
+<p>欢迎关注iOS开发公共账号 <strong> iOS开发知识 </strong>  ：扫描下方二维码关注<br />
+  <div style="text-align:center"><a href="http://www.imagechef.com/ic/make.jsp?tid=Beach" target="_blank"> <img src="http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg" alt="Beach custom comment codes for MySpace, Hi5, Friendster and more - ImageChef.com"/> </a> </div>
+</p>
+<p>
+  版权声明：转载请保留作者信息，恶意转载作者将保留追究法律责任的权利。BY:yishuiliunian
+</p>
+
+
+<div id="post__share">
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html&text=在设计SDK的时候应当注意的点 之运行时环境污染" target="_blank"></a>
+  <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html&title=在设计SDK的时候应当注意的点 之运行时环境污染" target="_blank"></a>
+</div> <!-- end #post__share -->
+
+<!-- <div id="disqus_thread" name="yishuiliunian">
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink" target="_blank">Loading Disqus comments...</a>
+</div> -->
+<!-- 多说评论框 start -->
+
+<div class="ds-thread" data-thread-key=/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian data-title=在设计SDK的时候应当注意的点 之运行时环境污染 data-url="www.dzpqzb.com/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+    (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+
+
+        <p id="copyright">Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Theme <a href="https://github.com/P233/3-Jekyll" target="_blank">3-Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Hosted on <a href="https://pages.github.com" target="_blank">Github</a></p>
+      </div> <!-- end #pjax -->
+
+      <div id="post__toc-trigger">
+        <div id="post__toc">
+          <span id="post__toc-title">Table of Contents</span>
+          <ul id="post__toc-ul"></ul>
+        </div>
+      </div>
+    </div> <!-- end #post -->
+
+    <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
+
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.pjax.js"></script>
+<script src="/assets/js/nprogress.js"></script>
+<script src="/assets/js/script.js"></script>
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-33738381-1', 'dzpqzb.com');
+  ga('send', 'pageview');
+</script>
+
+  </body>
+</html>

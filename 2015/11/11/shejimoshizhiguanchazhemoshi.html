@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
+
+<title>iOS设计模式之观察者模式 | 一水的技术博客</title>
+<meta name="author" content="董朝">
+
+
+
+
+<link rel="shortcut icon" href="http://7u2ho6.com1.z0.glb.clouddn.com/site-favicon.ico" />
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+
+<link href="/pages/rss.xml" rel="alternate" title="一水的技术博客" type="application/atom+xml">
+
+  </head>
+
+  <body>
+    <aside id="sidebar">
+  <nav id="tags">
+    <a href="/index.html" id="avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+
+    <ul id="tags__ul">
+      <li id="pl__all" class="tags__li tags-btn active">全部</li>
+      
+        <li id="iOS" class="tags__li tags-btn">iOS</li>
+      
+        <li id="设计思想" class="tags__li tags-btn">设计思想</li>
+      
+        <li id="工具链" class="tags__li tags-btn">工具链</li>
+      
+        <li id="开源组件" class="tags__li tags-btn">开源组件</li>
+      
+        <li id="SDK设计" class="tags__li tags-btn">SDK设计</li>
+      
+        <li id="BOOK" class="tags__li tags-btn">BOOK</li>
+      
+        <li id="iOS-Tips" class="tags__li tags-btn">iOS-Tips</li>
+      
+        <li id="碎念" class="tags__li tags-btn">碎念</li>
+      
+    </ul>
+
+    <div id="tags__bottom">
+      <a href="mailto:yishuiliunian@gmail.com" id="icon-email" class="tags-btn fontello"></a>
+      <a href="/pages/rss.xml" id="icon-feed" class="tags-btn fontello"></a>
+    </div>
+  </nav> <!-- end #tags -->
+
+  <div id="posts-list">
+    <form action="" id="search-form">
+      <a href="/index.html" id="mobile-avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+      <!-- NOTE: input field is disabled by default -->
+      <input id="search-input" type="text" placeholder="Search..." disabled >
+    </form>
+
+    <nav id="pl__container">
+    
+      <a class="碎念 pl__all" href="/2016/01/09/xieyu2016.html"><span class="pl__circle"></span><span class="pl__title">写于2016，那个2015年的尾巴</span><span class="pl__date">Jan 2016</span></a>
+    
+      <a class="iOS pl__all" href="/2015/12/14/design-class-header-detail1.html"><span class="pl__circle"></span><span class="pl__title">类的外部初始化</span><span class="pl__date">Dec 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/12/10/view-life-circle.html"><span class="pl__circle"></span><span class="pl__title">通过ViewController的关键流程来理解流程建模</span><span class="pl__date">Dec 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/28/optime-logic-method.html"><span class="pl__circle"></span><span class="pl__title">如何进行技术方案优化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/27/zhishikuangjia.html"><span class="pl__circle"></span><span class="pl__title">iOS开发知识框架</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/19/bitcode-open.html"><span class="pl__circle"></span><span class="pl__title">Bitcode适配指南</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/17/kill-alipay.html"><span class="pl__circle"></span><span class="pl__title">是怎样干掉支付宝的界面的</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS-Tips pl__all" href="/2015/11/17/block-usage.html"><span class="pl__circle"></span><span class="pl__title">Block使用的陷阱</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/12/emun-usage-when-and-how.html"><span class="pl__circle"></span><span class="pl__title">什么时候该使用枚举类型</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/defer-ios-caozuo.html"><span class="pl__circle"></span><span class="pl__title">OC中使用defer操作</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/macro-defines.html"><span class="pl__circle"></span><span class="pl__title">使用宏来减少代码重复</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arc-error.html"><span class="pl__circle"></span><span class="pl__title">ARC的一些细节之NSError的使用</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcdnfiles.html"><span class="pl__circle"></span><span class="pl__title">DZCDNFiles</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/mshttprpc.html"><span class="pl__circle"></span><span class="pl__title">MSHttpRPC</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/msinputscrollviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">MSInputScrollViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcache.html"><span class="pl__circle"></span><span class="pl__title">DZCache</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsinglonfactory.html"><span class="pl__circle"></span><span class="pl__title">DZSinglonFactory</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsilkkit.html"><span class="pl__circle"></span><span class="pl__title">DZSilkKit</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzlayouttable.html"><span class="pl__circle"></span><span class="pl__title">DZLayoutTable</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzgeometrytools.html"><span class="pl__circle"></span><span class="pl__title">DZGeometryTools</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzadjustframe.html"><span class="pl__circle"></span><span class="pl__title">DZAdjustFrame</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arcmrccompare.html"><span class="pl__circle"></span><span class="pl__title">ARC(甚至是代码行数)与安装包体积之间的关系</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/danlimoshiios.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式反思之单例模式的进化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="BOOK pl__all" href="/2015/11/11/tongguoshixiantableview.html"><span class="pl__circle"></span><span class="pl__title">通过实现一个TableView来理解iOS UI编程</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/11/zaishejisdkdeshihoumingmingkongjianwuran.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之命名空间污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/shejimoshizhiguanchazhemoshi.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式之观察者模式</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/fansi.html"><span class="pl__circle"></span><span class="pl__title">一个程序员的读书笔记：程序设计的反思</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/make-bugs-correct.html"><span class="pl__circle"></span><span class="pl__title">如何合理的制造BUG</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之运行时环境污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/06/quan-ju-bian-liang-man-tan.html"><span class="pl__circle"></span><span class="pl__title">全局变量漫谈</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ji-zhi-yu-ce-lue-fen-chi.html"><span class="pl__circle"></span><span class="pl__title">机制与策略分离</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ios.html"><span class="pl__circle"></span><span class="pl__title">IOS设计模式反思——六大原则</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/10/24/strage-animation.html"><span class="pl__circle"></span><span class="pl__title">奇怪的动画</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html"><span class="pl__circle"></span><span class="pl__title">由Runtime想到的几个问题</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/07/30/you-xu-gou-jian-zhi-ji-ben-fang-fa-pian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之基本方法篇</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/fen-bu-shi-bian-yi-iosyan-jiu.html"><span class="pl__circle"></span><span class="pl__title">分布式编译ios研究</span><span class="pl__date">Jul 2015</span></a>
+    
+    </nav>
+  </div> <!-- end #posts-list -->
+</aside> <!-- end #sidebar -->
+
+    <div id="post">
+      <div id="pjax">
+        <article id="post__content">
+  <h1 id="post__title" data-identifier="20151111">iOS设计模式之观察者模式</h1>
+  <p>什么是观察者模式？我们先打个比方，这就像你订报纸。比如你想知道美国最近放生了些新闻，你可能会订阅一份美国周刊，然后一旦美国有了新的故事，美国周刊就发一刊，并邮寄给你，当你收到这份报刊，然后你就能够了解美国最新的动态。其实这就是观察者模式，A对B的变化感兴趣，就注册为B的观察者，当B发生变化时通知A，告知B发生了变化。这是一种非常典型的观察者的用法，我把这种使用方法叫做经典观察者模式。当然与之相对的还有另外一种观察者模式——广义观察者模式。</p>
+
+<p>从经典的角度看，观察者模式是一种通知变化的模式，一般认为只在对象发生变化感兴趣的场合有用。主题对象知道有观察者存在，设置会维护观察者的一个队列；而从广义的角度看，观察者模式是中传递变化数据的模式，需要查看对象属性时就会使用的一种模式，主题对象不知道观察者的存在，更像是围观者。需要知道主题对象的状态，所以即使在主题对象没有发生改变的时候，观察者也可能会去访问主题对象。换句话说广义观察者模式，是在不同的对象之间传递数据的一种模式。</p>
+
+<p>观察者模式应当是在面向对象编程中被大规模使用的设计模式之一。从方法论的角度出发，传统的认知论认为，世界是由对象组成的，我们通过不停的观察和了解就能够了解对象的本质。整个人类的认知模型就是建立在“观察”这种行为之上的。我们通过不停与世界中的其他对象交互，并观察之来了解这个世界。同样，在程序的世界中，我们构建的每一个实例，也是通过不不停的与其他对象交互（查看其他对象的状态，或者改变其他对象的状态），并通过观察其他实例的变化并作出响应，以来完成功能。这也就是，为什么会把观察模式单独提出来，做一个专门的剖析的原因——在我看来他是很多其他设计模式的基础模式，并且是编程中极其重要的一种设计模式。</p>
+
+<h2 id="section">经典观察者模式</h2>
+
+<p>经典观察者模式被认为是对象的行为模式，又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、源-监听器(Source/Listener)模式或从属者(Dependents)模式。经典观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己或者做出相应的一些动作。在文章一开始举的例子就是典型观察者模式的应用。</p>
+
+<p>而在IOS开发中我们可能会接触到的经典观察者模式的实现方式，有这么几种：NSNotificationCenter、KVO、Delegate等</p>
+
+<h3 id="section-1">感知通知方式</h3>
+
+<p>在经典观察者模式中，因为观察者感知到主题对象变化方式的不同，又分为推模型和拉模型两种方式。</p>
+
+<h4 id="section-2">推模型</h4>
+
+<p><img src="http://ww1.sinaimg.cn/large/7df22103jw1exwx2dkgj7j20ol0dhgn2.jpg" alt="" /></p>
+
+<p>主题对象向观察者推送主题的详细信息，不管观察者是否需要，推送的信息通常是主题对象的全部或者部分数据。推模型实现了观察者和主题对象的解耦，两者之间没有过度的依赖关系。但是推模型每次都会以广播的方式，向所有观察者发送通知。所有观察者被动的接受通知。当通知的内容过多时，多个观察者同时接收，可能会对网络、内存（有些时候还会涉及IO）有较大影响。</p>
+
+<p>在IOS中典型的推模型实现方式为NSNotificationCenter和KVO。</p>
+
+<h5 id="nsnotificationcenter">NSNotificationCenter</h5>
+
+<p>NSnotificationCenter是一种典型的有调度中心的观察者模式实现方式。以NSNotificationCenter为中心，观察者往Center中注册对某个主题对象的变化感兴趣，主题对象通过NSNotificationCenter进行变化广播。这种模型就是文章开始发布订阅报纸在OC中的一种类似实现。所有的观察和监听行为都向同一个中心注册，所有对象的变化也都通过同一个中心向外广播。</p>
+
+<p>NSNotificationCenter就像一个枢纽一样，处在整个观察者模式的核心位置，调度着消息在观察者和监听者之间传递。</p>
+
+<p><img src="http://ww3.sinaimg.cn/large/7df22103jw1exwx3ni8l8j20nl06amxm.jpg" alt="" /></p>
+
+<p>一次完整的观察过程如上图所示。整个过程中，关键的类有这么几个（介绍顺序按照完成顺序):</p>
+
+<h6 id="observernsobjectnsnotificationcenteraddobserverselectornameobjectnsnotificationcenter1center">1. 观察者Observer，一般继承自NSObject，通过NSNotificationCenter的~~~addObserver:selector:name:object~~~接口来注册对某一类型通知感兴趣.在注册时候一定要注意，~~~NSNotificationCenter~~~不会对观察者进行引用计数+1的操作，我们在程序中释放观察者的时候，一定要去报从center中将其注销了。</h6>
+
+<h6 id="nsnotificationcenter-1">2. 通知中心NSNotificationCenter，通知的枢纽。</h6>
+
+<h6 id="postnotificationnameobjectuserinfo">3. 主题对象，被观察的对象，通过postNotificationName:object:userInfo:发送某一类型通知，广播改变。</h6>
+
+<pre><code>- (void) postMessage
+ {
+     [[NSNotificationCenter defaultCenter] postNotificationName:kDZTestNotificatonMessage object:Nil userInfo:@{}];
+ }
+</code></pre>
+
+<h6 id="nsnotificationcenternsnotification">4. 通知对象NSNotification，当有通知来的时候，Center会调用观察者注册的接口来广播通知，同时传递存储着更改内容的NSNotification对象。</h6>
+
+<h5 id="applenotificationcenter">apple版实现的NotificationCenter让我用起来不太爽的几个小问题</h5>
+
+<p>在使用NSNotificationCenter的时候，从编程的角度来讲我们往往不止是希望能够做到功能实现，还能希望编码效率和整个工程的可维护性良好。而Apple提供的以NSNotificationCenter为中心的观察者模式实现，在可维护性和效率上存在以下缺点：</p>
+
+<p>每个注册的地方需要同时注册一个函数，这将会带来大量的编码工作。仔细分析能够发现，其实我们每个观察者每次注册的函数几乎都是雷同的。这就是种变相的CtrlCV，是典型的丑陋和难维护的代码。
+每个观察者的回调函数，都需要对主题对象发送来的消息进行解包的操作。从UserInfo中通过KeyValue的方式，将消息解析出来，而后进行操作。试想一下，工程中有100个地方，同时对前面中在响应变化的函数中进行了解包的操作。而后期需求变化需要多传一个内容的时候，将会是一场维护上的灾难。
+当大规模使用观察者模式的时候，我们往往在dealloc处加上一句:
+[[NSNotificationCenter defaultCenter] removeObserver:self]
+而在实际使用过程中，会发现该函数的性能是比较低下的。在整个启动过程中，进行了10000次RemoveObserver操作，</p>
+
+<pre><code>@implementation DZMessage
+ - (void) dealloc
+ {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+ }
+ ....
+for (int i = 0 ; i &amp;lt; 10000; i++) {
+      DZMessage* message = [DZMessage new];
+}
+</code></pre>
+
+<p>通过下图可以看出这一过程消耗了23.4%的CPU，说明这一函数的效率还是很低的。
+<img src="http://ww1.sinaimg.cn/large/7df22103jw1exwx55g3mdj20m708bjui.jpg" alt="" />
+这还是只有一种消息类型的存在下有这样的结果，如果整个NotificationCenter中混杂着多种消息类型，那么恐怕对于性能来说将会是灾难性的。</p>
+
+<pre><code>for (int i = 0 ; i &amp;lt; 10000; i++) {
+      DZMessage* message = [DZMessage new];
+      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handle) name:[@(i) stringValue] object:nil];
+  }
+</code></pre>
+
+<p>增加了多种消息类型之后，RemoveObserver占用了启动过程中63.9%的CPU消耗。
+<img src="http://ww2.sinaimg.cn/large/7df22103jw1exwx5xzf1tj20lf07tju8.jpg" alt="" />
+而由于Apple没有提供Center的源码，所以修改这个Center几乎不可能了。</p>
+
+<h5 id="dznotificationcenter">改进版的有中心观察者模式（DZNotificationCenter）</h5>
+
+<p>GitHub地址 在设计的时候考虑到以上用起来不爽的地方，进行了优化：</p>
+
+<ol>
+  <li>将解包到执行函数的操作进行了封装，只需要提供某消息类型的解包block和消息类型对应的protocol，当有消息到达的时候，消息中心会进行统一解包，并直接调用观察者相应的函数。</li>
+  <li>对观察者的维护机制进行优化（还未做完），提升查找和删除观察者的效率。</li>
+</ol>
+
+<p>DZNotificationCenter的用法和NSNotificationCenter在注册和注销观察者的地方是一样的，不一样的地方在于，你在使用的时候需要提供解析消息的block。你可以通过两种方式来提供。</p>
+
+<h6 id="section-3">1. 直接注册的方式</h6>
+
+<pre><code>[DZDefaultNotificationCenter addDecodeNotificationBlock:^SEL(NSDictionary *userInfo, NSMutableArray *__autoreleasing *params) {
+      NSString* key = userInfo[@"key"];
+      if (params != NULL) {
+          *params = [NSMutableArray new];
+      }
+      [*params  addObject:key];
+      return @selector(handleTestMessageWithKey:);
+  } forMessage:kDZMessageTest];
+</code></pre>
+
+<h6 id="dznotificationinitdelegaete">2. 实现DZNotificationInitDelegaete协议，当整个工程中大规模使用观察者的时候，建议使用该方式。这样有利于统一管理所有的解析方式。</h6>
+
+<pre><code>- (DZDecodeNotificationBlock) decodeNotification:(NSString *)message forCenter:(DZNotificationCenter *)center
+{
+    if (message == kDZMessageTest) {
+        return ^(NSDictionary* userInfo, NSMutableArray* __autoreleasing* params){
+            NSString* key = userInfo[@"key"];
+            if (params != NULL) {
+                *params = [NSMutableArray new];
+            }
+            [*params  addObject:key];
+            return @selector(handlePortMessage:);
+        };
+    }
+    return nil;
+}
+</code></pre>
+
+<p>在使用的过程中为了，能够保证在观察者处能够回调相同的函数，可以实现针对某一消息类型的protocol</p>
+
+<pre><code>@protocol DZTestMessageInterface &amp;lt;NSObject&amp;gt;
+- (void) handleTestMessageWithKey:(NSString*)key;
+@end
+</code></pre>
+<p>这样就能够保证，在使用观察者的地方不用反复的拼函数名和解析消息内容了。</p>
+
+<pre><code>@interface DZViewController () &amp;lt;DZTestMessageInterface&amp;gt;
+@end
+@implementation DZViewController
+....
+- (void) handleTestMessageWithKey:(NSString *)key
+{
+    self.showLabel.text = [NSString stringWithFormat:@"get message with %@", key];
+}
+....
+</code></pre>
+
+<h3 id="kvo">KVO</h3>
+
+<p>KVO的全称是Key-Value Observer，即键值观察。是一种没有中心枢纽的观察者模式的实现方式。一个主题对象管理所有依赖于它的观察者对象，并且在自身状态发生改变的时候主动通知观察者对象。 让我们先看一个完整的示例：</p>
+
+<pre><code>static NSString* const kKVOPathKey = @"key";
+@implementation DZKVOTest
+- (void) setMessage:(DZMessage *)message
+{
+    if (message != _message) {
+        if (_message) {
+            [_message removeObserver:self forKeyPath:kKVOPathKey];
+        }
+        if (message) {
+            [message addObserver:self forKeyPath:kKVOPathKey options:NSKeyValueObservingOptionNew context:Nil];
+        }
+        _message = message;
+    }
+}
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqual:kKVOPathKey] &amp;amp;&amp;amp; object == _message) {
+        NSLog(@"get %@",change);
+    }
+}
+- (void) postMessage
+{
+    _message.key = @"asdfasd";
+}
+@end
+</code></pre>
+<p>完成一次完整的改变通知过程，经过以下几次过程:</p>
+
+<h5 id="message-addobserverself-forkeypathkkvopathkey-optionsnskeyvalueobservingoptionnew-contextnil">1. 注册观察者[message addObserver:self forKeyPath:kKVOPathKey options:NSKeyValueObservingOptionNew context:Nil];</h5>
+
+<h5 id="messagekey--asdfasd">2. 更改主题对象属性的值，即触发发送更改的通知 _message.key = @”asdfasd”;</h5>
+
+<h5 id="section-4">3.在制定的回调函数中，处理收到的更改通知</h5>
+
+<pre><code>- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+ if ([keyPath isEqual:kKVOPathKey] &amp;amp;&amp;amp; object == _message) {
+     NSLog(@"get %@",change);
+ }
+}
+</code></pre>
+
+<h5 id="message-removeobserverself-forkeypathkkvopathkey">4.注销观察者 [_message removeObserver:self forKeyPath:kKVOPathKey];</h5>
+
+<h4 id="kvo-1">KVO实现原理</h4>
+
+<p>一般情况下对于使用Property的属性，objc会为其自动添加键值观察功能，你只需要写一句@property (noatomic, assign) float age 就能够获得age的键值观察功能。而为了更深入的探讨一下，KVO的实现原理我们先手动实现一下KVO：</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="lineno"> 1</span> <span class="vi">@implementation</span> <span class="no">DZKVOManual</span>
+<span class="lineno"> 2</span> <span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="ss">setAge</span><span class="p">:(</span><span class="n">int</span><span class="p">)</span><span class="n">age</span>
+<span class="lineno"> 3</span> <span class="p">{</span>
+<span class="lineno"> 4</span>     <span class="o">[</span><span class="nb">self</span> <span class="ss">willChangeValueForKey</span><span class="p">:</span><span class="n">kKVOPathAge</span><span class="o">]</span><span class="p">;</span>
+<span class="lineno"> 5</span>     <span class="k">if</span> <span class="p">(</span><span class="n">age</span> <span class="o">!=</span><span class="n">_age</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 6</span>         <span class="n">_age</span> <span class="o">=</span> <span class="n">age</span><span class="p">;</span>
+<span class="lineno"> 7</span>     <span class="p">}</span>
+<span class="lineno"> 8</span>     <span class="o">[</span><span class="nb">self</span> <span class="ss">didChangeValueForKey</span><span class="p">:</span><span class="n">kKVOPathAge</span><span class="o">]</span><span class="p">;</span>
+<span class="lineno"> 9</span> <span class="p">}</span>
+<span class="lineno">10</span> <span class="sr">//</span><span class="err">经验证</span>  <span class="err">会先去调用</span><span class="ss">automaticallyNotifiesObserversForKey</span><span class="p">:</span><span class="err">当该函数没有时才会调用</span><span class="n">automaticallyNotifiesObserversOfAge</span><span class="err">。这个函数应该是编译器，自动增加的一个函数，使用</span><span class="n">xcode</span><span class="err">能够自动提示出来。的确很强大。</span>
+<span class="lineno">11</span> <span class="sr">//</span><span class="o">+</span><span class="p">(</span><span class="no">BOOL</span><span class="p">)</span> <span class="n">automaticallyNotifiesObserversOfAge</span>
+<span class="lineno">12</span> <span class="sr">//</span><span class="p">{</span>
+<span class="lineno">13</span> <span class="sr">//</span>    <span class="k">return</span> <span class="no">NO</span><span class="p">;</span>
+<span class="lineno">14</span> <span class="sr">//</span><span class="p">}</span>
+<span class="lineno">15</span> <span class="o">+</span> <span class="p">(</span><span class="no">BOOL</span><span class="p">)</span> <span class="ss">automaticallyNotifiesObserversForKey</span><span class="p">:(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">key</span>
+<span class="lineno">16</span> <span class="p">{</span>
+<span class="lineno">17</span>     <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span><span class="n">kKVOPathAge</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">18</span>         <span class="k">return</span> <span class="no">NO</span><span class="p">;</span>
+<span class="lineno">19</span>     <span class="p">}</span>
+<span class="lineno">20</span>     <span class="k">return</span> <span class="o">[</span><span class="k">super</span> <span class="ss">automaticallyNotifiesObserversForKey</span><span class="p">:</span><span class="n">key</span><span class="o">]</span><span class="p">;</span>
+<span class="lineno">21</span> <span class="p">}</span>
+<span class="lineno">22</span> <span class="vi">@end</span></code></pre></figure>
+
+<p>首先，需要手动实现属性的 setter 方法，并在设置操作的前后分别调用 willChangeValueForKey: 和 didChangeValueForKey方法，这两个方法用于通知系统该 key 的属性值即将和已经变更了；</p>
+
+<p>其次，要实现类方法 automaticallyNotifiesObserversForKey，并在其中设置对该 key 不自动发送通知（返回 NO 即可）。这里要注意，对其它非手动实现的 key，要转交给 super 来处理。</p>
+
+<p>在这里的手动实现，主要是手动实现了主题对象变更向外广播的过程。后续如何广播到观察者和观察者如何响应我们没有实现，其实这两个过程apple已经封装的很好了，猜测一下的话，应该是主题对象会维护一个观察者的队列，当本身属性发生变动，接受到通知的时候，找到相关属性的观察者队列，依次调用observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context来广播更改。 还有一个疑问，就是在自动实现KVO的时候，系统是否和我们手动实现做了同样的事情呢？</p>
+
+<h4 id="kvo-2">自动实现KVO及其原理</h4>
+
+<p>我们仔细来观察一下在使用KVO的过程中类DZMessage的一个实例发生了什么变化： 在使用KVO之前：</p>
+
+<p><img src="http://ww4.sinaimg.cn/large/7df22103jw1exwxex4ozvj20d204rt9f.jpg" alt="" /></p>
+
+<p>当调用Setter方法，并打了断点的时候：</p>
+
+<p><img src="http://ww1.sinaimg.cn/large/7df22103jw1exwxf3vu2rj20b3040dge.jpg" alt="" /></p>
+
+<p>神奇的发现类的isa指针发生了变化，我们原本的类叫做DZMessage，而使用KVO后类名变成了NSKVONotifying_DZMessage。这说明objc在运行时对我们的类做了些什么。</p>
+
+<p>我们从Apple的文档<a href="https://developer.apple.com/library/mac/documentation/cocoa/conceptual/KeyValueObserving/Articles/KVOImplementation.html">Key-Value Observing Implementation Details</a>找到了一些线索。</p>
+
+<blockquote>
+  <p>Automatic key-value observing is implemented using a technique called isa-swizzling. The isa pointer, as the name suggests, points to the object’s class which maintains a dispatch table.This dispatch table essentially contains pointers to the methods the class implements, among other data. When an observer is registered for an attribute of an object the isa pointer of the observed object is modified, pointing to an intermediate class rather than at the true class. As a result the value of the isa pointer does not necessarily reflect the actual class of the instance. You should never rely on the isa pointer to determine class membership. Instead, you should use the class method to determine the class of an object instance.</p>
+</blockquote>
+
+<p>当某一个类的实例第一次使用KVO的时候，系统就会在运行期间动态的创建该类的一个派生类，该类的命名规则一般是以NSKVONotifying为前缀，以原本的类名为后缀。并且将原型的对象的isa指针指向该派生类。同时在派生类中重载了使用KVO的属性的setter方法，在重载的setter方法中实现真正的通知机制，正如前面我们手动实现KVO一样。这么做是基于设置属性会调用 setter 方法，而通过重写就获得了 KVO 需要的通知机制。当然前提是要通过遵循 KVO 的属性设置方式来变更属性值，如果仅是直接修改属性对应的成员变量，是无法实现 KVO 的。</p>
+
+<p>同时派生类还重写了 class 方法以“欺骗”外部调用者它就是起初的那个类。因此这个对象就成为该派生类的对象了，因而在该对象上对 setter 的调用就会调用重写的 setter，从而激活键值通知机制。此外，派生类还重写了 dealloc 方法来释放资源。</p>
+
+<h2 id="section-5">拉模型</h2>
+
+<p><img src="http://ww2.sinaimg.cn/large/7df22103jw1exwxg9a68nj20o50f1q4l.jpg" alt="" />
+拉模型是指主题对象在通知观察者的时候，只传递少量信息或者只是通知变化。如果观察者需求要更具体的信息，由观察者主动从主题对象中拉取数据。相比推模型来说，拉模型更加自由，观察者只要知道有情况发生就好了，至于什么时候获取、获取那些内容、甚至是否获取都可以自主决定。但是，却存在两个问题：</p>
+
+<ol>
+  <li>如果某个观察者响应过慢，可能会漏掉之前通知的内容</li>
+  <li>观察者必须保存一个对目标对象的引用，而且还需要了解主题对象的结构，这就使观察者产生了对主题对象的依赖。
+可能每种设计模式都会存在或多或少的一些弊端，但是他们的确能够解决问题，也有更多有用的地方。在使用的时候，就需要我们权衡利弊，做出一个合适的选择。而工程师的价值就体现在，能够在纷繁复杂的工具世界中找到最有效的那个。而如果核桃没被砸开，不是你手力气不大的问题，而是你选错了工具，谁让你非得用门缝夹，不用锤子呢！</li>
+</ol>
+
+<p>当然，上面那段属于题外话。言归正传，在OBJC编程中，典型的一种拉模型的实现是delegate。可能很多人会不同意我的观点，说delegate应当是委托模式。好吧，我不否认，delegate的确是委托模式的一种极度典型的实现方式。但是这并不妨碍，他也是一种观察者模式。其实本来各种设计模式之间就不是泾渭分明的。在使用和解释的时候，只要你能够说得通，而且能够解决问题就好了，没必要纠缠他们的名字。而在通知变化这个事情上delegate的确是能够解决问题的。</p>
+
+<p>我们来看一个使用delegate实现拉模型的观察者的例子：</p>
+
+<h4 id="delegate">1. 先实现一个delegate方便注册观察者，和回调函数</h4>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="lineno">1</span> <span class="vi">@class</span> <span class="no">DZClient</span><span class="p">;</span>
+<span class="lineno">2</span> <span class="vi">@protocol</span> <span class="no">DZClientChangedDelegate</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="no">NSObject</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span>
+<span class="lineno">3</span> <span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="ss">client</span><span class="p">:(</span><span class="no">DZClient</span><span class="o">*</span><span class="p">)</span><span class="n">client</span> <span class="ss">didChangedContent</span><span class="p">:(</span><span class="no">NSString</span><span class="o">*</span><span class="p">)</span><span class="n">key</span><span class="p">;</span>
+<span class="lineno">4</span> <span class="vi">@end</span>
+<span class="lineno">5</span> <span class="vi">@interface</span> <span class="no">DZClient</span> <span class="p">:</span> <span class="no">NSObject</span>
+<span class="lineno">6</span> <span class="vi">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">weak</span><span class="p">)</span> <span class="nb">id</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="no">DZClientChangedDelegate</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="n">delegate</span><span class="p">;</span>
+<span class="lineno">7</span> <span class="vi">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="no">NSString</span><span class="o">*</span> <span class="n">key</span><span class="p">;</span>
+<span class="lineno">8</span> <span class="vi">@end</span></code></pre></figure>
+
+<h4 id="section-6">2. 注册观察者</h4>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="lineno">1</span> <span class="sr">//</span><span class="no">DZAppDelegate</span>
+<span class="lineno">2</span> <span class="no">DZClient</span><span class="o">*</span> <span class="n">client</span> <span class="o">=</span> <span class="o">[</span><span class="no">DZClient</span> <span class="kp">new</span><span class="o">]</span><span class="p">;</span>
+<span class="lineno">3</span> <span class="n">client</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
+<span class="lineno">4</span> <span class="n">client</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="err">@</span><span class="s2">&quot;aa&quot;</span><span class="p">;</span></code></pre></figure>
+
+<h4 id="section-7">3. 当主题对象的属性发生改变的时候，发送内容有变化的通知</h4>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="lineno"> 1</span> <span class="vi">@implementation</span> <span class="no">DZClient</span>
+<span class="lineno"> 2</span> <span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="ss">setKey</span><span class="p">:(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">key</span>
+<span class="lineno"> 3</span> <span class="p">{</span>
+<span class="lineno"> 4</span>     <span class="k">if</span> <span class="p">(</span><span class="n">_key</span> <span class="o">!=</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 5</span>         <span class="n">_key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+<span class="lineno"> 6</span>         <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="n">_delegate</span> <span class="ss">respondsToSelector</span><span class="p">:</span><span class="vi">@selector</span><span class="p">(</span><span class="ss">client</span><span class="p">:</span><span class="ss">didChangedContent</span><span class="p">:)</span><span class="o">]</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno"> 7</span>             <span class="o">[</span><span class="n">_delegate</span> <span class="ss">client</span><span class="p">:</span><span class="nb">self</span> <span class="ss">didChangedContent</span><span class="p">:</span><span class="err">@</span><span class="s2">&quot;key&quot;</span><span class="o">]</span><span class="p">;</span>
+<span class="lineno"> 8</span>         <span class="p">}</span>
+<span class="lineno"> 9</span>     <span class="p">}</span>
+<span class="lineno">10</span> <span class="p">}</span></code></pre></figure>
+
+<h4 id="section-8">4. 观察者收到主题对象有变化的通知后，主动去拉取变化的内容。</h4>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="lineno">1</span> <span class="sr">//</span><span class="no">DZAppDelegate</span>
+<span class="lineno">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="ss">client</span><span class="p">:(</span><span class="no">DZClient</span> <span class="o">*</span><span class="p">)</span><span class="n">client</span> <span class="ss">didChangedContent</span><span class="p">:(</span><span class="no">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">key</span>
+<span class="lineno">3</span> <span class="p">{</span>
+<span class="lineno">4</span>     <span class="k">if</span> <span class="p">(</span><span class="o">[</span><span class="n">key</span>  <span class="ss">isEqual</span><span class="p">:</span> <span class="err">@</span><span class="s2">&quot;key&quot;</span><span class="o">]</span><span class="p">)</span> <span class="p">{</span>
+<span class="lineno">5</span>         <span class="no">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s2">&quot;get changed key %@&quot;</span><span class="p">,</span><span class="n">client</span><span class="o">.</span><span class="n">key</span><span class="p">);</span>
+<span class="lineno">6</span>     <span class="p">}</span>
+<span class="lineno">7</span> <span class="p">}</span></code></pre></figure>
+
+<h2 id="section-9">广义观察者模式</h2>
+
+<p>在上面介绍了，观察者被动的接受主题改变的经典意义上的观察者模式之后，我们再来看一下广义观察者模式。当然上面所讲的经典观察者模式，也是一种一种传递数据的方式。广义观察者涵盖了经典观察者模式。</p>
+
+<p>往往我们会有需要在“观察者”和“主题对象”之间传递变化的数据。而这种情况下，主题对象可能不会像经典观察者模式中的主题对象那样勤劳，在发生改变的时候不停的广播。在广义观察者模式中，主题对象可能是懒惰的，而是由观察者通过不停的查询主题对象的状态，来获知改变的内容。</p>
+
+<p>我们熟悉的服务器CS架构，始终比较典型的冠以观察者模式，服务器是伺服的，等待着客户端的访问，客户端通过访问服务器来获取最新的内容，而不是服务器主动的推送。</p>
+
+<p>之所以，要提出广义观察者模式这样一个概念。是为了探讨一下观察者模式的本质。方便我们能够更深刻的理解观察者模式，并且合理的使用它。而且我们平时更多的将注意力放在了通知变化上面，而观察者根本的目的是在于，在观察者和主题对象之间，传递变化的数据。这些数据可能是变化这个事件本身，也可能是变化的内容，甚至可能是一些其他的内容。</p>
+
+<p>从变化数据传递的角度来思考的话，能够实现这个的模式和策略实在是数不胜数，比如传统的网络CS模型，比如KVC等等。在这里就先不详细展开讨论了。</p>
+
+
+</article> <!-- end #post__content -->
+
+<p>欢迎关注iOS开发公共账号 <strong> iOS开发知识 </strong>  ：扫描下方二维码关注<br />
+  <div style="text-align:center"><a href="http://www.imagechef.com/ic/make.jsp?tid=Beach" target="_blank"> <img src="http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg" alt="Beach custom comment codes for MySpace, Hi5, Friendster and more - ImageChef.com"/> </a> </div>
+</p>
+<p>
+  版权声明：转载请保留作者信息，恶意转载作者将保留追究法律责任的权利。BY:yishuiliunian
+</p>
+
+
+<div id="post__share">
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/11/11/shejimoshizhiguanchazhemoshi.html&text=iOS设计模式之观察者模式" target="_blank"></a>
+  <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/11/11/shejimoshizhiguanchazhemoshi.html&title=iOS设计模式之观察者模式" target="_blank"></a>
+</div> <!-- end #post__share -->
+
+<!-- <div id="disqus_thread" name="yishuiliunian">
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink" target="_blank">Loading Disqus comments...</a>
+</div> -->
+<!-- 多说评论框 start -->
+
+<div class="ds-thread" data-thread-key=/2015/11/11/shejimoshizhiguanchazhemoshi data-title=iOS设计模式之观察者模式 data-url="www.dzpqzb.com/2015/11/11/shejimoshizhiguanchazhemoshi.html"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+    (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+
+
+        <p id="copyright">Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Theme <a href="https://github.com/P233/3-Jekyll" target="_blank">3-Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Hosted on <a href="https://pages.github.com" target="_blank">Github</a></p>
+      </div> <!-- end #pjax -->
+
+      <div id="post__toc-trigger">
+        <div id="post__toc">
+          <span id="post__toc-title">Table of Contents</span>
+          <ul id="post__toc-ul"></ul>
+        </div>
+      </div>
+    </div> <!-- end #post -->
+
+    <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
+
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.pjax.js"></script>
+<script src="/assets/js/nprogress.js"></script>
+<script src="/assets/js/script.js"></script>
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-33738381-1', 'dzpqzb.com');
+  ga('send', 'pageview');
+</script>
+
+  </body>
+</html>

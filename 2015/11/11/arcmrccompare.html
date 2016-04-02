@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
+
+<title>ARC(甚至是代码行数)与安装包体积之间的关系 | 一水的技术博客</title>
+<meta name="author" content="董朝">
+
+
+
+
+<link rel="shortcut icon" href="http://7u2ho6.com1.z0.glb.clouddn.com/site-favicon.ico" />
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+
+<link href="/pages/rss.xml" rel="alternate" title="一水的技术博客" type="application/atom+xml">
+
+  </head>
+
+  <body>
+    <aside id="sidebar">
+  <nav id="tags">
+    <a href="/index.html" id="avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+
+    <ul id="tags__ul">
+      <li id="pl__all" class="tags__li tags-btn active">全部</li>
+      
+        <li id="iOS" class="tags__li tags-btn">iOS</li>
+      
+        <li id="设计思想" class="tags__li tags-btn">设计思想</li>
+      
+        <li id="工具链" class="tags__li tags-btn">工具链</li>
+      
+        <li id="开源组件" class="tags__li tags-btn">开源组件</li>
+      
+        <li id="SDK设计" class="tags__li tags-btn">SDK设计</li>
+      
+        <li id="BOOK" class="tags__li tags-btn">BOOK</li>
+      
+        <li id="iOS-Tips" class="tags__li tags-btn">iOS-Tips</li>
+      
+        <li id="碎念" class="tags__li tags-btn">碎念</li>
+      
+    </ul>
+
+    <div id="tags__bottom">
+      <a href="mailto:yishuiliunian@gmail.com" id="icon-email" class="tags-btn fontello"></a>
+      <a href="/pages/rss.xml" id="icon-feed" class="tags-btn fontello"></a>
+    </div>
+  </nav> <!-- end #tags -->
+
+  <div id="posts-list">
+    <form action="" id="search-form">
+      <a href="/index.html" id="mobile-avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+      <!-- NOTE: input field is disabled by default -->
+      <input id="search-input" type="text" placeholder="Search..." disabled >
+    </form>
+
+    <nav id="pl__container">
+    
+      <a class="碎念 pl__all" href="/2016/01/09/xieyu2016.html"><span class="pl__circle"></span><span class="pl__title">写于2016，那个2015年的尾巴</span><span class="pl__date">Jan 2016</span></a>
+    
+      <a class="iOS pl__all" href="/2015/12/14/design-class-header-detail1.html"><span class="pl__circle"></span><span class="pl__title">类的外部初始化</span><span class="pl__date">Dec 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/12/10/view-life-circle.html"><span class="pl__circle"></span><span class="pl__title">通过ViewController的关键流程来理解流程建模</span><span class="pl__date">Dec 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/28/optime-logic-method.html"><span class="pl__circle"></span><span class="pl__title">如何进行技术方案优化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/27/zhishikuangjia.html"><span class="pl__circle"></span><span class="pl__title">iOS开发知识框架</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/19/bitcode-open.html"><span class="pl__circle"></span><span class="pl__title">Bitcode适配指南</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/17/kill-alipay.html"><span class="pl__circle"></span><span class="pl__title">是怎样干掉支付宝的界面的</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS-Tips pl__all" href="/2015/11/17/block-usage.html"><span class="pl__circle"></span><span class="pl__title">Block使用的陷阱</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/12/emun-usage-when-and-how.html"><span class="pl__circle"></span><span class="pl__title">什么时候该使用枚举类型</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/defer-ios-caozuo.html"><span class="pl__circle"></span><span class="pl__title">OC中使用defer操作</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/macro-defines.html"><span class="pl__circle"></span><span class="pl__title">使用宏来减少代码重复</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arc-error.html"><span class="pl__circle"></span><span class="pl__title">ARC的一些细节之NSError的使用</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcdnfiles.html"><span class="pl__circle"></span><span class="pl__title">DZCDNFiles</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/mshttprpc.html"><span class="pl__circle"></span><span class="pl__title">MSHttpRPC</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/msinputscrollviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">MSInputScrollViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcache.html"><span class="pl__circle"></span><span class="pl__title">DZCache</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsinglonfactory.html"><span class="pl__circle"></span><span class="pl__title">DZSinglonFactory</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsilkkit.html"><span class="pl__circle"></span><span class="pl__title">DZSilkKit</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzlayouttable.html"><span class="pl__circle"></span><span class="pl__title">DZLayoutTable</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzgeometrytools.html"><span class="pl__circle"></span><span class="pl__title">DZGeometryTools</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzadjustframe.html"><span class="pl__circle"></span><span class="pl__title">DZAdjustFrame</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arcmrccompare.html"><span class="pl__circle"></span><span class="pl__title">ARC(甚至是代码行数)与安装包体积之间的关系</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/danlimoshiios.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式反思之单例模式的进化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="BOOK pl__all" href="/2015/11/11/tongguoshixiantableview.html"><span class="pl__circle"></span><span class="pl__title">通过实现一个TableView来理解iOS UI编程</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/11/zaishejisdkdeshihoumingmingkongjianwuran.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之命名空间污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/shejimoshizhiguanchazhemoshi.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式之观察者模式</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/fansi.html"><span class="pl__circle"></span><span class="pl__title">一个程序员的读书笔记：程序设计的反思</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/make-bugs-correct.html"><span class="pl__circle"></span><span class="pl__title">如何合理的制造BUG</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之运行时环境污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/06/quan-ju-bian-liang-man-tan.html"><span class="pl__circle"></span><span class="pl__title">全局变量漫谈</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ji-zhi-yu-ce-lue-fen-chi.html"><span class="pl__circle"></span><span class="pl__title">机制与策略分离</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ios.html"><span class="pl__circle"></span><span class="pl__title">IOS设计模式反思——六大原则</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/10/24/strage-animation.html"><span class="pl__circle"></span><span class="pl__title">奇怪的动画</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html"><span class="pl__circle"></span><span class="pl__title">由Runtime想到的几个问题</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/07/30/you-xu-gou-jian-zhi-ji-ben-fang-fa-pian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之基本方法篇</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/fen-bu-shi-bian-yi-iosyan-jiu.html"><span class="pl__circle"></span><span class="pl__title">分布式编译ios研究</span><span class="pl__date">Jul 2015</span></a>
+    
+    </nav>
+  </div> <!-- end #posts-list -->
+</aside> <!-- end #sidebar -->
+
+    <div id="post">
+      <div id="pjax">
+        <article id="post__content">
+  <h1 id="post__title" data-identifier="20151111">ARC(甚至是代码行数)与安装包体积之间的关系</h1>
+  <p>此文的目的就是通过一些列的逻辑推理来推测出ARC语安装包体积之间的关系，或者说ARC对于安装包体积的一些影响。</p>
+
+<p>两个事物之间的关系主要存在两种关系：相关性和因果性。相关性，表现为当一个事物发生改变的时候，另外一个事物同时也会跟着发生改变。而因果性则表现为，一个事物的变化会引起另外一个事物的变化。</p>
+
+<p>如果我们决定因为安装包体积而抛弃ARC的话，我们就必须非常明确的确定，ARC与安装包增大之间有因果性关系。即，使用ARC是安装包体积增长的一个原因。而非使用ARC与否和安装包体积之间呈现出相关性，而且。</p>
+
+<p>在《ARC对安装包影响的分析（高清、多图》一文中，使用“单因变量“试验，确定了使用非ARC之后，安装包体积有下降的趋势。这种方法，存在的缺陷是，事先已经假定了ARC与安装包体积之间是线性相关的关系，即通过一个简单的f(x)=kx，这样的一个公式就能够表示ARC与安装包体积之间的关系。然后，在这个假设之上去找支撑这个观点的依据。很幸运的找到了。但是，其前提假设正确与否没有给出详细的说明。</p>
+
+<p>但是实际情况是，ARC与安装包体积之间绝对不是简单的线性关系。而是非线性的。ARC通过不同的层面在影响着安装包体积大小。也就是说我们要确定ARC是怎样影响安装包体积的，才能去讨论ARC与安装包体积之间的关系。</p>
+
+<p>在开篇我很明白的告诉读者，最后不会得出一个类似于f(x)=kx的公式来，不会有20行ARC对应1KB的结论。因为在以下阐述的ARC对于安装包体积的影响中，有很多因素是非线性且不可量化的。在手Q或者任何一个软件，这样一个复杂性系统中，很多原始的简单的基于线性可量化的理论已经显得捉襟见肘。我们应当无奈的而且坦诚的承认，在很多复杂性系统中，或者根本就没有微观规律可言。</p>
+
+<h2 id="section">直接影响，直接作用于安装包体积</h2>
+
+<p>所谓直接影响就是代码是否使用ARC和安装包内二进制可执行文件间的具有直接关系（前提是代码行数与二进制文件大小存在直接关系）。首先我们先假定，上述结论成立。我们再来分析。</p>
+
+<h3 id="arcmrc">ARC与MRC之间指令差异</h3>
+
+<p>参考Clang 3.5 documentation OBJECTIVE-C AUTOMATIC REFERENCE COUNTING (ARC)。我们了解到，Clang实现ARC的主要方式就是将内存管理转变成对象关系处理，并通过在runtime中增加了一些列的函数来支持这些关系处理：</p>
+
+<pre><code>id objc_autorelease(id value);
+void objc_autoreleasePoolPop(void *pool);
+void *objc_autoreleasePoolPush(void);
+id objc_autoreleaseReturnValue(id value);
+void objc_copyWeak(id *dest, id *src);
+void objc_destroyWeak(id *object);
+id objc_initWeak(id *object, id value);
+id objc_loadWeak(id *object);
+id objc_loadWeakRetained(id *object);
+void objc_moveWeak(id *dest, id *src);
+void objc_release(id value);
+id objc_retain(id value);
+id objc_retainAutorelease(id value);
+id objc_retainAutoreleaseReturnValue(id value);
+id objc_retainAutoreleasedReturnValue(id value);
+id objc_retainBlock(id value);
+id objc_storeStrong(id *object, id value);
+id objc_storeWeak(id *object, id value);
+</code></pre>
+
+<p>并且，在很多处理内存的方式上并像很多网上流传的材料所说的那样——在编译器帮助开发者插入retain与release这么简单。虽然他们的基础性技术都是retain count。但是在具体处理上所使用的模型已经发生改变。所以参照MRC的二进制文件，查找ARC的二进制文件指令的增长数量，或者参照ARC的二进制文件去查找MRC减少的指令。就不太靠谱了，他们使用的指令都不一样。怎么去对比。</p>
+
+<p>线性拟合</p>
+
+<p>通过与手Q基础侧的人了解到得出：</p>
+
+<pre><code>20行ARC = 1kb
+30行MRC = 1kb
+100行C++ = 1KB
+</code></pre>
+
+<p>这个结论时，采样的文件只有几个使用ARC更改过的文件。首先抛开结果是否正确不讲，第一采样空间的代表性值得怀疑，第二样本空间是否够大也是值得怀疑。有了怀疑于是就就用整个手Q中的.o文件的大小与代码行数之间进行多项式拟合。之所以采用.o文件是因为，直接测量当个文件对于安装包大小的影响非常困难。退而求其次，算单个文件与.o文件之间的关系。采样空间为手Q项目中的所有*.m文件。样本量约为1500+-。</p>
+
+<pre><code>import os
+from os.path import getsize, join
+import numpy as np
+import scipy as sp
+from scipy.optimize import leastsq
+import pylab as pl
+
+m = 9
+
+def fake_func(p, x):
+    f = np.poly1d(p)
+    return f(x)
+
+def residuals(p, y, x):
+    return y - fake_func(p, x)
+
+
+
+
+class OCFile:
+    def __init__(self, linescount, arc):
+        self.linescount = linescount
+        self.arc = arc
+
+def get_all_file(floder_path):
+    dic = {}
+    if floder_path is None:
+        raise Exception("floder_path is None")
+    for dirpath, dirnames, filenames in os.walk(floder_path):
+        if len(dirpath) &gt;= 6:
+            if dirpath[0:6] == './.svn':
+                continue
+        for name in filenames:
+            p = dirpath + '/' + name
+            if name[-2:] == '.m':
+                arc = 0
+                if "[super dealloc]" in open(p).read():
+                    arc = 0
+                else:
+                    arc = 1
+                count = len(open(p,'rU').readlines())
+                tf = OCFile(count, arc)
+                key = name[0:-2]+".o"
+                dic[key] = tf
+
+    return dic
+
+rclinesDic = get_all_file('/Users/stonedong/Documents/TencentWork/master')
+
+
+arcf = open("arc.txt", "w")
+mrcf = open("mrc.txt", "w")
+
+
+arcx= []
+arcy = []
+mrcx = []
+mrcy = []
+
+for item in  os.listdir('.'):
+    if item[-2:] == '.o':
+        size = getsize(join(".", item))
+        if item in rclinesDic.keys():
+            of = rclinesDic[item]
+            fp = mrcf
+            if of.arc == 1:
+                fp =arcf
+                arcx.append(of.linescount)
+                arcy.append(size/1024)
+            else:
+                fp = mrcf
+                mrcx.append(of.linescount)
+                mrcy.append(size)
+            fp.write(item)
+            fp.write('\t')
+            fp.write(str(size))
+            fp.write('\t')
+            fp.write(str(of.linescount))
+            fp.write("\n")
+
+fp.close()
+
+
+
+x_show = np.linspace(0, 3000, 1000)
+
+p0 = np.random.randn(m)
+
+plsq = leastsq(residuals, p0, args=(mrcy, mrcx))
+print plsq[0]
+print "\n"
+pl.plot(x_show, fake_func(plsq[0], x_show), label='fitted curve')
+pl.plot(mrcx, mrcy, 'bo', label='with noise')
+pl.legend()
+pl.show()
+</code></pre>
+
+<h3 id="section-1">拟合结果：</h3>
+
+<h4 id="arc">ARC</h4>
+
+<p><img src="http://ww3.sinaimg.cn/large/7df22103jw1exx9bd2n76j20fk0bomxq.jpg" alt="" /></p>
+
+<p>拟合的多项式参数为：</p>
+
+<p><img src="http://ww4.sinaimg.cn/large/7df22103jw1exx9bupyuvj20ev02qjrw.jpg" alt="" /></p>
+
+<h4 id="mrc">MRC</h4>
+
+<p><img src="http://ww4.sinaimg.cn/large/7df22103jw1exx9ciiwjtj20fk0bo3zc.jpg" alt="" /></p>
+
+<p>拟合的多项式参数为：
+<img src="http://ww1.sinaimg.cn/large/7df22103jw1exx9ctbty7j20e10283yz.jpg" alt="" /></p>
+
+<p>通过上图很明显看出，使用线性的多现实拟合的时候，结果极度欠拟合。拟合出的特征多项式完全没有意义。从而更加直观的可以看出，ARC或者MRC对于安装包大小的影响绝非线性关系。并且通过上述结果页可以看出，找不出一个合理的多项式用来表征ARC与安装包体积的关系，也找不出一个多项式来表征MRC与安装包体积的关系。最直接的结论就是，代码行数与安装包体积之间的关系不是线性关系。宏观上看，的确代码行数增加安装包体积增加。但是两者之间不存在线性关系。</p>
+
+<p>因而所得出上述ARC或者MRC与安装包体积之间存在20行ARC对应1KB是存疑的。可能这是一个均值，但是均值在很多情况下是不具有普适性的。不能将使用均值来断定，我们实际在编程中代码行数对于安装包体积的影响。</p>
+
+<p>同时计算了其均值和方差：</p>
+
+<p><img src="http://ww4.sinaimg.cn/large/7df22103jw1exx9d9gwbbj20b502j3yo.jpg" alt="" /></p>
+
+<p>在方差如此之大的情况下，均值的意义就非常小了。</p>
+
+<h2 id="section-2">间接影响，通过影响程序员来影响安装包体积的大小</h2>
+
+<p>通过上面的讨论，我们已经初步得出结论，ARC对于安装包体积的影响绝不是一个简单的线性关系。在手Q这样一个复杂系统当中，ARC甚至是代码行数，对于安装包体积的影响绝对不是简单粗暴的，不是可以使用一个函数表达式就能说明的。</p>
+
+<p>《技术的本质》一书中指出，技术通过影响人然后影响一切。同样的道理，ARC设计出来之后，首先影响的是我们的编程方式。而后通过我们编程方式的改变去影响其他，包括安装包体积的大小。</p>
+
+<p>比如block的使用方式，在定义变量的时候使用strong关键字。甚至是设计模式的设计方式都会发生改变。</p>
+
+<p>这些都是不可量化的影响。试问当这些因素加入到我们考量ARC与安装包体积之间的关系的时候，你如何去用数值度量这种影响？谁有能说清楚一个设计模式设计方式的改变对于安装包体积的影响有多大？</p>
+
+<p>还有即使同样的一个算法，不同的编程人员也会写出不一样的代码来，这又如何去度量？</p>
+
+<p>人是在整个软件过程中最不稳定的因素。前辈们常说，出问题的时候首先怀疑自己，然后去怀疑工具，甚至你都不需要怀疑工具。在我们没有解决好自己的问题之前，去怀疑工具，避免有点过了。</p>
+
+<p>纯粹个人见解的是：对于安装包体积影响最大的可能就是编程人员了把。如果能够减少逻辑冗余，能够尽可能的抽出公共组件，控制安装包体积大小不是没有可能的。</p>
+
+<p>同时，在上述的论述中，我们还没有牵扯到，文件之间的引用，函数之间的调用，类之间的交互等更复杂的关系。将之考量进去之后，ARC与安装包体积之间的关系将会更加错综复杂不可度量。</p>
+
+<h2 id="section-3">结论</h2>
+
+<p>通过上述，直接影响的定量分析手段和间接影响的定性分析的手段，我们初步得出了代码行数与安装包体积大小不存在线性关系。ARC对于安装包体积的影响也不是线性关系。代码行数、ARC、MRC以一种复杂且不可度量的方式影响着安装包体积大小。我们只能说有一个宏观趋势：代码增多，安装包体积增大。但是是如何影响安装包体积增大了，这个真的说不清楚了。太复杂了。已不是20arc-&gt;1kb这样简单。</p>
+
+<p>还有一点，ARC正在不断的变化之中，我们根据当前的ARC这种工具的的状态做出的判断，很可能只是因为Xcode和Clang的一次升级，就会变成谬误。语言和工具在发展，他们发展出了更多更好用的工具（包括ARC）在内，辅助我们控制整个软件过程中的复杂性。我们编程不止要实现产品的需求，同样也需要控制整个工程的复杂性，包括代码质量（可维护性和可阅读性等）、包括项目进度、包括安装包体积。。。。如果单纯因为一个简单的一个没有可靠理论依据的与安装包体积间线性相关性的现象就鲁莽的怀疑ARC，未免有点一叶障目不见泰山。</p>
+
+<p>当摩尔定律让机器的性能不断提升的时候，我们可能不像以前，机器资源紧缺的时候那么去关注优化机器的性能，优化CPU消耗，优化内存、优化IO、优化存储….这个时候，我们是否应该关注一下怎样去优化人的时间。优化我们苦逼的程序员那宝贵的时间。而ARC就是这么一个好东西能够优化，我们程序员的时间。强烈支持ARC。</p>
+
+
+</article> <!-- end #post__content -->
+
+<p>欢迎关注iOS开发公共账号 <strong> iOS开发知识 </strong>  ：扫描下方二维码关注<br />
+  <div style="text-align:center"><a href="http://www.imagechef.com/ic/make.jsp?tid=Beach" target="_blank"> <img src="http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg" alt="Beach custom comment codes for MySpace, Hi5, Friendster and more - ImageChef.com"/> </a> </div>
+</p>
+<p>
+  版权声明：转载请保留作者信息，恶意转载作者将保留追究法律责任的权利。BY:yishuiliunian
+</p>
+
+
+<div id="post__share">
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/11/11/arcmrccompare.html&text=ARC(甚至是代码行数)与安装包体积之间的关系" target="_blank"></a>
+  <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/11/11/arcmrccompare.html&title=ARC(甚至是代码行数)与安装包体积之间的关系" target="_blank"></a>
+</div> <!-- end #post__share -->
+
+<!-- <div id="disqus_thread" name="yishuiliunian">
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink" target="_blank">Loading Disqus comments...</a>
+</div> -->
+<!-- 多说评论框 start -->
+
+<div class="ds-thread" data-thread-key=/2015/11/11/arcmrccompare data-title=ARC(甚至是代码行数)与安装包体积之间的关系 data-url="www.dzpqzb.com/2015/11/11/arcmrccompare.html"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+    (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+
+
+        <p id="copyright">Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Theme <a href="https://github.com/P233/3-Jekyll" target="_blank">3-Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Hosted on <a href="https://pages.github.com" target="_blank">Github</a></p>
+      </div> <!-- end #pjax -->
+
+      <div id="post__toc-trigger">
+        <div id="post__toc">
+          <span id="post__toc-title">Table of Contents</span>
+          <ul id="post__toc-ul"></ul>
+        </div>
+      </div>
+    </div> <!-- end #post -->
+
+    <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
+
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.pjax.js"></script>
+<script src="/assets/js/nprogress.js"></script>
+<script src="/assets/js/script.js"></script>
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-33738381-1', 'dzpqzb.com');
+  ga('send', 'pageview');
+</script>
+
+  </body>
+</html>

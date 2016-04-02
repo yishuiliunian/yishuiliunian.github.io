@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
+
+<title>通过ViewController的关键流程来理解流程建模 | 一水的技术博客</title>
+<meta name="author" content="董朝">
+
+
+
+
+<link rel="shortcut icon" href="http://7u2ho6.com1.z0.glb.clouddn.com/site-favicon.ico" />
+
+<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+
+<link href="/pages/rss.xml" rel="alternate" title="一水的技术博客" type="application/atom+xml">
+
+  </head>
+
+  <body>
+    <aside id="sidebar">
+  <nav id="tags">
+    <a href="/index.html" id="avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+
+    <ul id="tags__ul">
+      <li id="pl__all" class="tags__li tags-btn active">全部</li>
+      
+        <li id="iOS" class="tags__li tags-btn">iOS</li>
+      
+        <li id="设计思想" class="tags__li tags-btn">设计思想</li>
+      
+        <li id="工具链" class="tags__li tags-btn">工具链</li>
+      
+        <li id="开源组件" class="tags__li tags-btn">开源组件</li>
+      
+        <li id="SDK设计" class="tags__li tags-btn">SDK设计</li>
+      
+        <li id="BOOK" class="tags__li tags-btn">BOOK</li>
+      
+        <li id="iOS-Tips" class="tags__li tags-btn">iOS-Tips</li>
+      
+        <li id="碎念" class="tags__li tags-btn">碎念</li>
+      
+    </ul>
+
+    <div id="tags__bottom">
+      <a href="mailto:yishuiliunian@gmail.com" id="icon-email" class="tags-btn fontello"></a>
+      <a href="/pages/rss.xml" id="icon-feed" class="tags-btn fontello"></a>
+    </div>
+  </nav> <!-- end #tags -->
+
+  <div id="posts-list">
+    <form action="" id="search-form">
+      <a href="/index.html" id="mobile-avatar" style="background-image:url(http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg)"></a>
+      <!-- NOTE: input field is disabled by default -->
+      <input id="search-input" type="text" placeholder="Search..." disabled >
+    </form>
+
+    <nav id="pl__container">
+    
+      <a class="碎念 pl__all" href="/2016/01/09/xieyu2016.html"><span class="pl__circle"></span><span class="pl__title">写于2016，那个2015年的尾巴</span><span class="pl__date">Jan 2016</span></a>
+    
+      <a class="iOS pl__all" href="/2015/12/14/design-class-header-detail1.html"><span class="pl__circle"></span><span class="pl__title">类的外部初始化</span><span class="pl__date">Dec 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/12/10/view-life-circle.html"><span class="pl__circle"></span><span class="pl__title">通过ViewController的关键流程来理解流程建模</span><span class="pl__date">Dec 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/28/optime-logic-method.html"><span class="pl__circle"></span><span class="pl__title">如何进行技术方案优化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/27/zhishikuangjia.html"><span class="pl__circle"></span><span class="pl__title">iOS开发知识框架</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/19/bitcode-open.html"><span class="pl__circle"></span><span class="pl__title">Bitcode适配指南</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/17/kill-alipay.html"><span class="pl__circle"></span><span class="pl__title">是怎样干掉支付宝的界面的</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS-Tips pl__all" href="/2015/11/17/block-usage.html"><span class="pl__circle"></span><span class="pl__title">Block使用的陷阱</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/12/emun-usage-when-and-how.html"><span class="pl__circle"></span><span class="pl__title">什么时候该使用枚举类型</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/defer-ios-caozuo.html"><span class="pl__circle"></span><span class="pl__title">OC中使用defer操作</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/macro-defines.html"><span class="pl__circle"></span><span class="pl__title">使用宏来减少代码重复</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arc-error.html"><span class="pl__circle"></span><span class="pl__title">ARC的一些细节之NSError的使用</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcdnfiles.html"><span class="pl__circle"></span><span class="pl__title">DZCDNFiles</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/mshttprpc.html"><span class="pl__circle"></span><span class="pl__title">MSHttpRPC</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/msinputscrollviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">MSInputScrollViewController</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzcache.html"><span class="pl__circle"></span><span class="pl__title">DZCache</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsinglonfactory.html"><span class="pl__circle"></span><span class="pl__title">DZSinglonFactory</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzsilkkit.html"><span class="pl__circle"></span><span class="pl__title">DZSilkKit</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzlayouttable.html"><span class="pl__circle"></span><span class="pl__title">DZLayoutTable</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzgeometrytools.html"><span class="pl__circle"></span><span class="pl__title">DZGeometryTools</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/11/11/dzadjustframe.html"><span class="pl__circle"></span><span class="pl__title">DZAdjustFrame</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/arcmrccompare.html"><span class="pl__circle"></span><span class="pl__title">ARC(甚至是代码行数)与安装包体积之间的关系</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/danlimoshiios.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式反思之单例模式的进化</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="BOOK pl__all" href="/2015/11/11/tongguoshixiantableview.html"><span class="pl__circle"></span><span class="pl__title">通过实现一个TableView来理解iOS UI编程</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/11/zaishejisdkdeshihoumingmingkongjianwuran.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之命名空间污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/shejimoshizhiguanchazhemoshi.html"><span class="pl__circle"></span><span class="pl__title">iOS设计模式之观察者模式</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/fansi.html"><span class="pl__circle"></span><span class="pl__title">一个程序员的读书笔记：程序设计的反思</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/make-bugs-correct.html"><span class="pl__circle"></span><span class="pl__title">如何合理的制造BUG</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="SDK设计 pl__all" href="/2015/11/10/zai-she-ji-sdkde-shi-hou-ying-dang-zhu-yi-de-dian.html"><span class="pl__circle"></span><span class="pl__title">在设计SDK的时候应当注意的点 之运行时环境污染</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/11/06/quan-ju-bian-liang-man-tan.html"><span class="pl__circle"></span><span class="pl__title">全局变量漫谈</span><span class="pl__date">Nov 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ji-zhi-yu-ce-lue-fen-chi.html"><span class="pl__circle"></span><span class="pl__title">机制与策略分离</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/10/24/ios.html"><span class="pl__circle"></span><span class="pl__title">IOS设计模式反思——六大原则</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/10/24/strage-animation.html"><span class="pl__circle"></span><span class="pl__title">奇怪的动画</span><span class="pl__date">Oct 2015</span></a>
+    
+      <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html"><span class="pl__circle"></span><span class="pl__title">由Runtime想到的几个问题</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="设计思想 pl__all" href="/2015/07/30/you-xu-gou-jian-zhi-ji-ben-fang-fa-pian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之基本方法篇</span><span class="pl__date">Jul 2015</span></a>
+    
+      <a class="iOS pl__all" href="/2015/07/30/fen-bu-shi-bian-yi-iosyan-jiu.html"><span class="pl__circle"></span><span class="pl__title">分布式编译ios研究</span><span class="pl__date">Jul 2015</span></a>
+    
+    </nav>
+  </div> <!-- end #posts-list -->
+</aside> <!-- end #sidebar -->
+
+    <div id="post">
+      <div id="pjax">
+        <article id="post__content">
+  <h1 id="post__title" data-identifier="20151210">通过ViewController的关键流程来理解流程建模</h1>
+  <p>在最近解决某个问题的时候，发现在ViewDidDisappear中去获取self.navigationController为空。猛然间意识到，原来在VC的生命周期中存在一些细节问题需要注意。而且，最近一段时间，对基于流程（生命周期是特殊的流程）建模的编程思想也开始有些反思。所以就总结了一下VC生命周期的一些问题。</p>
+
+<p>先说点比较抽象的东西，关于流程建模的。对于同一个对象而言，往往在不同的业务场景中其有不一样的流程。换句话说，对于一个对象而言其可能出在多个流程中。比如我们拿一个VC来说：</p>
+
+<ol>
+  <li>每一个OC的实例都有其本身的生命周期——创建、使用、销毁</li>
+  <li>而对于VC来讲在处理内存问题的时候，还有其特有的ViewDidLoad，等过程</li>
+  <li>在处理页面展示的时候，也有ViewWillAppear等过程</li>
+  <li>….</li>
+</ol>
+
+<p>而在一个流程当中，每一个过程（一般会以函数表示）都有其特殊的职责。比如alloc用于非配内存，init用于初始化内存。而我们在这些函数中做的事情，也必须尽可能的和该函数的职责所匹配。一个被设计好的流程（通常会以一组函数的形式呈现），就像是一个插排。上面的每个插口都有自己适配的类型，如果你乱插，可能会有烧掉保险丝的危险。比如你在alloc中硬要做dealloc的事情。从设计模式的角度来说，这种思想叫做『控制反转』，是设计框架的时候常用的技巧，通过约束使用者的使用方式，来完成功能。而我们在使用UIKit等框架的时候，我们作为使用方，自然要接受这种『控制反转』。且能够在正确的地方做正确的事情。一句话说就是：</p>
+
+<blockquote>
+  <p>恰如其分</p>
+</blockquote>
+
+<p>同时，我希望通过阐释VC的一些生命流程和其使用细节的事情。也能激发读者对于基于流程建模的编程思想的反思。通过这种思想去反思在日常编程中，其他库中一些流程的使用。甚至是在自己进行程序设计的时候，能够也注意使用一下这种方式。</p>
+
+<p>好了下面我们就开始看看一个VC都有哪些流程需要注意的.btw，穷举所有的流程是一个费时费力的事情，所以会只摘几个比较关键的流程来描述和讲解。最重要的目的还是在于能够启发各位用流程建模这个视角来思考编程的一些问题：），偷懒了。</p>
+
+<h2 id="section">内存使用流程</h2>
+<p>VC的实例在内存使用上面，打的流程和其他对象实例的使用类似,都要经过下述的一些过程：</p>
+
+<pre><code>创建-&gt;初始化-&gt;使用-&gt;销毁
+</code></pre>
+
+<p>后面的阐述也是类似，我们先说流程。然后再具体到函数的使用。因为我们在使用一个库或者框架的时候，首先要关注的是他的模型。尤其是流程模型。而具体的函数往往是在该模型基础上，实践下来的产物。</p>
+
+<h3 id="section-1">(1)创建</h3>
+
+<p>苹果在内存处理上使用的是<strong>两段式</strong>构造的思想：</p>
+
+<blockquote>
+  <p>将创建和初始化分两步走</p>
+</blockquote>
+
+<p>创建的核心关注点在于内存分配。从堆栈上批出一块内存给对象使用。至于该对象，如何使用该内存（初始化）则是另外的函数的事情。经过创建和初始化两步之后，才能够给出一个干净可以使用的对象实例。</p>
+
+<p>在创建的时候，一般涉及到的函数为：
+~~~
++ (instancetype)alloc
++ (instancetype)allocWithZone:(struct _NSZone *)zone
+~~~
+这两个函数为系统函数，我们不能重载该函数。这点是苹果在文档中格外强调的。因而，对于创建我们也只是调用一下系统函数的事情，没有太多自定义的工作需要我们去做。</p>
+
+<h3 id="raiihttpbaikebaiducomitemraii">(2)初始化 (<a href="http://baike.baidu.com/item/RAII">RAII</a>)</h3>
+<p>初始化是两段式构造的第二步，对象实例只有经过该步骤之后，才是一个干净可以使用的对象。这种思想在很多编程语言中我们可以看到，比如C++。当然也有很多一段式构造的例子比如C语言。</p>
+
+<p>而在OC中，初始化使我们进行对象自定义操作的开始。这里我们需要初始化一些当前类特有的属性的值，以保证后续业务逻辑能够够正常。比如当我们从xib文件中加载VC的使用我们会使用到函数：</p>
+
+<pre><code>- (instancetype _Nonnull)initWithNibName:(NSString * _Nullable)nibName bundle:(NSBundle * _Nullable)nibBundle
+</code></pre>
+<p>该函数将会通过传入的xib文件名和bundle来加载界面，并且初始化相关的数据。当然这是系统的函数。而我们更关注的是我们在这里应该做什么和可以做什么。</p>
+
+<p>说句废话：要做对象实例的初始化。主要是变量的赋值操作。</p>
+
+<p>For Exmaple:</p>
+
+<pre><code>- (instancetype) initWithNibName:(NSString *)nibNameOrNil
+                          bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (!self) {
+        return self;
+    }
+    _payHandler = [BDWalletPayWebHandler new];
+    _payHandler.enviromentWebViewController = self;
+    return self;
+}
+</code></pre>
+
+<p>上面的例子中我们在该函数中初始化了一个_payHandler的变量。而且细心的读者可能发现，我们用于初始化这个变量的值还不是外部传进来的，而是内部新生成的。这种方式我们称之为内部初始化。自然也会有外部初始化。</p>
+
+<ol>
+  <li>内部初始化：变量的值在内部生成</li>
+  <li>外部初始化：用于初始化成员变量的值是在外部生成，然后传给</li>
+</ol>
+
+<p>而在实际的初始化场景中我们经常会发现这样的情况：在进行类的设计的时候，遇到传值的问题的时候，比如下述问题，我们通过VC1获取了用户的姓名，要向VC2进行传递。现在的一般做法是在定义VC2的时候，在头文件中暴漏name变量。</p>
+
+<pre><code>@interface B : UIViewController
+@property (strong) NSString* name;
+@end
+</code></pre>
+
+<p>然后使用的时候这个样子：</p>
+
+<pre><code>
+B* vc = [B new];
+vc.name = @"xx";
+[self.navigationController push:vc];
+</code></pre>
+
+<p>这种做法，封装性很差，任何持有VC2实例的地方都能够修改这个name值，导致一些很奇怪的逻辑。而且往往是那种不可预期的变动。一旦出现bug查找起来极其困难。</p>
+
+<p>其实这种情况应当属于外部初始化的典型应用。更好的方式就是我们就把name当成对象初始化必须的一个变量，需要对其进行初始化，那么就应当提供相应的函数来进行初始化。这样可以保持比较好的封装性。</p>
+
+<p>建议以后采取这样的方式</p>
+
+<pre><code>// .h
+@interface VC2 ： UIViewController
+- （instancetype） init UNAVAILABLE;
+-   （instancetype）initWithName:(NSString*)name;
+@end
+
+//.m
+@interface VC2 ： UIViewController ()
+{
+     NSString* _name;
+}
+@end
+@implatation VC2: UIViewController
+-   （instancetype）initWithName:(NSString*)name
+{
+     self = [super init];
+     if(!self) return self;
+     _name = name;
+     return self;
+}
+@end
+
+</code></pre>
+
+<p>在.h文件中进行变量声明的时候，如果不需要外部多次修改的变量，就不要暴漏了，做成私有变量，如果该变量初始化时所需的，那么就写成初始化函数哈。因为@property这种语法的存在，削弱了OC中作用域的概念，从而导致了大家对于publick，private，protected等概念不是很清晰，从初始化这个事情上可见一斑。然，这些概念对于程序的健壮性又是多么的至关重要。还是应该拾起来的。</p>
+
+<h4 id="section-2">常用的函数</h4>
+<pre><code>- init;
+- (instancetype _Nonnull)initWithNibName:(NSString * _Nullable)nibName bundle:(NSBundle * _Nullable)nibBundle
+- (instancetype _Nonnull) initWith****
+</code></pre>
+
+<p>其中<code>init</code>函数为所有OC对象都有的</p>
+
+<h3 id="section-3">(3)使用</h3>
+
+<p>关于使用这个其实是最重要的部分，而对象一旦创建并初始化完成之后，就可以嵌入到除了内存使用流程之外的流程之中。而在内存流程中我们所谓的使用，就是在其他流程中，对该内存对象进行的一系列的操作，包括且不止于：增删改查。</p>
+
+<p>对于使用的细节，可参考其他流程的介绍。</p>
+
+<h3 id="section-4">(4)销毁</h3>
+
+<p>对象在完成使命之后，自然要被销毁，来释放其持有的资源。所谓有借有还再借不难，在创建过程中占用的内存，在初始化过程中持有的其他系统资源，在这个时候要做统一的释放。而且这是最后的释放时机，不然这个对象就成了小偷，会永久性的把资源偷走，比如在传统MRC的情境下，在init中分配是有了一个array，但是在dealloc中没有release，那么这个数组所占用的内存就写漏掉了。</p>
+
+<p>这里我们重提RAII，资源获取就是初始化。因为你获取了，你得释放啊。谁污染谁治理。所以申请和释放，创建和销毁是必须成对存在的。RAII是一个广义的资源管理概念，不至于内存。</p>
+
+<p>这个问题我们在Notification的使用中，经常会碰到crash的情况，一般都是因为没有正确的removeObser导致的脏内存引起的。我们可以把addObserve看成资源持有，而removeObserver看成资源释放。实际上也是如此，这对函数会对observe的引用计数进行加减操作。那么对于Notification这个事情也可以参考上述的流程来考虑。但这得和业务场景匹配才行，有些情况下接受通知可以伴随着对象的生命周期，建议在init-dealloc这对中注册取消。如果是伴随着UI显示而接收通知，则在didappear和diddisappear中进行最好（and在dealloc补充个取消，因为在navigation poptoroot的时候，中间的一些VC不会出发disappear等函数）。</p>
+
+<h3 id="section-5">(5)异常</h3>
+
+<p>这个没有罗列在最初的那么内存流程模型当中，因为这样的，在建模的时候，首先要做的是让整个模型Work起来，而后再去处理各种边界问题。如果一上来就把精力集中在边界问题的处理上，就会无限制的放大问题的复杂度，增加处理的麻烦。</p>
+
+<p>而我们在看了基础的内存使用流程模型之后，在看在异常情况下apple是怎样处理的。</p>
+
+<h4 id="section-6">初始化内存不足</h4>
+
+<p>直接返回nil</p>
+
+<h4 id="section-7">使用期间内存不足</h4>
+<p>我们这里之说iOS6.0以上的情况，6.0之后viewDidUnload等被废弃，而且目前市面上6.0以下的机器也快成古董了。</p>
+
+<p>当系统遭遇内存警告的时候，会调用VC的下述函数，在该函数内存，我们可以释放一些能够再次被创建的资源，比如维持的从网络或者数据库来的数据等等。
+~~~</p>
+
+<ul>
+  <li>(void)didReceiveMemoryWarning {
+  [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
+}
+~~~</li>
+</ul>
+
+<h2 id="section-8">视图管理流程</h2>
+
+<p><img src="http://ww4.sinaimg.cn/large/7df22103jw1ez0b3hn5jmj207o0egwf8.jpg" alt="" /></p>
+
+<p>先来看一张比较大的图，这是apple目前提供的和View控制相关的一些函数的摘录（UIViewController中的函数).而这也是一个调用的时序关系图。VC的view还有其子View的创建使用，都在这个流程之中。</p>
+
+<h3 id="section-9">流程解释</h3>
+
+<h4 id="section-10">创建根视图</h4>
+<p>当VC.view为空的时候，并且第一次调用vc.view的时候，会调用loadView函数来加载跟视图。</p>
+
+<pre><code>- (void) loadView
+{
+    self.view = [UIView new];
+}
+</code></pre>
+
+<p>在这个函数中你可以使用self.view = **来对根视图进行赋值，而且建议也是只在这里进行根视图的赋值操作。因为一旦根视图确定后，外部会对根视图进行一些布局了之类的操作，如果在使用过程中随意的更换根视图，上述的这些操作将很难重放。导致界面的一些异常。</p>
+
+<h4 id="section-11">初始化根视图上子视图</h4>
+<p>当调用了loadView加载了根视图之后，系统会触发VC的ViewDidLoad函数。这个使用self.view已经有值，可以在其上addSubView了。</p>
+
+<p>在这里我们一般会做一些处理初始化子视图，并且addSubView之类的操作。注意布局的事情，就不要在这里做了，因为系统为我们提供了专门的函数来做这个事情。而且这个地方你拿到的self.view的frame信息是不准确的。比如刚才我们在loadView中没有对view进行布局初始化，给他设置一个frame。到了这个ViewDidLoad的地方的时候，你拿到的self.view.frame就是{0,0,0,0}。也就是说，你在这里进行布局的话，非常有可能是乱的。</p>
+
+<pre><code>- (void)viewDidLoad {
+    [super viewDidLoad];
+    _subView = [DZView new];
+    _subView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:_subView];
+}
+</code></pre>
+
+<h4 id="section-12">布局</h4>
+<p>一般情况下，对于VC的根视图的操作是外部进行的，比如UINavigationController去push一个VC的时候，就会对vc.view.frame进行赋值，来控制VC的布局。而系统的这些试图控制器（导航了，之类的东西），都实现了CALayer的delegate，当vc的根视图的frame发生变化的时候会接受到通知</p>
+
+<pre><code>- layoutSublayersOfLayer:
+</code></pre>
+
+<p>系统的视图控制器会在这里面调用这两个函数来通知其当前的子VC去做布局的工作：</p>
+
+<pre><code>- viewWillLayoutSubviews
+- viewDidLayoutSubviews
+</code></pre>
+
+<p>而这个子VC一般是我们创建的。在这两个函数里面我们去做布局的操作。这两个函数一个是在view本身的布局做完之前调用，一个是之后。无论哪个函数，这里面渠道的根视图的frame或者bounds信息都是准确的。</p>
+
+<p>而且，如果在这两个函数里面进行相对布局操作的话，将会让VC的根视图拥有适配不同屏幕的能力，同时当调整根视图的frame的时候，整个视图的布局也能够作出相应的变化。</p>
+
+<h4 id="section-13">显示流程</h4>
+
+<pre><code>- viewWillAppear:
+– viewDidAppear:
+- viewWillDisappear:
+- viewDidDisappear:
+</code></pre>
+
+<p>从上述函数的字面意思理解：当视图被加载之后，要在window上显示出来，处于用户可见区域，或者离开用户可见区域的时候。系统将会调用VC相关函数来通知这种变化。</p>
+
+<p>我们去看viewWillDisappear的文档：</p>
+
+<blockquote>
+  <p>This method is called in response to a view being removed from a view hierarchy. This method is called before the view is actually removed and before any animations are configured.</p>
+</blockquote>
+
+<p>而上述显示流程能够被触发是依赖系统的这套机制的：</p>
+
+<pre><code>    [vc willMoveToParentViewController:self];
+    [self addChildViewController:vc];
+    [self.view addSubview:vc.view];
+    vc.view.frame = self.view.bounds;
+    [vc didMoveToParentViewController:self];
+</code></pre>
+
+<p>而现在系统集中默认的试图管理器UINavitionController，UITabBarController,还有present方式，都是可以保证会使用上述机制来触发响应的显示逻辑的。在这些函数里面，我们可以做一些和显示相关的业务逻辑了。</p>
+
+<p>但是当你做业务逻辑的时候，一定要考虑这个函数在整个流程中的时序关系和他所代表的涵义。尤其是在每个视图管理器中的控制流程中，比如最开始提到的去获取self.navigationController为空的问题。</p>
+
+<h2 id="section-14">总结</h2>
+
+<p>关于ViewController的关键的流程，先谈内存和视图管理这两个。当然其还有其他的一些流程，要说完有点太复杂了。希望通过上述的两个例子，能够展示一下流程建模在理解框架和使用框架上的一些的裨益。能够使用这种思想来思考日常的编程问题。</p>
+
+
+
+</article> <!-- end #post__content -->
+
+<p>欢迎关注iOS开发公共账号 <strong> iOS开发知识 </strong>  ：扫描下方二维码关注<br />
+  <div style="text-align:center"><a href="http://www.imagechef.com/ic/make.jsp?tid=Beach" target="_blank"> <img src="http://ww4.sinaimg.cn/large/7df22103jw1exx11uhhkoj20by0by3zc.jpg" alt="Beach custom comment codes for MySpace, Hi5, Friendster and more - ImageChef.com"/> </a> </div>
+</p>
+<p>
+  版权声明：转载请保留作者信息，恶意转载作者将保留追究法律责任的权利。BY:yishuiliunian
+</p>
+
+
+<div id="post__share">
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/12/10/view-life-circle.html&text=通过ViewController的关键流程来理解流程建模" target="_blank"></a>
+  <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/12/10/view-life-circle.html&title=通过ViewController的关键流程来理解流程建模" target="_blank"></a>
+</div> <!-- end #post__share -->
+
+<!-- <div id="disqus_thread" name="yishuiliunian">
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink" target="_blank">Loading Disqus comments...</a>
+</div> -->
+<!-- 多说评论框 start -->
+
+<div class="ds-thread" data-thread-key=/2015/12/10/view-life-circle data-title=通过ViewController的关键流程来理解流程建模 data-url="www.dzpqzb.com/2015/12/10/view-life-circle.html"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"dzpqzb"};
+    (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+
+
+        <p id="copyright">Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Theme <a href="https://github.com/P233/3-Jekyll" target="_blank">3-Jekyll</a>&nbsp;&nbsp;|&nbsp;&nbsp;Hosted on <a href="https://pages.github.com" target="_blank">Github</a></p>
+      </div> <!-- end #pjax -->
+
+      <div id="post__toc-trigger">
+        <div id="post__toc">
+          <span id="post__toc-title">Table of Contents</span>
+          <ul id="post__toc-ul"></ul>
+        </div>
+      </div>
+    </div> <!-- end #post -->
+
+    <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
+
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.pjax.js"></script>
+<script src="/assets/js/nprogress.js"></script>
+<script src="/assets/js/script.js"></script>
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-33738381-1', 'dzpqzb.com');
+  ga('send', 'pageview');
+</script>
+
+  </body>
+</html>
