@@ -13,7 +13,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 <!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
 
-<title>由Runtime想到的几个问题 | 一水的技术博客</title>
+<title>Objective-C中正确的判断父类是否实现了某个方法 | 一水的技术博客</title>
 <meta name="author" content="董朝">
 
 
@@ -167,31 +167,143 @@
     <div id="post">
       <div id="pjax">
         <article id="post__content">
-  <h1 id="post__title" data-identifier="20150730">由Runtime想到的几个问题</h1>
-  <p>这几天有同事开始关注runtime的东西，并做了一个分享。在分享的过程中，提到了一个super的问题。</p>
+  <h1 id="post__title" data-identifier="20160815">Objective-C中正确的判断父类是否实现了某个方法</h1>
+  <h1 id="objective-c">Objective-C中正确的判断父类是否实现了某个方法</h1>
 
-<p>比如这个例子,因为继承的层级过于复杂，而不知道父类有没有实现WebViewDelegate的特定方法，需要确认一下在执行：</p>
+<p>在某些特殊的场景下，我们会有判断父类是否实现了某个方法的需求。比如在tableViewDelegate中的didSelectCellAtIndexPath方法中：为了不覆盖父类的对应方法，在实现的时候需要实现判断一下父类是否实现了该方法，实现了则调用一下父类的方法，没有实现则不调用如下：</p>
 
-<pre><code>- (void) webViewDidFinishLoad:(UIWebView *)webView
+<pre><code>
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([super respondsToSelector:@selector(webViewDidFinishLoad:)]) {
-            [super webViewDidFinishLoad:webView];
-     }
-     ....
+    Class supClass = class_getSuperclass([self class]);
+    NSLog(@"self class is %@, super class is %@",self.class, supClass);
+    if (class_respondsToSelector(supClass, _cmd)) {
+        struct objc_super sup = {
+            .receiver = self,
+            .super_class = [self class]
+        };
+        void(*func)(struct objc_super*,SEL,UITableView*,NSIndexPath*) = (void*)&amp;objc_msgSendSuper;
+        func(&amp;sup, _cmd,tableView, indexPath);
+    }
+}
+
+</code></pre>
+
+<p>But，这样做会造成死循环。为什么呢，且看下面的这个例子：</p>
+
+<pre><code>@interface A : AnSuper
+
+@end
+@implementation A
+
+- (void) test
+{
+    Class supClass = class_getSuperclass([self class]);
+    NSLog(@"self class is %@, super class is %@",self.class, supClass);
+    if (class_respondsToSelector(supClass, _cmd)) {
+        struct objc_super sup = {
+            .receiver = self,
+            .super_class = [self class]
+        };
+        void(*func)(struct objc_super*,SEL) = (void*)&amp;objc_msgSendSuper;
+        func(&amp;sup, _cmd);
+    }
+}
+@end
+
+@interface B  : A
+@end
+
+@implementation B
+@end
+
+@interface C : B
+@end
+
+@implementation C
+@end
+
+void TestC() {
+    C* c = [C new];
+    [c test];
+}
+
+</code></pre>
+
+<p>C类继承自B类，B类继承自A类，在A中有方法test，在test方法中判断了其父类是否实现过test方法，实现则行执行。当创建一个C的实例调用test方法的时候。结果就死循环到这个test方法了。</p>
+
+<p>因为当调用[self class]的时候，无论当前方法实现在哪个类中，其都是以当前的instance的isa指针为准的，也就是说当C类的Instance上调用class方法的时候，返回的都是当前的类C，而去查找其父类则会一直是B类。不会像我们想想的一样，是从类A开始查找，找到A类的父类AnSuper。</p>
+
+<p>而在test方法中，判断父类是否实现了test方法，则一直是在判断B类是否实现了test方法，返回YES，一直在调用。死循环了就。</p>
+
+<p>而我们的目标是为了判断当前的方法是否在父类中有实现，很明显因为[self class]无法返回这个方法实现所在的类。导致无法满足的需求，还产生了BUG。本质上使用[self class]这个方法就是不对的。那应该使用什么呢？</p>
+
+<p>在C++中有__CLASS__的环境变量，来指称当前的类。而OC中没有类似的环境变量,可以参见Apple Mailing List中的讨论<a href="http://lists.apple.com/archives/objc-language/2008/Aug/msg00177.html">__CLASS__macro for current Obj-C class name?</a>。</p>
+
+<p>要是有个__CLASS__能够指称当前的方法实现所在的类就好了，我们的需求就能迎刃而解。然后就去环境变量中挨个查找。终于发现了__FOUNCTION__。这个东西。</p>
+
+<pre><code>-[A test]
+</code></pre>
+
+<p>在A类的test方法中打印一下，能够看到其输出了当前的函数实现所在的位置。也就是说我们可以从中提取出，当前方法实现所在的类。哈哈。说干就干。</p>
+
+<pre><code>Class DZGetCurrentClassInvocationSEL(NSString* functionString)
+{
+    
+    if (functionString.length == 0) {
+        return nil;
+    }
+    
+    NSRange rangeStart = [functionString rangeOfString:@"["];
+    NSRange rangeEnd = [functionString rangeOfString:@" "];
+    if (rangeStart.location == NSNotFound || rangeEnd.location == NSNotFound) {
+        return nil;
+    }
+    NSInteger start = rangeStart.location + rangeStart.length;
+    if (rangeEnd.location - start &lt;= 0) {
+        return nil;
+    }
+    NSRange classRange = NSMakeRange(start, rangeEnd.location - start);
+    NSString *classString = [functionString substringWithRange:classRange];
+    return NSClassFromString(classString);
+}
+
+BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector) {
+    Class superClass = class_getSuperclass(cla);
+    return class_respondsToSelector(superClass, selector);
+}
+
+
+
+FOUNDATION_EXTERN Class DZGetCurrentClassInvocationSEL(NSString*  functionString);
+
+FOUNDATION_EXTERN BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector);
+
+#define __IMP_CLASS__  DZGetCurrentClassInvocationSEL([NSString stringWithFormat:@"%s",__FUNCTION__])
+#define __DZSuperResponseCMD__ DZCheckSuperResponseToSelector(__IMP_CLASS__, _cmd)
+
+</code></pre>
+
+<p>这里定义了两个宏~~~<strong>IMP_CLASS</strong>~~~用于指称当前方法实现所在的类，~~~<strong>DZSuperResponseCMD</strong>~~~用于检查父类是否实现了该方法。</p>
+
+<p>测试一下，在A类中添加测试函数test2:</p>
+
+<pre><code>- (void) test2
+{
+    if (__DZSuperResponseCMD__) {
+        struct objc_super sup = {
+            .receiver = self,
+            .super_class = [self class]
+        };
+        void(*func)(struct objc_super*,SEL) = (void*)&amp;objc_msgSendSuper;
+        func(&amp;sup, _cmd);
+    }
 }
 </code></pre>
 
-<p>这个语义上看，是完成了我们要的功能，对父类是否实现特定方法进行了验证，但是实际使用的时候却发现，结果一直返回YES，不管父类有没有实现！！！那么问题出在了哪里。
-self和super实质上都是向当前的Instance实例发送消息，而其不同在于进行函数查找时的起点不同。self是从当前的class，而super是从superclass。由于~~~respondsToSelector:~~~方法实质上是在NSObject中实现的，也就是说无论用self，还是super来调用该方法实质上，都是调用的NSObject中该方法。同事该方法，检查当前实例是否支持该方法，结果就一直返回YES了。</p>
+<p>顺利通过。</p>
 
-<p>因为在使用的时候，要完成检查super是否支持某方法就得用其他的方法了：</p>
-
-<pre><code>  if (class_respondsToSelector(class_getSuperclass([self class]), @selector(webViewDidFinishLoad:))) {
-        [super webViewDidFinishLoad:webView];
-    }
-</code></pre>
-
-<p>虽然知道原因和解决方法，但是还是觉得这个apple的一个bug。因为语义和实际的执行结果出现了偏差。很容易让人在实际编程中，因为这个而造成method not found的crash。</p>
+<p>现在可以使用上面构建的两个宏来做判断父类是否实现了特定方法的事情了。</p>
 
 
 </article> <!-- end #post__content -->
@@ -205,9 +317,9 @@ self和super实质上都是向当前的Instance实例发送消息，而其不同
 
 
 <div id="post__share">
-  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html&text=由Runtime想到的几个问题" target="_blank"></a>
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2016/08/15/super-class-response-to-selector.html&text=Objective-C中正确的判断父类是否实现了某个方法" target="_blank"></a>
   <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
-  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html&title=由Runtime想到的几个问题" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2016/08/15/super-class-response-to-selector.html&title=Objective-C中正确的判断父类是否实现了某个方法" target="_blank"></a>
 </div> <!-- end #post__share -->
 
 <!-- <div id="disqus_thread" name="yishuiliunian">
@@ -216,7 +328,7 @@ self和super实质上都是向当前的Instance实例发送消息，而其不同
 </div> -->
 <!-- 多说评论框 start -->
 
-<div class="ds-thread" data-thread-key=/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti data-title=由Runtime想到的几个问题 data-url="www.dzpqzb.com/2015/07/30/you-runtimexiang-dao-de-ji-ge-wen-ti.html"></div>
+<div class="ds-thread" data-thread-key=/2016/08/15/super-class-response-to-selector data-title=Objective-C中正确的判断父类是否实现了某个方法 data-url="www.dzpqzb.com/2016/08/15/super-class-response-to-selector.html"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"dzpqzb"};
     (function() {

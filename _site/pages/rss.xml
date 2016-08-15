@@ -6,6 +6,150 @@
     <description>iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips</description>
     
       <item>
+        <title>Objective-C中正确的判断父类是否实现了某个方法</title>
+        <link>http://dzpqzb.com/2016/08/15/super-class-response-to-selector.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2016/08/15/super-class-response-to-selector.html</guid>
+        <pubDate>Mon, 15 Aug 2016 18:13:01 +0800</pubDate>
+        <description>&lt;h1 id=&quot;objective-c&quot;&gt;Objective-C中正确的判断父类是否实现了某个方法&lt;/h1&gt;
+
+&lt;p&gt;在某些特殊的场景下，我们会有判断父类是否实现了某个方法的需求。比如在tableViewDelegate中的didSelectCellAtIndexPath方法中：为了不覆盖父类的对应方法，在实现的时候需要实现判断一下父类是否实现了该方法，实现了则调用一下父类的方法，没有实现则不调用如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Class supClass = class_getSuperclass([self class]);
+    NSLog(@&quot;self class is %@, super class is %@&quot;,self.class, supClass);
+    if (class_respondsToSelector(supClass, _cmd)) {
+        struct objc_super sup = {
+            .receiver = self,
+            .super_class = [self class]
+        };
+        void(*func)(struct objc_super*,SEL,UITableView*,NSIndexPath*) = (void*)&amp;amp;objc_msgSendSuper;
+        func(&amp;amp;sup, _cmd,tableView, indexPath);
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But，这样做会造成死循环。为什么呢，且看下面的这个例子：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface A : AnSuper
+
+@end
+@implementation A
+
+- (void) test
+{
+    Class supClass = class_getSuperclass([self class]);
+    NSLog(@&quot;self class is %@, super class is %@&quot;,self.class, supClass);
+    if (class_respondsToSelector(supClass, _cmd)) {
+        struct objc_super sup = {
+            .receiver = self,
+            .super_class = [self class]
+        };
+        void(*func)(struct objc_super*,SEL) = (void*)&amp;amp;objc_msgSendSuper;
+        func(&amp;amp;sup, _cmd);
+    }
+}
+@end
+
+@interface B  : A
+@end
+
+@implementation B
+@end
+
+@interface C : B
+@end
+
+@implementation C
+@end
+
+void TestC() {
+    C* c = [C new];
+    [c test];
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;C类继承自B类，B类继承自A类，在A中有方法test，在test方法中判断了其父类是否实现过test方法，实现则行执行。当创建一个C的实例调用test方法的时候。结果就死循环到这个test方法了。&lt;/p&gt;
+
+&lt;p&gt;因为当调用[self class]的时候，无论当前方法实现在哪个类中，其都是以当前的instance的isa指针为准的，也就是说当C类的Instance上调用class方法的时候，返回的都是当前的类C，而去查找其父类则会一直是B类。不会像我们想想的一样，是从类A开始查找，找到A类的父类AnSuper。&lt;/p&gt;
+
+&lt;p&gt;而在test方法中，判断父类是否实现了test方法，则一直是在判断B类是否实现了test方法，返回YES，一直在调用。死循环了就。&lt;/p&gt;
+
+&lt;p&gt;而我们的目标是为了判断当前的方法是否在父类中有实现，很明显因为[self class]无法返回这个方法实现所在的类。导致无法满足的需求，还产生了BUG。本质上使用[self class]这个方法就是不对的。那应该使用什么呢？&lt;/p&gt;
+
+&lt;p&gt;在C++中有__CLASS__的环境变量，来指称当前的类。而OC中没有类似的环境变量,可以参见Apple Mailing List中的讨论&lt;a href=&quot;http://lists.apple.com/archives/objc-language/2008/Aug/msg00177.html&quot;&gt;__CLASS__macro for current Obj-C class name?&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;要是有个__CLASS__能够指称当前的方法实现所在的类就好了，我们的需求就能迎刃而解。然后就去环境变量中挨个查找。终于发现了__FOUNCTION__。这个东西。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-[A test]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在A类的test方法中打印一下，能够看到其输出了当前的函数实现所在的位置。也就是说我们可以从中提取出，当前方法实现所在的类。哈哈。说干就干。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Class DZGetCurrentClassInvocationSEL(NSString* functionString)
+{
+    
+    if (functionString.length == 0) {
+        return nil;
+    }
+    
+    NSRange rangeStart = [functionString rangeOfString:@&quot;[&quot;];
+    NSRange rangeEnd = [functionString rangeOfString:@&quot; &quot;];
+    if (rangeStart.location == NSNotFound || rangeEnd.location == NSNotFound) {
+        return nil;
+    }
+    NSInteger start = rangeStart.location + rangeStart.length;
+    if (rangeEnd.location - start &amp;lt;= 0) {
+        return nil;
+    }
+    NSRange classRange = NSMakeRange(start, rangeEnd.location - start);
+    NSString *classString = [functionString substringWithRange:classRange];
+    return NSClassFromString(classString);
+}
+
+BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector) {
+    Class superClass = class_getSuperclass(cla);
+    return class_respondsToSelector(superClass, selector);
+}
+
+
+
+FOUNDATION_EXTERN Class DZGetCurrentClassInvocationSEL(NSString*  functionString);
+
+FOUNDATION_EXTERN BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector);
+
+#define __IMP_CLASS__  DZGetCurrentClassInvocationSEL([NSString stringWithFormat:@&quot;%s&quot;,__FUNCTION__])
+#define __DZSuperResponseCMD__ DZCheckSuperResponseToSelector(__IMP_CLASS__, _cmd)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里定义了两个宏~~~&lt;strong&gt;IMP_CLASS&lt;/strong&gt;~~~用于指称当前方法实现所在的类，~~~&lt;strong&gt;DZSuperResponseCMD&lt;/strong&gt;~~~用于检查父类是否实现了该方法。&lt;/p&gt;
+
+&lt;p&gt;测试一下，在A类中添加测试函数test2:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (void) test2
+{
+    if (__DZSuperResponseCMD__) {
+        struct objc_super sup = {
+            .receiver = self,
+            .super_class = [self class]
+        };
+        void(*func)(struct objc_super*,SEL) = (void*)&amp;amp;objc_msgSendSuper;
+        func(&amp;amp;sup, _cmd);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;顺利通过。&lt;/p&gt;
+
+&lt;p&gt;现在可以使用上面构建的两个宏来做判断父类是否实现了特定方法的事情了。&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
         <title>写于2016，那个2015年的尾巴</title>
         <link>http://dzpqzb.com/2016/01/09/xieyu2016.html</link>
         <guid isPermaLink="true">http://dzpqzb.com/2016/01/09/xieyu2016.html</guid>
@@ -1254,42 +1398,6 @@ it, simply add the following line to your Podfile:&lt;/p&gt;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZCache is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>DZSinglonFactory</title>
-        <link>http://dzpqzb.com/2015/11/11/dzsinglonfactory.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/dzsinglonfactory.html</guid>
-        <pubDate>Wed, 11 Nov 2015 19:40:39 +0800</pubDate>
-        <description>&lt;h1 id=&quot;dzsinglonfactory&quot;&gt;DZSinglonFactory&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/stonedong/DZSinglonFactory&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/stonedong/DZSinglonFactory.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZSinglonFactory&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/DZSinglonFactory.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZSinglonFactory&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/DZSinglonFactory.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoadocs.org/docsets/DZSinglonFactory&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/DZSinglonFactory.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;usage&quot;&gt;Usage&lt;/h2&gt;
-
-&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;DZSinglonFactory is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
-it, simply add the following line to your Podfile:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;pod &quot;DZSinglonFactory&quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
-
-&lt;p&gt;stonedong, yishuiliunian@gmail.com&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;DZSinglonFactory is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
 </description>
       </item>
     
