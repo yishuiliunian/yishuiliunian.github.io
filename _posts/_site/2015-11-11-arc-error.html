@@ -1,0 +1,40 @@
+<p>首先看一下这段代码会输出一些什么：</p>
+
+<pre><code>NSError* error;
+NSError** errPtr = &amp;error;
+NSLog(@"%x",errPtr);
+</code></pre>
+
+<p>如果你认为，能够输出error的地址的话，也是情有可原的。但是，实际情况是：</p>
+
+<p><img src="http://ww4.sinaimg.cn/large/7df22103jw1exxcepvhjrj20fk00zt8r.jpg" alt="" /></p>
+
+<p>编译器直接报错，编译都不通过，也就谈不上运行输出结果了。为什么会这样呢？</p>
+
+<p>在ARC下每个变量都有一个所有权修饰符默认是__strong，而在定义OC对象的指针变量的时候，需要注意其所有权修饰符需要与其所指向的对象的所有权修饰符保持一致。于是上面的代码需要改成这个样子：</p>
+
+<pre><code>    NSError* error;
+    NSError* __strong * errPtr = &amp;error;
+    NSLog(@"%x",errPtr);
+</code></pre>
+<p>看到这你也许会问，经常遇到到使用NSError来返回错误信息的函数，比如:</p>
+
+<pre><code>- (BOOL)verifyPassword:(NSString *)inPassword error:(NSError **)outError
+</code></pre>
+
+<p>为什么调用他的时候没有报错呢？</p>
+
+<p>因为在函数使用的时候，会默认的将outError的所有权变成__autoreleasing.并且在调用函数之前编译器回补齐一个临时变量，从而达到了所有权修饰符保持一致的效果：</p>
+
+<pre><code>- (BOOL)verifyPassword:(NSString *)inPassword error:(NSError *__autoreleasing*)outError {
+    ....
+}
+....
+{
+    NSError __strong* error;
+    NSError __autoreleasing* tmp = error;
+    [anObject verifyPassword:@"a" error:&amp;tmp];
+}
+</code></pre>
+
+<p>这个问题，在使用NSError或者使用指针在ARC下进行数据传递的时候，需要注意和小心。</p>

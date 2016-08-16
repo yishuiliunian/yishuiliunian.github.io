@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
+    
       <a class="iOS pl__all" href="/2016/08/15/super-class-response-to-selector.html"><span class="pl__circle"></span><span class="pl__title">Objective-C中正确的判断父类是否实现了某个方法</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="碎念 pl__all" href="/2016/01/09/xieyu2016.html"><span class="pl__circle"></span><span class="pl__title">写于2016，那个2015年的尾巴</span><span class="pl__date">Jan 2016</span></a>
@@ -168,143 +170,19 @@
       <div id="pjax">
         <article id="post__content">
   
-    <h1 id="post__title" data-identifier="20160815">Objective-C中正确的判断父类是否实现了某个方法</h1>
-    <h1 id="objective-c">Objective-C中正确的判断父类是否实现了某个方法</h1>
+    <h1 id="post__title" data-identifier="20160816">利用动态库注入调试SDK</h1>
+    <blockquote>
+  <p>剑乃利器，可伤敌，亦可伤己，皆由持之者定夺。</p>
+</blockquote>
 
-<p>在某些特殊的场景下，我们会有判断父类是否实现了某个方法的需求。比如在tableViewDelegate中的didSelectCellAtIndexPath方法中：为了不覆盖父类的对应方法，在实现的时候需要实现判断一下父类是否实现了该方法，实现了则调用一下父类的方法，没有实现则不调用如下：</p>
+<p>动态库注入一般情况下使我们要防范的安全漏洞。要通过技术手段把这个漏洞补上。防止发生，第三方注入修改我们的业务逻辑，完成他们想做的事情。这是利剑伤己的一面，同时我们也可以用这种技术来做一些有价值的事情。比如应用在SDK调试当中。</p>
 
-<pre><code>
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    Class supClass = class_getSuperclass([self class]);
-    NSLog(@"self class is %@, super class is %@",self.class, supClass);
-    if (class_respondsToSelector(supClass, _cmd)) {
-        struct objc_super sup = {
-            .receiver = self,
-            .super_class = [self class]
-        };
-        void(*func)(struct objc_super*,SEL,UITableView*,NSIndexPath*) = (void*)&amp;objc_msgSendSuper;
-        func(&amp;sup, _cmd,tableView, indexPath);
-    }
-}
+<p>当SDK提交给宿主之后，一旦发现问题，调试将会是一个噩梦。不能打断点，不能改代码验证修改是否修正了问题。宿主那边只有我们提供的framework或者静态库文件。而宿主也不能把他们的代码权限开放给我们。两头受堵。于是，我们就想，要是能像正常调试开发一样，提示一个集成之后之后的SDK那有多好！！！</p>
 
-</code></pre>
+<p>于是，开始调研这个事情的可行性。主要的研究方向放在了动态库注入上面，经过验证：我们可以利用宿主提供的集成包，对其进行动态库注入，而在动态库中，加入hook的代码，通过hook代码来打断点，打log，修改逻辑，来完成调试的工作。</p>
 
-<p>But，这样做会造成死循环。为什么呢，且看下面的这个例子：</p>
+<p>注入的事情可以详细参考文章：<a href="http://www.jianshu.com/p/189afbe3b429">一步一步实现iOS微信自动抢红包(非越狱)</a></p>
 
-<pre><code>@interface A : AnSuper
-
-@end
-@implementation A
-
-- (void) test
-{
-    Class supClass = class_getSuperclass([self class]);
-    NSLog(@"self class is %@, super class is %@",self.class, supClass);
-    if (class_respondsToSelector(supClass, _cmd)) {
-        struct objc_super sup = {
-            .receiver = self,
-            .super_class = [self class]
-        };
-        void(*func)(struct objc_super*,SEL) = (void*)&amp;objc_msgSendSuper;
-        func(&amp;sup, _cmd);
-    }
-}
-@end
-
-@interface B  : A
-@end
-
-@implementation B
-@end
-
-@interface C : B
-@end
-
-@implementation C
-@end
-
-void TestC() {
-    C* c = [C new];
-    [c test];
-}
-
-</code></pre>
-
-<p>C类继承自B类，B类继承自A类，在A中有方法test，在test方法中判断了其父类是否实现过test方法，实现则行执行。当创建一个C的实例调用test方法的时候。结果就死循环到这个test方法了。</p>
-
-<p>因为当调用[self class]的时候，无论当前方法实现在哪个类中，其都是以当前的instance的isa指针为准的，也就是说当C类的Instance上调用class方法的时候，返回的都是当前的类C，而去查找其父类则会一直是B类。不会像我们想想的一样，是从类A开始查找，找到A类的父类AnSuper。</p>
-
-<p>而在test方法中，判断父类是否实现了test方法，则一直是在判断B类是否实现了test方法，返回YES，一直在调用。死循环了就。</p>
-
-<p>而我们的目标是为了判断当前的方法是否在父类中有实现，很明显因为[self class]无法返回这个方法实现所在的类。导致无法满足的需求，还产生了BUG。本质上使用[self class]这个方法就是不对的。那应该使用什么呢？</p>
-
-<p>在C++中有__CLASS__的环境变量，来指称当前的类。而OC中没有类似的环境变量,可以参见Apple Mailing List中的讨论<a href="http://lists.apple.com/archives/objc-language/2008/Aug/msg00177.html">__CLASS__macro for current Obj-C class name?</a>。</p>
-
-<p>要是有个__CLASS__能够指称当前的方法实现所在的类就好了，我们的需求就能迎刃而解。然后就去环境变量中挨个查找。终于发现了__FOUNCTION__。这个东西。</p>
-
-<pre><code>-[A test]
-</code></pre>
-
-<p>在A类的test方法中打印一下，能够看到其输出了当前的函数实现所在的位置。也就是说我们可以从中提取出，当前方法实现所在的类。哈哈。说干就干。</p>
-
-<pre><code>Class DZGetCurrentClassInvocationSEL(NSString* functionString)
-{
-    
-    if (functionString.length == 0) {
-        return nil;
-    }
-    
-    NSRange rangeStart = [functionString rangeOfString:@"["];
-    NSRange rangeEnd = [functionString rangeOfString:@" "];
-    if (rangeStart.location == NSNotFound || rangeEnd.location == NSNotFound) {
-        return nil;
-    }
-    NSInteger start = rangeStart.location + rangeStart.length;
-    if (rangeEnd.location - start &lt;= 0) {
-        return nil;
-    }
-    NSRange classRange = NSMakeRange(start, rangeEnd.location - start);
-    NSString *classString = [functionString substringWithRange:classRange];
-    return NSClassFromString(classString);
-}
-
-BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector) {
-    Class superClass = class_getSuperclass(cla);
-    return class_respondsToSelector(superClass, selector);
-}
-
-
-
-FOUNDATION_EXTERN Class DZGetCurrentClassInvocationSEL(NSString*  functionString);
-
-FOUNDATION_EXTERN BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector);
-
-#define __IMP_CLASS__  DZGetCurrentClassInvocationSEL([NSString stringWithFormat:@"%s",__FUNCTION__])
-#define __DZSuperResponseCMD__ DZCheckSuperResponseToSelector(__IMP_CLASS__, _cmd)
-
-</code></pre>
-
-<p>这里定义了两个宏~~~<strong>IMP_CLASS</strong>~~~用于指称当前方法实现所在的类，~~~<strong>DZSuperResponseCMD</strong>~~~用于检查父类是否实现了该方法。</p>
-
-<p>测试一下，在A类中添加测试函数test2:</p>
-
-<pre><code>- (void) test2
-{
-    if (__DZSuperResponseCMD__) {
-        struct objc_super sup = {
-            .receiver = self,
-            .super_class = [self class]
-        };
-        void(*func)(struct objc_super*,SEL) = (void*)&amp;objc_msgSendSuper;
-        func(&amp;sup, _cmd);
-    }
-}
-</code></pre>
-
-<p>顺利通过。</p>
-
-<p>现在可以使用上面构建的两个宏来做判断父类是否实现了特定方法的事情了。</p>
 
   
 </article> <!-- end #post__content -->

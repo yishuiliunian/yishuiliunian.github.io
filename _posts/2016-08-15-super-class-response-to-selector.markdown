@@ -9,6 +9,9 @@ categories: iOS
 Objective-C中正确的判断父类是否实现了某个方法
 ==
 
+> 相关代码可在[Github](https://github.com/yishuiliunian/SuperResponseTest)得到
+
+
 在某些特殊的场景下，我们会有判断父类是否实现了某个方法的需求。比如在tableViewDelegate中的didSelectCellAtIndexPath方法中：为了不覆盖父类的对应方法，在实现的时候需要实现判断一下父类是否实现了该方法，实现了则调用一下父类的方法，没有实现则不调用如下：
 
 

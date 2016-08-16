@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
+    
       <a class="iOS pl__all" href="/2016/08/15/super-class-response-to-selector.html"><span class="pl__circle"></span><span class="pl__title">Objective-C中正确的判断父类是否实现了某个方法</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="碎念 pl__all" href="/2016/01/09/xieyu2016.html"><span class="pl__circle"></span><span class="pl__title">写于2016，那个2015年的尾巴</span><span class="pl__date">Jan 2016</span></a>
@@ -169,6 +171,10 @@
         <article id="post__content">
   <h1 id="post__title" data-identifier="20160815">Objective-C中正确的判断父类是否实现了某个方法</h1>
   <h1 id="objective-c">Objective-C中正确的判断父类是否实现了某个方法</h1>
+
+<blockquote>
+  <p>相关代码可在<a href="https://github.com/yishuiliunian/SuperResponseTest">Github</a>得到</p>
+</blockquote>
 
 <p>在某些特殊的场景下，我们会有判断父类是否实现了某个方法的需求。比如在tableViewDelegate中的didSelectCellAtIndexPath方法中：为了不覆盖父类的对应方法，在实现的时候需要实现判断一下父类是否实现了该方法，实现了则调用一下父类的方法，没有实现则不调用如下：</p>
 
