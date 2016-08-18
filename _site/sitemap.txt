@@ -13,6 +13,8 @@
 
 
 
+  /2016/08/18/mrlogicinjection.html
+
   /2016/08/16/debug-sdk-with-injection.html
 
   /2016/08/15/super-class-response-to-selector.html
