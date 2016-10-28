@@ -1,0 +1,62 @@
+digraph tableelement {
+   rankdir  = BT
+   fontname = "Courier New"
+   fontsize = 8
+   node [
+      fontname = "Courier New" 
+      fontsize = 8
+      shape = "record"
+   ]
+   edge [
+      fontname = "Courier New"
+      fontsize = 8
+   ]
+   EKElement [
+      label = "{EKElment }"
+   ]
+   EKTableElement [
+     label = "{EKTableElement}"
+   ]
+   EKTableDataController[
+     label = "{EKTableDataController}"
+   ]
+
+   EKAdjustTableElement [
+     label = "{EKAdjustTableElement}"
+   ]
+
+   EKCellElement [
+     label = "{EKCellElement}" 
+   ]
+
+   EKTableViewController [
+     label = "{EKTableViewController}"
+   ]
+
+   UITableViewCell [
+     label = "{UITableViewCell}"
+   ]
+
+   EKAdjustCellElement [
+     label = "{EKAdjustCellElement}"
+   ]
+
+   EKAdjustTableViewCell [
+     label = "{EKAdjustTableViewCell}"
+   ]
+   edge [
+      arrowhead = "empty"
+   ]
+   EKTableElement -> EKElement[arrowhead = "empty"]
+   EKTableElement -> EKTableDataController[arrowhead="normal"]
+   EKAdjustTableElement -> EKTableElement[arrowhead="empty"]
+   EKCellElement -> EKElement[arrowhead = "empty"]
+   EKCellElement -> UITableViewCell[arrowhead="normal", style=dashed]
+   EKTableViewController -> EKTableElement[arrowhead="normal"]
+   UITableViewCell -> EKCellElement[arrowhead="normal", style=dashed]
+   EKAdjustCellElement -> EKCellElement[arrowhead="empty"]
+   EKAdjustTableViewCell -> UITableViewCell[arrowhead="empty"]
+
+
+   
+}

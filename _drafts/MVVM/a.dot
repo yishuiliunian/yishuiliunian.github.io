@@ -1,0 +1,14 @@
+digraph G {
+    rankdir  = BT
+    fontname = "Courier New"
+    fontsize = 8
+
+    node [
+        fontname = "Courier New"
+        fontsize = 8
+        shape    = "record"
+    ]
+
+    Animal -> Dog[arrowhead = "empty"]
+
+}

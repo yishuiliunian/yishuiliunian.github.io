@@ -1,0 +1,75 @@
+digraph tableelement {
+   rankdir  = BT
+   fontname = "Courier New"
+   fontsize = 8
+   node [
+      fontname = "Courier New" 
+      fontsize = 8
+      shape = "record"
+   ]
+   edge [
+      fontname = "Courier New"
+      fontsize = 8
+   ]
+   EKAdjustTableElement [
+     label = "{EKAdjustTableElement}"
+     fillcolor = "gray80"
+     style = "filled"
+   ]
+
+
+   EKTableViewController [
+     label = "{EKTableViewController}"
+     fillcolor = "gray80"
+     style = "filled"
+   ]
+
+   EKAdjustCellElement [
+     label = "{EKAdjustCellElement}"
+     fillcolor = "gray80"
+     style = "filled"
+   ]
+
+   EKAdjustTableViewCell [
+     label = "{EKAdjustTableViewCell}"
+     fillcolor = "gray80"
+     style = "filled"
+   ]
+   edge [
+      arrowhead = "empty"
+   ]
+
+   YHInfoTableElement [
+     label = "{YHInfoTableElement}"
+   ]
+
+   YHToastCellElement [
+     label = "{YHToastCellElement}"
+   ]
+
+   YHToastCell [
+     label = "{YHToastCell}" 
+   ]
+
+   YHInfoMessageCellElement [
+     label = "{YHInfoMessageCellElement}"
+   ]
+
+   YHInfoMessageCell [
+     label = "{YHInfoMessageCell}"
+   ]
+
+   EKTableViewController -> YHInfoTableElement[arrowhead="normal"]
+   YHInfoTableElement -> EKAdjustTableElement[arrowhead="empty"]
+   YHToastCellElement -> EKAdjustCellElement[arrowhead = "empty"]
+   YHInfoMessageCell-> EKAdjustTableViewCell[arrowhead="empty"]
+   YHToastCell-> EKAdjustTableViewCell[arrowhead="empty"]
+   YHInfoMessageCellElement-> EKAdjustCellElement[arrowhead = "empty"]
+   
+
+   YHInfoMessageCellElement -> YHInfoTableElement[arrowhead=ediamond]
+   YHToastCellElement -> YHInfoTableElement[arrowhead=ediamond]
+
+   YHInfoMessageCell-> YHInfoMessageCellElement [arrowhead="normal", style=dashed]
+   YHToastCell -> YHToastCellElement [arrowhead="normal", style=dashed]
+}
