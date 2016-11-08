@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/11/08/dzurlrouter.html"><span class="pl__circle"></span><span class="pl__title">DZURLRouter</span><span class="pl__date">Nov 2016</span></a>
+    
       <a class="开源组件 pl__all" href="/2016/08/18/mrlogicinjection.html"><span class="pl__circle"></span><span class="pl__title">MRLogicInjection</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
@@ -100,7 +102,7 @@
     
       <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/instruments_symbols_problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
     
@@ -138,7 +140,7 @@
     
       <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/swift_compare_oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
     
@@ -154,7 +156,7 @@
     
       <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
     
-      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
     
       <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
     
@@ -184,11 +186,11 @@
 
 <p>在开篇我很明白的告诉读者，最后不会得出一个类似于f(x)=kx的公式来，不会有20行ARC对应1KB的结论。因为在以下阐述的ARC对于安装包体积的影响中，有很多因素是非线性且不可量化的。在手Q或者任何一个软件，这样一个复杂性系统中，很多原始的简单的基于线性可量化的理论已经显得捉襟见肘。我们应当无奈的而且坦诚的承认，在很多复杂性系统中，或者根本就没有微观规律可言。</p>
 
-<h2 id="section">直接影响，直接作用于安装包体积</h2>
+<p>##直接影响，直接作用于安装包体积</p>
 
 <p>所谓直接影响就是代码是否使用ARC和安装包内二进制可执行文件间的具有直接关系（前提是代码行数与二进制文件大小存在直接关系）。首先我们先假定，上述结论成立。我们再来分析。</p>
 
-<h3 id="arcmrc">ARC与MRC之间指令差异</h3>
+<p>###ARC与MRC之间指令差异</p>
 
 <p>参考Clang 3.5 documentation OBJECTIVE-C AUTOMATIC REFERENCE COUNTING (ARC)。我们了解到，Clang实现ARC的主要方式就是将内存管理转变成对象关系处理，并通过在runtime中增加了一些列的函数来支持这些关系处理：</p>
 
@@ -322,9 +324,9 @@ pl.legend()
 pl.show()
 </code></pre>
 
-<h3 id="section-1">拟合结果：</h3>
+<p>###拟合结果：</p>
 
-<h4 id="arc">ARC</h4>
+<p>####ARC</p>
 
 <p><img src="http://ww3.sinaimg.cn/large/7df22103jw1exx9bd2n76j20fk0bomxq.jpg" alt="" /></p>
 
@@ -332,7 +334,7 @@ pl.show()
 
 <p><img src="http://ww4.sinaimg.cn/large/7df22103jw1exx9bupyuvj20ev02qjrw.jpg" alt="" /></p>
 
-<h4 id="mrc">MRC</h4>
+<p>####MRC</p>
 
 <p><img src="http://ww4.sinaimg.cn/large/7df22103jw1exx9ciiwjtj20fk0bo3zc.jpg" alt="" /></p>
 
@@ -349,7 +351,7 @@ pl.show()
 
 <p>在方差如此之大的情况下，均值的意义就非常小了。</p>
 
-<h2 id="section-2">间接影响，通过影响程序员来影响安装包体积的大小</h2>
+<p>##间接影响，通过影响程序员来影响安装包体积的大小</p>
 
 <p>通过上面的讨论，我们已经初步得出结论，ARC对于安装包体积的影响绝不是一个简单的线性关系。在手Q这样一个复杂系统当中，ARC甚至是代码行数，对于安装包体积的影响绝对不是简单粗暴的，不是可以使用一个函数表达式就能说明的。</p>
 
@@ -367,7 +369,7 @@ pl.show()
 
 <p>同时，在上述的论述中，我们还没有牵扯到，文件之间的引用，函数之间的调用，类之间的交互等更复杂的关系。将之考量进去之后，ARC与安装包体积之间的关系将会更加错综复杂不可度量。</p>
 
-<h2 id="section-3">结论</h2>
+<p>##结论</p>
 
 <p>通过上述，直接影响的定量分析手段和间接影响的定性分析的手段，我们初步得出了代码行数与安装包体积大小不存在线性关系。ARC对于安装包体积的影响也不是线性关系。代码行数、ARC、MRC以一种复杂且不可度量的方式影响着安装包体积大小。我们只能说有一个宏观趋势：代码增多，安装包体积增大。但是是如何影响安装包体积增大了，这个真的说不清楚了。太复杂了。已不是20arc-&gt;1kb这样简单。</p>
 

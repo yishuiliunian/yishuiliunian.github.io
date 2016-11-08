@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/11/08/dzurlrouter.html"><span class="pl__circle"></span><span class="pl__title">DZURLRouter</span><span class="pl__date">Nov 2016</span></a>
+    
       <a class="开源组件 pl__all" href="/2016/08/18/mrlogicinjection.html"><span class="pl__circle"></span><span class="pl__title">MRLogicInjection</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
@@ -100,7 +102,7 @@
     
       <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/instruments_symbols_problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
     
@@ -138,7 +140,7 @@
     
       <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/swift_compare_oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
     
@@ -154,7 +156,7 @@
     
       <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
     
-      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
     
       <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
     
@@ -172,11 +174,11 @@
       <div id="pjax">
         <article id="post__content">
   <h1 id="post__title" data-identifier="20151128">如何进行技术方案优化</h1>
-  <h1 id="section">如何进行技术方案优化</h1>
+  <p>#如何进行技术方案优化</p>
 
 <p>首先这是一个很宏大的题目，我也只能窥其一斑。只说说自己的一些浅见和反思。因为之前有一段时间，在面对说要技术方案优化的时候，自己也有过一段不知所措的时期。后来才开始慢慢觉得自己找到点门道了，这片文章也算是自己的一个总结吧。</p>
 
-<h2 id="section-1">什么是优化</h2>
+<p>##什么是优化</p>
 
 <p>首先我们先破题，来谈谈“优化”这个事情。通常情况下，我们说到优化的时候，往往会伴随着对之前系统的吐槽。或是不好用，或是性能低，或是用起来很麻烦。巴拉巴拉。是的，当我们对原先的系统有槽点的时候，我们会谈到“优化”。而“优化”的前提也是，之前已经有过一个东西存在，而且真对目前的场景应景不再适合。这个是有需要对原有系统进行调整，以满足当前的场景与需求。那么所谓优化即是：对原有系统进行有目的的改造。</p>
 
@@ -211,7 +213,7 @@
 
 <p>好了这是一个优化的例子：始于发现问题，止于目标达成。而重要的是其过程，描述问题！！！！</p>
 
-<h2 id="or">分析问题 (定性or定量)</h2>
+<p>##分析问题 (定性or定量)</p>
 
 <p>其实，我一直比较坚信一句话：当你能够准确的描述一个问题的时候，你到解决问题就没剩几步了。比如刚才说的卡顿的问题，我们当时是这么描述的：图片读取发生了主线程，主线程中有一部分CPU片段用于文件读取和图片解码，造成主线程阻塞，从而导致帧率下降。当描述到这里的时候，解决方案就比较显而易见了，挪呗。搞到其他线程中之行。把主线程空出来。</p>
 
@@ -226,19 +228,19 @@
   <li>或许你的编程功底很深，或许很浅，或许你尝试分析而没有结果。那么可以使用改改代码试试的方法了。我们称之为：实验法。</li>
 </ol>
 
-<h3 id="section-2">逻辑分析法， 原理性分析</h3>
+<p>###逻辑分析法， 原理性分析</p>
 
 <p>哈哈，套用马哲的一句话：事物是普遍联系的。既然是普遍联系的，不说必然存在因果，那么通过一定的逻辑分析。是可以找到他们之间的一些蛛丝马迹的关联的。这些关联或许可以解释一些什么。比如刚才卡顿的问题：原理就是主线程CPU被消耗过多，无法及时处理UI任务导致的。这只是一个例子。</p>
 
 <p>我们进行逻辑分析的目的，是为了找到我们的某些代码和问题之间的<strong>因果性</strong>联系。就是说，我们能够明确知道造成UI卡顿的问题，就是因为IO的问题之类。这个话题说起来，比较深邃了。其中绝大部分实践的方法可以从《数理逻辑》这本书中找到。不过这是本讲数学的书，咱们得稍微换下脑子，把其中的定理，在编程中应用一下。因为我也只是意会了其中的某些东西，讲出来还没有那么功底。就只能麻烦各位自己去琢磨了。：）</p>
 
-<h3 id="assume-action-response-test-assume">实验法,Assume-Action-Response-Test-Assume</h3>
+<p>###实验法,Assume-Action-Response-Test-Assume</p>
 
 <p>我称这个过称为<strong>AARTA</strong>。这是一个一直往复的过程，在分析的过程中，你得一次次的重复这个过程来找到真正问题的所在。其实，这个方法比较常应用在改BUG这个场景上。其实如果从广义上讲，按照上面咱们对技术优化的定义，改bug也算是一种优化。只不过这个场景比价特殊而已。当无法准确的分析原理，或者当前程序的复杂性过高（低内聚高耦合）已经超出人脑的计算能力范围的时候，那么就可以“猜”了。</p>
 
 <p><img src="http://ww2.sinaimg.cn/large/7df22103jw1eyhrrytgv2j209408g3yn.jpg" alt="" /></p>
 
-<h4 id="assume">（1）假设 assume</h4>
+<p>####（1）假设 assume</p>
 
 <p>根据以往的经验来，设定一个和问题域相关的假设。比如UI卡顿的问题，你怀疑是不是因为图片的问题呢。那么现在就假设是图片的问题！</p>
 
@@ -254,13 +256,13 @@
 
 <p>根据，程序的反馈和我们预先设定的目标来判断一下，当前改动是否满足了我们设计的目标。如果有，那么你大概就找到了问题的一个原因。如果没有那么进行下一步。</p>
 
-<h4 id="assume-1">（5） 重新提出假设 Assume</h4>
+<h4 id="assume">（5） 重新提出假设 Assume</h4>
 
 <p>既然不是图片的问题，那么会不会是其他事情上耗费了CPU呢。比如布局样式的计算。那么重新假设是局部样式的问题。在执行（2）过程。</p>
 
 <p>所谓实验，即是大胆假设，小心取证，如此往复，以求终解。</p>
 
-<h2 id="section-3">监控</h2>
+<p>##监控</p>
 
 <p>上面只是进行了一些方法论的探讨。但是有一件事情，是若要优化一定要做的。那就是“监控”。</p>
 
@@ -274,7 +276,7 @@
 
 <p>而且，监控也是优化的数据来源。他能够通过数据的指标来非常直观的告诉你，程序哪里有问题，你优化之后，效果是怎样的。现在网上有很多这方面的服务提供出来，比如bugly之类的，甚至有些是APM（application performance manager)，直接监控到程序的运行状态和性能。google一下，能搜出不少来。可以酌情，应用在自己开发的app中。</p>
 
-<h2 id="section-4">总结</h2>
+<p>##总结</p>
 
 <p>说了半天，总结一下。优化是在可控的范围内有目的性的对现有程序的修改。一般可以使用逻辑分析法和实验法来定位、分析、描述问题。或者定性或者定量。无论哪种，要想优化，你得先建立起对自己app运行的监控体系。</p>
 

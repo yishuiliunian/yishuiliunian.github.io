@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/11/08/dzurlrouter.html"><span class="pl__circle"></span><span class="pl__title">DZURLRouter</span><span class="pl__date">Nov 2016</span></a>
+    
       <a class="开源组件 pl__all" href="/2016/08/18/mrlogicinjection.html"><span class="pl__circle"></span><span class="pl__title">MRLogicInjection</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
@@ -100,7 +102,7 @@
     
       <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/instruments_symbols_problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
     
@@ -138,7 +140,7 @@
     
       <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/swift_compare_oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
     
@@ -154,7 +156,7 @@
     
       <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
     
-      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
     
       <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
     
@@ -172,13 +174,13 @@
       <div id="pjax">
         <article id="post__content">
   <h1 id="post__title" data-identifier="20151111">iOS设计模式反思之单例模式的进化</h1>
-  <h1 id="section">单例模式</h1>
+  <p>#单例模式</p>
 
 <p>什么是单例模式？ 单例模式想一个大独裁者，他规定在他的国度里面，所有数据的访问和请求都得经过他，甚至你要调用相关的函数也得经过它。学术一点就是，单例模式，为某一类需求和数据提供了统一的程序接口。主要的实现技术就是，确保全局只有一个对象的实例存在。举个例子把，比如NSNotificationCenter 中的 defaultCenter 负责全局的消息分发、NSFileManager 的 defaultManager 统一负责物理文件的管理、NSUserDefaults 的 standardUserDefaults 统一管理用户的配置文件……不一而足。在整个iOS框架中，可以说是大规模使用了单例模式。</p>
 
-<h2 id="section-1">单例模式的原理及实现</h2>
+<p>##单例模式的原理及实现</p>
 
-<h3 id="arc">在非ARC情况下实现一个单例</h3>
+<p>###在非ARC情况下实现一个单例</p>
 
 <pre><code>@implementation DZSinglonNoARC
 + (DZSinglonNoARC*) shareInstance
@@ -257,7 +259,7 @@
 
 <p>然后是重载了一些列的函数，重载这些函数的目的，就是修改原有的NSOjbect的内存操作相关的函数，保持内存中有且只有一个该类的对象。</p>
 
-<h3 id="arc-1">arc下的实现</h3>
+<p>###arc下的实现</p>
 
 <p>我们先看一个例子</p>
 
@@ -279,7 +281,7 @@
 </code></pre>
 <p>通过上面的代码我们能够看出其实在ARC下单例的实现方式与非ARC下大同小异，只不过是没有重载内存管理的函数而已。而这也得益于ARC这种技术。</p>
 
-<h2 id="section-2">单例工厂</h2>
+<p>##单例工厂</p>
 
 <p>在实际的编程工作中，随着项目规模的不断扩大，我们往往发现在整个项目中存在着大量的单例。于是我们就会遇到一个问题如何去管理这些单例。 同时，也会遇到每一次都要按照上面的实现方式从头来一遍来实现一个单例，从编程效率上看难免有些低下，毕竟很多代码都是相同的。使用设计模式的目标之一就是合理的干掉重复的代码。那么有没有一个好的方式来管理这些单例呢，我们很自然的想到了工厂模式。</p>
 
@@ -421,7 +423,7 @@ extern "C" {
 </code></pre>
 <p>当然这中使用方式，看起来不太像是严格意义上的单例模式，但是他却完成单例模式最根本的意图，把接口和功能统一。</p>
 
-<h2 id="section-3">模块管理系统</h2>
+<p>##模块管理系统</p>
 
 <p>还记得文章的标题吗？单例模式的进化，那么这里单例模式要进化到什么地步呢？在实际的编码过程中，随着工程规模的不断扩大，我们可能会在我们的项目中大规模的时候单例模式。就像是世界中，有了N多个独裁者，协调这些独裁者，对任何一个系统来说都是困难的。这个时候，就会遇到一个问题：如何有效的管理数量较多的单例。虽然我们使用单例工厂的方式，解决了单例统一构建的问题，但是没有能够解决统一管理的问题。这里统一管理的问题包括：</p>
 

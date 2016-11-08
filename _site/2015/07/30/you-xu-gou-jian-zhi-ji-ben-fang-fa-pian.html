@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/11/08/dzurlrouter.html"><span class="pl__circle"></span><span class="pl__title">DZURLRouter</span><span class="pl__date">Nov 2016</span></a>
+    
       <a class="开源组件 pl__all" href="/2016/08/18/mrlogicinjection.html"><span class="pl__circle"></span><span class="pl__title">MRLogicInjection</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
@@ -100,7 +102,7 @@
     
       <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/instruments_symbols_problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
     
@@ -138,7 +140,7 @@
     
       <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/swift_compare_oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
     
@@ -154,7 +156,7 @@
     
       <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
     
-      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
     
       <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
     
@@ -178,8 +180,8 @@
 
 <p>同时，建议看一下<a href="http://km.oa.com/group/22128/articles/show/185307">关于程序设计和思维的思考</a>。</p>
 
-<h2 id="section">自顶向下分析，自下而上构建</h2>
-<p>我们先回顾一个小学六年级的算术题目：计算阴影面积</p>
+<p>##自顶向下分析，自下而上构建
+我们先回顾一个小学六年级的算术题目：计算阴影面积</p>
 
 <p><img src="http://ww2.sinaimg.cn/large/7df22103jw1eukszuei6dj203803s3yg.jpg" alt="" /></p>
 
@@ -203,13 +205,13 @@
 
 <p>首先有了物理层，才能在其之上去构建数据链路层。这才是我们真实的构建顺序，现有基础，才能构建上层功能。现有地基才能往上添砖加瓦（BDD和TDD的顺序可能有些时候是不是如此，比如TDD先写测试用例，而后去实现功能，其实，在我看来这是把一部分分析工作移到了构建过程中）。既然构建的方向和我们思考的方向，恰恰相仿。那么构建必然会有其独特的地方和方法。</p>
 
-<h3 id="section-1">架构</h3>
-<p>架为设计，构为构建。我们是否可以尝试放弃一些控制，不在从一个高大的“架构”层面思考问题，而是从最基础的代码和构建开始，通过遵循一些简单而可重复的规则，让我们写的每一个函数每一个类都“简单可依赖”，通过明确我们所使用的规则，在软件的不断迭代中，构建出高度复杂同时也同样高度可维护性的代码。</p>
+<p>###架构
+架为设计，构为构建。我们是否可以尝试放弃一些控制，不在从一个高大的“架构”层面思考问题，而是从最基础的代码和构建开始，通过遵循一些简单而可重复的规则，让我们写的每一个函数每一个类都“简单可依赖”，通过明确我们所使用的规则，在软件的不断迭代中，构建出高度复杂同时也同样高度可维护性的代码。</p>
 
 <p>从架构的层次思考问题，很多时候我们很难去解决需求变更，产品变化等等问题。只能说“这个架构在最近几个版本之内能够支撑业务增长”。因为我们试图去创造一个可以控制一切的东西，将未来那些不可预期的变化都预知到。而这正是问题所在，那些不可预期的变化，既然你不知道，那么又怎么能够创造出能够提前解决他们的方案呢？那么换个角度，我们不试图去占卜未来的变化，而只是把当下的代码做的能够适应变化，那么即使未来发生变化，我们的代码不是也能够有效的处理问题吗？</p>
 
-<h2 id="section-2">逻辑与抽象</h2>
-<p>从开始干coding monkey开始就一直听各种人说：数学基础对于编程能力很重要。但是，为什么？</p>
+<p>##逻辑与抽象
+从开始干coding monkey开始就一直听各种人说：数学基础对于编程能力很重要。但是，为什么？</p>
 
 <blockquote>
   <p>数学（Mathematics）是利用符号语言研究数量、结构、变化以及空间等概念的一门学科，从某种角度看属于形式科学的一种。数学透过抽象化和逻辑推理的使用，由计数、计算、量度和对物体形状及运动的观察而产生。数学家们拓展这些概念，为了公式化新的猜想以及从选定的公理及定义中建立起严谨推导出的定理。
@@ -220,9 +222,9 @@
 
 <p>数学之于编程在于能力的培养而非具体方法的指导。而其中的两种能力最为关键：逻辑与抽象。</p>
 
-<h2 id="section-3">逻辑：真与假 (二分)</h2>
+<p>##逻辑：真与假 (二分)</p>
 
-<h3 id="section-4">从基础开始</h3>
+<p>###从基础开始</p>
 <blockquote>
   <p>易有太极，是生两仪，两仪生四象，四象生八卦
 ——《易传》</p>
@@ -236,25 +238,25 @@
 
 <p>而真值判断做为基本的规则，将会贯穿在整个程序设计的各个层次当中。从有序构建的解读来讲，最基础的一个规则就是“真与假”的逻辑。</p>
 
-<h3 id="section-5">分而治之</h3>
-<p>其实很多时候，我们面对的问题并没有我们想想的那么复杂和难以解决。只不过是我们自己把问题想复杂了，导致自己很长时间解决不了问题。那些庞大的问题，往往可以细分成小问题。而当问题规模相对较小的时候，解决起来也相对简单。当小问题解决之后，我们再拿着解决掉的小问题，去解决原来的大问题。那么看似庞大的问题，则可以迎刃而解。而这个过程中，往往但从解决问题的层面去考虑的话，单纯解决小问题的思路和单纯解决大问题的思路在很多地方是类似的。</p>
+<p>###分而治之
+其实很多时候，我们面对的问题并没有我们想想的那么复杂和难以解决。只不过是我们自己把问题想复杂了，导致自己很长时间解决不了问题。那些庞大的问题，往往可以细分成小问题。而当问题规模相对较小的时候，解决起来也相对简单。当小问题解决之后，我们再拿着解决掉的小问题，去解决原来的大问题。那么看似庞大的问题，则可以迎刃而解。而这个过程中，往往但从解决问题的层面去考虑的话，单纯解决小问题的思路和单纯解决大问题的思路在很多地方是类似的。</p>
 
-<h3 id="section-6">通过抽象，制造基础素材</h3>
+<p>###通过抽象，制造基础素材</p>
 
-<h3 id="section-7">简单可依赖</h3>
-<p>我们先尝试解决一个问题，就是传统项目型工程和现在的产品型工程的最大区别在什么地方？我想应该是“愿景是否清晰”。往往项目型的工程，能够有足够的时间进行需求分析，概念设计，详细设计和架构设计等等，而且他们有明确的“愿景”，工程的规模大概多大，需求方都有哪些要求（虽然也会有变更，但大体已定）。而对于产品型的项目呢？则不尽相同，往往只有一个版本或者几个版本内的需求规划，很少能有人能够预知整个工程在遥远的未来将会演变成的样子，所以将会面对无穷无尽的需求变更，而且往往每个版本的时间都很紧张，没有足够的时间按照传统项目的方法去做需求分析和架构设计。既然，项目型工程和产品型工程存在这些差异。那么，是否项目型工程在构建的过程中需要一些特别的方法？</p>
+<p>###简单可依赖
+我们先尝试解决一个问题，就是传统项目型工程和现在的产品型工程的最大区别在什么地方？我想应该是“愿景是否清晰”。往往项目型的工程，能够有足够的时间进行需求分析，概念设计，详细设计和架构设计等等，而且他们有明确的“愿景”，工程的规模大概多大，需求方都有哪些要求（虽然也会有变更，但大体已定）。而对于产品型的项目呢？则不尽相同，往往只有一个版本或者几个版本内的需求规划，很少能有人能够预知整个工程在遥远的未来将会演变成的样子，所以将会面对无穷无尽的需求变更，而且往往每个版本的时间都很紧张，没有足够的时间按照传统项目的方法去做需求分析和架构设计。既然，项目型工程和产品型工程存在这些差异。那么，是否项目型工程在构建的过程中需要一些特别的方法？</p>
 
 <p>我们很喜欢用建筑类比于软件工程。那么我们先从一个问题开始：谁建造了城市？
 <img src="http://ww4.sinaimg.cn/large/7df22103jw1eukt21tnanj20hy0bcta0.jpg" alt="" /></p>
 
 <p>建筑工程中有两种非常鲜明的角色，一个是建筑师，一个是搬砖的普通工人。如果问这两种人谁牛逼，大概我们想都不想的说建筑师牛逼。这个完全像问架构师和码农谁牛逼一样。大家都认为架构师牛逼，因为架构师设计了整个工程的蓝图。而码农只不过是一群找着蓝图施工的人罢了。对于传统的项目型工程可能的确是这个样子，但是对于产品型的工程就不见得了，我们很少能见到一些牛逼的结构式，反而是见到了很多牛逼的码农。他们往往是在没有明确的架构指导下，构建出了一个个大型的产品。拿我做手Q的经验来看，我几乎没有见到过一个完整的手Q框架图，见到最多的是对于某些问题的具体分析和解决方案。有人为了解决网络通信的问题做了MSF，有人为了解决结构化数据存储的问题封装了SQLIte存储，有人为了解决JS调用繁多的问题做了WebView的插件机制………</p>
 
-<h3 id="section-8">函数式编程</h3>
+<p>###函数式编程</p>
 
-<h3 id="section-9">红点系统，由类型向配置过度</h3>
+<p>###红点系统，由类型向配置过度</p>
 
-<h2 id="section-10">抽象：变与不变</h2>
-<p>如果说用一句话来总结抽象的作用，我想这句话应该是：封装变化。把抽象用到最好的一种编程范式应该是OOP（面向对象编程范式）了吧。在OOP的设计思想体系中有一个根基是六大基本原则：</p>
+<p>##抽象：变与不变
+如果说用一句话来总结抽象的作用，我想这句话应该是：封装变化。把抽象用到最好的一种编程范式应该是OOP（面向对象编程范式）了吧。在OOP的设计思想体系中有一个根基是六大基本原则：</p>
 
 <ol>
   <li>单一职责原则<br />
@@ -309,10 +311,10 @@
 
 <p>功能是构建的副作用，而我们在构建整个程序的时候，注重的往往是这些“副作用”。</p>
 
-<h2 id="section-11">工具</h2>
+<p>##工具</p>
 
-<h3 id="pin">PIN箱</h3>
-<p>用于概念收拢
+<p>###PIN箱
+用于概念收拢
 ###Cocoapods
 IOS中的lib管理工具</p>
 

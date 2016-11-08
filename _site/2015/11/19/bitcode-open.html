@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/11/08/dzurlrouter.html"><span class="pl__circle"></span><span class="pl__title">DZURLRouter</span><span class="pl__date">Nov 2016</span></a>
+    
       <a class="开源组件 pl__all" href="/2016/08/18/mrlogicinjection.html"><span class="pl__circle"></span><span class="pl__title">MRLogicInjection</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
@@ -100,7 +102,7 @@
     
       <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/instruments_symbols_problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
     
@@ -138,7 +140,7 @@
     
       <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/swift_compare_oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
     
@@ -154,7 +156,7 @@
     
       <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
     
-      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
     
       <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
     
@@ -174,7 +176,7 @@
   <h1 id="post__title" data-identifier="20151119">Bitcode适配指南</h1>
   <p>随着XCode7的发布，Apple提供了一项新的技术来支持App瘦身功能，那就是Bitcode。本文章将会结合自己在支持bitcode过程中遇到的问题，来阐述支持bitcode的过程。</p>
 
-<h2 id="bitcode">BitCode是什么</h2>
+<p>##BitCode是什么</p>
 
 <pre><code>Bitcode is an intermediate representation of a compiled program. Apps you upload to iTunes Connect that contain bitcode will be compiled and linked on the store. Including bitcode will allow Apple to re-optimize your app binary in the future without the need to submit a new version of your app to the store.
 
@@ -187,7 +189,7 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 <p><img src="http://ww2.sinaimg.cn/large/7df22103jw1ey79g6evsij20kb08rmxg.jpg" alt="" /></p>
 
-<h3 id="section">一点编译原理</h3>
+<p>###一点编译原理</p>
 
 <p>为了更好的理解什么是bitcode，我们简短的看一下编译器编译的过程：</p>
 
@@ -210,7 +212,7 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 <p>在前后端之间传递的就是IR（中间码），而bitcode就是一种特殊形式的中间码。原本前后端的工作都是在本地LLVM中完成，虽然Apple没有给出具体的Bitcode实现，但是通过他们的文档可以猜测，是将一部分后端的工作移到了服务器进行。从Xcode上传IR到服务器，服务器来真对不同的机型进行后续操作。从而达到真对不同机型生成对应指令集的二进制，而减小报体积的目的。</p>
 
-<h2 id="bitcode-1">打开bitcode设置</h2>
+<p>##打开bitcode设置</p>
 
 <p>实际上在Xcode 7中，我们新建一个iOS程序时，bitcode选项默认是设置为YES的。我们可以在”Build Settings”-&gt;”Enable Bitcode”选项中看到这个设置。</p>
 
@@ -228,7 +230,7 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 <p>但是如果其中包含第三方库，不支持bitcode时候。需要将”Enable BitCode”设置成NO。而且这个选项是，只要有一个第三方库不支持，就不能开的。否则连接错误。</p>
 
-<h2 id="fembed-bitcode-fembed-bitcode-maker">确保打包的时候使用的是<code>fembed-bitcode</code>, 而不是<code>fembed-bitcode-maker</code></h2>
+<p>##确保打包的时候使用的是<code>fembed-bitcode</code>, 而不是<code>fembed-bitcode-maker</code></p>
 
 <blockquote>
   <p>You should be aware that a normal build with the -fembed-bitcode-marker option will produce minimal size embedded bitcode sections without any real content. This is done as a way of testing the bitcode-related aspects of your build without slowing down the build process. The actual bitcode content is included when you do an Archive build.</p>
@@ -243,11 +245,11 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 <p>如果您开发的是app那么走正常的打包archive流程就好了。如果你正在开发.a静态库或者framework，请注意打包方式设置为archive,或者在打包脚本中加入-fembed-bitcode参数。如果需要的话，需要在Build Settings中打开 DEPLOYMENT_POSTPROCESSING=YES，设置Strip Style为debugging。</p>
 
-<h2 id="bitcode-2">检测是否打开Bitcode</h2>
+<p>##检测是否打开Bitcode</p>
 
 <p>当打开bitcdoe选项之后，我们可以使用otool工具来检查二进制文件中是否包含bitcode段。</p>
 
-<h3 id="a">针对于静态链接库.a文件</h3>
+<p>###针对于静态链接库.a文件</p>
 
 <pre><code>otool -arch armv7 -l xxxx.a | grep __bitcode | wc -l
 </code></pre>
@@ -260,7 +262,7 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 <p>上述命令只检查了armv7架构，同时，也必须使用改指令检查其他的指令集是否包含bitcode如：arm64，armv7s等等</p>
 
-<h3 id="appframeworkbitcode">检查app或者framework中是否包含bitcode</h3>
+<p>###检查app或者framework中是否包含bitcode</p>
 
 <p>由于app中二进制和framework中二进制文件与.a文件存在差异，因为需要检查的是__LLVM段，当出现该段的时候，则表示支持bitcdoe，否则不支持。</p>
 
@@ -276,34 +278,34 @@ Xcode hides symbols generated during build time by default, so they are not read
   <p>BUT, 上述检查过了之后，也不一定是真的支持bitcode，在实际的测试中，发现上述检测命令通过之后，某个使用的第三方库，依然报错不支持bitcode。因而最终结果，还是需要以是否能够连接成功为准。重要事情说三遍，上述网上流传的检测方法只做参考，最终还是要以实际效果为准。</p>
 </blockquote>
 
-<h3 id="section-1">最终结果检查</h3>
+<p>###最终结果检查</p>
 
 <p>如果您是一个APP，可以直接进行Archive打包，如果是一个库，则建议建一个Demo工程进行打包，记得要打开bitcode设置。</p>
 
-<h4 id="checkpoint1--">CheckPoint1  连接是否报错</h4>
+<p>####CheckPoint1  连接是否报错</p>
 
 <p>如果有任何一个库没有打开bitcode链接，将会出现类似下方的错误。只要链接过了，那么恭喜了，基本上是OK了。
 <img src="http://ww4.sinaimg.cn/large/7df22103jw1eyc7gbmexbj21fy04o7as.jpg" alt="" /></p>
 
-<h4 id="checkpoint2-">CheckPoint2 检查最终效果</h4>
+<p>####CheckPoint2 检查最终效果</p>
 
-<h5 id="ipa">使用开发模式导出ipa</h5>
+<p>#####使用开发模式导出ipa</p>
 
 <p><img src="http://ww3.sinaimg.cn/large/7df22103jw1eyc7nexdfbj206t07qmxo.jpg" alt="" /></p>
 
 <p><img src="http://ww1.sinaimg.cn/large/7df22103jw1eyc7o22jrtj20g409qmyv.jpg" alt="" /></p>
 
-<h5 id="section-2">选择出包的方式</h5>
+<p>#####选择出包的方式</p>
 
 <p>这里建议使用第二种，生成真对具体机型的包</p>
 
 <p><img src="http://ww2.sinaimg.cn/large/7df22103jw1eyc7occxdqj20g409q408.jpg" alt="" /></p>
 
-<h5 id="compiling-bitcode">出现了，Compiling Bitcode，这个过程！！！！！</h5>
+<p>#####出现了，Compiling Bitcode，这个过程！！！！！</p>
 
 <p><img src="http://ww4.sinaimg.cn/large/7df22103jw1eyc7pqgxolj20g409q3ys.jpg" alt="" /></p>
 
-<h5 id="section-3">最终结果</h5>
+<p>#####最终结果</p>
 
 <p>在最后输出的文件中，你能够看到一个App Thinning的结果，里面有针对各个机型的ipa包。</p>
 

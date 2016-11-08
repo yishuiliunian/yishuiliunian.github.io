@@ -13,7 +13,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 <!--[if lte IE 9]><meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
 
-<title>SWIFT与OC的比较 | 一水的技术博客</title>
+<title>DZURLRouter | 一水的技术博客</title>
 <meta name="author" content="董朝">
 
 
@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/11/08/dzurlrouter.html"><span class="pl__circle"></span><span class="pl__title">DZURLRouter</span><span class="pl__date">Nov 2016</span></a>
+    
       <a class="开源组件 pl__all" href="/2016/08/18/mrlogicinjection.html"><span class="pl__circle"></span><span class="pl__title">MRLogicInjection</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
@@ -100,7 +102,7 @@
     
       <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/instruments_symbols_problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
     
@@ -138,7 +140,7 @@
     
       <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/swift_compare_oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
     
@@ -154,7 +156,7 @@
     
       <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
     
-      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
     
       <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
     
@@ -171,35 +173,183 @@
     <div id="post">
       <div id="pjax">
         <article id="post__content">
-  <h1 id="post__title" data-identifier="20151111">SWIFT与OC的比较</h1>
-  <h1 id="swiftoc">SWIFT与OC的比较</h1>
+  <h1 id="post__title" data-identifier="20161108">DZURLRouter</h1>
+  <h1 id="dzurlroutehttpwwwgithubcomyishuiliuniandzurlroute"><a href="http://www.github.com/yishuiliunian/DZURLRoute">DZURLRoute</a></h1>
 
-<p>废了半天劲，用蹩脚的英语终于把《The Swift Programming Language》看了个大概。在看过的过程中，的确发现有很多东西很惊艳。但是，做为一直使用OC多年的我来说，自然会冒出一个问题：Swift到底比OC优秀在什么地方？</p>
+<h2 id="whats-it">What’s it</h2>
+<p>DZURLRoute是支持基于标准URL进行Native页面间跳转的Objective-C实现。方便您架构页面之间高内聚低耦合的开发模式。他的核心思想是把每一个页面当成一个资源，通过标准的URL协议（统一资源定位符）来定位到每一个可触达的页面（资源）。</p>
 
-<p>还记得，当时从C和C++的世界，大跃进到OC的世界，对于”[]”的语法也是消耗不少时间才完全接受并弄懂。到了现在，接触Swift之后，回首OC，突然有种“曾经沧海难为水，除却巫山不是云”的感觉。现在的我并没有说想要抛弃OC，转向Swift的冲动，反而是我想继续使用OC。</p>
+<p>在设计该类库的时候，进行了多伦次抽象。最后突然灵光一现，应该首先设计的是页面之间的规则。而当我们把页面看成一种资源，页面之间的的调用看成资源寻址和调用的时候。很容易就想到了URL的方式。通过一个简单的规则（URL）来页面之间的关系。没有那么多复杂的机制。只是一个规则，这个东西简单而美丽。一旦有了这个规则，剩下的事情就是如果去实现这个了。而DZURLRoute只是其中的一种实现，相信其他人还会有更好的实现版本，欢迎分享。</p>
 
-<p>在使用过很多语言之后，自然就会比较每种语言之间的差异。语言的优劣这个东西，到目前为止我几乎没有找到一个标准来评判。这是个公说公有理，破说破理由的事情。有些人就是认为C++是最优秀的，并且是C++的忠实拥趸，而有些人认为python才是神器…..不一而足。去问这些人，为什么喜欢一门语言，你得到的答案无非关乎两个方面：</p>
+<h3 id="features">Features</h3>
+<h4 id="url">URL唤起任意见面</h4>
+<p>采用标准的正则表达式匹配URL，通过URL来定为每一个资源，唤起页面只需要拼装好需要跳转的URL，通过DZURLRoute进行转发就好。</p>
+
+<pre><code>[[DZURLRoute defaultRoute] routeURL:[NSURL URLWithString:@"scheme://host/path?query=xx"]];
+</code></pre>
+
+<h4 id="urlblock">采用标准的通配符进行URL匹配，并使用block的方式来处理请求。扩展性好。</h4>
+
+<p>注册匹配规则的地方接受收入标注的通配符规则，内部通过正则表达式进行匹配。方便您将一类URL统一定位到一个资源。同时，采用通配符匹配而非字符串对比也是考虑到未来的可扩展性。</p>
+
+<pre><code>@interface YHActionGroupDetailElement : UIViewController
+@end
+
+@implementation YHActionGroupDetailElement
++ (void) load
+{
+    [[DZURLRoute defaultRoute] addRoutePattern:@"scheme://host/path" handler:^BOOL(DZURLRouteRequest *request) {
+        ActionGroup* profile = [request.paramters protobuffInstanceForKey:kYHURLQueryParamterProfile kindOf:[ActionGroup class]];
+        YHActionGroupDetailElement* vcx = [[YHActionGroupDetailViewController alloc] initWithprofile:profile];
+        [request.topNavigationController pushViewController:vcx animated:YES];
+        return YES;
+    }];
+}
+</code></pre>
+
+<h5 id="block304">您可以在block中自定义行为，比如类似304跳转的行为</h5>
+
+<h4 id="section">携带页面跳转需要的上下文环境</h4>
+
+<pre><code>@interface DZURLRouteRequest : NSObject
+......
+@property (nonatomic, strong, readonly) NSArray* viewControllerStack;
+@property (nonatomic, strong, readonly) UIViewController* topViewController;
+@property (nonatomic, strong, readonly) UINavigationController* topNavigationController;
+......
+@end
+</code></pre>
+
+<p>我们加载一个页面在iOS中有两种比较标准的方式：</p>
 
 <ol>
-  <li>效率，压榨机器性能的能力怎么样</li>
-  <li>表现能力，用起来是不是顺手，能不能高效的表达自己的设计思想。</li>
+  <li>UINavigationController push</li>
+  <li>UIViewController present</li>
 </ol>
 
-<p>效率这个事情，从语言的层面比较难衡量。因为，很多时候效率更多来自于一些和具体语言无关的东西，比如算法了，数据结构和设计模式了等等，甚至是编程人员的质量。虽然官方给出的数据说Swift比OC快1.3倍，但是没有说怎么去衡量的。于是有些人就用Swift来写算法题目，测速度。开发者Keith的<a href="http://www.techbrood.com/news/%E7%A7%BB%E5%8A%A8/swift%E3%80%81objective-c%E8%AF%AD%E8%A8%80%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95.html">测试结果</a>却是另外的一个结论：OC比Swift要快不好。所以，到底效率的比较上面就有点不靠谱了。因为你说不准到底谁更快。</p>
+<p>这两种方式都需要从唤起页面的地方开始调用，这也是之前页面之间耦合性很高的原因。在调用的地方需要知道被调用页面的类和初始化方法，才能正确的创建和初始化被调用方的变量。在DZURLRoute中，通过维护全局的可展示的UI栈。可以把整个用户界面显示中的UIViewController的上下文情况得到。并通过DZURLRequest传递给处理函数。在处理函数内部可以直接通过该上下文来唤起当前界面。推荐在+load方法中注册当前类的通配符规则，这样可以保持较好的封闭性（该类的处理，在该类内部完成）。例如在上个特性中展示的代码。</p>
 
-<p>所以我们就主要从表现能力层面上来比较Swift和OC。</p>
+<p>这个能够实现携带UI堆栈上下文还要得力于另外一个库<a href="">DZUIViewControllerLifeCircleAction</a>，提供了对于UIViewController进行AOP编程的基础。</p>
 
-<p>编程语言的主要思想大概经历了这么几个迭代：</p>
+<h4 id="urlurl">支持<a href="标准URL协议链接">标准的URL协议</a></h4>
 
-<ol>
-  <li>助记符时代，简单粗暴有效</li>
-  <li>高级语言，以过程式和命令式为主的语言，比如C了之类。</li>
-  <li>面向对象时代。</li>
-</ol>
+<blockquote>
+  <p>scheme://host/path?query</p>
+</blockquote>
 
-<p>基本上程序语言设计方法论在出现了面向对象之后，就没再有一个质的改变。从Smaltalk开始，后来创造出来的大多数语言都是在面向对象上面变着法的玩，但终究没有跳出OOP这个大框架。OC如此，Swift也如此。同样是对象驱动的语言，另种语言从本质上讲，对于程序的基本模型都是对象。但是在表现能力上却有些不同。</p>
+<p>会自动解析出URL中相关的属性，同时将其他相关传递处理:</p>
 
-<p>而语言这个东西，各有各的好。而且有些语言能够表达的概念，</p>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">名称</th>
+      <th style="text-align: left">含义</th>
+      <th style="text-align: left">备注</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">originURL</td>
+      <td style="text-align: left">原始的跳转URL</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">scheme</td>
+      <td style="text-align: left">scheme</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">module</td>
+      <td style="text-align: left">URL的host</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">method</td>
+      <td style="text-align: left">URL中Path部分的第一层</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">paramters</td>
+      <td style="text-align: left">以字典形式提供的query中的Key-Value对</td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<pre><code>@interface DZURLRouteRequest : NSObject
+.......
+@property (nonatomic, strong, readonly) NSURL* originURL;
+@property (nonatomic, strong, readonly) NSString* scheme;
+@property (nonatomic, strong, readonly) NSString* module;
+@property (nonatomic, strong, readonly) NSString* method;
+@property (nonatomic, strong, readonly) NSDictionary* paramters;
+......
+
+</code></pre>
+
+<h4 id="section-1">支持降级策略</h4>
+<p>支持类似HTTP404错误的处理方式，在本地不支持某个URL处理的时候，将请求转发到统一的404处理页面。在该页面内部，用户可以自己写处理逻辑，将原始URL带到服务器后端，服务器设置降级策略将Native请求跳转到H5页面。</p>
+
+<h4 id="scheme">支持外部scheme跳转</h4>
+
+<p>因为支持标准的URL处理，如果需要处理外部的URL跳转，只要在appdelgate中进行直接调用路由转发即可:</p>
+
+<ul>
+  <li>(BOOL) application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return [[NSURLRoute defaultRoute] routeURL:url]
+}</li>
+</ul>
+
+<h4 id="abtest">ABTest等扩展需求支持</h4>
+
+<p>对于某些业务会有的在ABTest的方案，也是支持良好只需要在URL中携带相关ABTest的参数即可。在该方案设计中，每个类在自己的+load方法中注册自己的唤起方法。其中包括实例初始化，必要参数传递，还有页面跳转。因而，在注册唤起定位方位时，可以将ABTest的实验数据通过URL query传输过来，在初始化过程中传递之。并在实验中根据不同的实验条件进行实验。</p>
+
+<h2 id="example">Example</h2>
+
+<p>To run the example project, clone the repo, and run <code>pod install</code> from the Example directory first.</p>
+
+<h2 id="requirements">Requirements</h2>
+
+<pre><code>s.dependency  'DZViewControllerLifeCircleAction'
+s.dependency 'NSString-UrlEncode'
+</code></pre>
+
+<h2 id="installation">Installation</h2>
+
+<p>DZURLRoute is available through <a href="http://cocoapods.org">CocoaPods</a>. To install
+it, simply add the following line to your Podfile:</p>
+
+<pre><code class="language-ruby">pod "DZURLRoute"
+</code></pre>
+
+<h2 id="author">Author</h2>
+
+<p>yishuiliunian, yishuiliunian@gmail.com</p>
+
+<h2 id="license">License</h2>
+
+<p>DZURLRoute is available under the MIT license. See the LICENSE file for more info.</p>
+
+<p>Copyright (c) 2016 yishuiliunian <a href="mailto:yishuiliunian@gmail.com">yishuiliunian@gmail.com</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the “Software”), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
 
 
 </article> <!-- end #post__content -->
@@ -213,9 +363,9 @@
 
 
 <div id="post__share">
-  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2015/11/11/swift-compare-oc.html&text=SWIFT与OC的比较" target="_blank"></a>
+  <a id="icon-twitter" class="fontello" href="https://twitter.com/intent/tweet?url=http://dzpqzb.com/2016/11/08/dzurlrouter.html&text=DZURLRouter" target="_blank"></a>
   <a id="icon-cc" class="fontello" href="http://creativecommons.org/licenses/by-nc-sa/3.0" target="_blank"></a>
-  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2015/11/11/swift-compare-oc.html&title=SWIFT与OC的比较" target="_blank"></a>
+  <a id="icon-weibo" class="fontello" href="http://v.t.sina.com.cn/share/share.php?url=http://dzpqzb.com/2016/11/08/dzurlrouter.html&title=DZURLRouter" target="_blank"></a>
 </div> <!-- end #post__share -->
 
 <!-- <div id="disqus_thread" name="yishuiliunian">
@@ -224,7 +374,7 @@
 </div> -->
 <!-- 多说评论框 start -->
 
-<div class="ds-thread" data-thread-key=/2015/11/11/swift_compare_oc data-title=SWIFT与OC的比较 data-url="www.dzpqzb.com/2015/11/11/swift-compare-oc.html"></div>
+<div class="ds-thread" data-thread-key=/2016/11/08/dzurlrouter data-title=DZURLRouter data-url="www.dzpqzb.com/2016/11/08/dzurlrouter.html"></div>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"dzpqzb"};
     (function() {

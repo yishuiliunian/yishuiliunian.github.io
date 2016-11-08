@@ -6,6 +6,190 @@
     <description>iOS开发者，讲述一些关于OC、iOS、设计模式和架构的故事。欢迎关注微信公共账号IOS_Tips</description>
     
       <item>
+        <title>DZURLRouter</title>
+        <link>http://dzpqzb.com/2016/11/08/dzurlrouter.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2016/11/08/dzurlrouter.html</guid>
+        <pubDate>Tue, 08 Nov 2016 12:31:53 +0800</pubDate>
+        <description>&lt;h1 id=&quot;dzurlroutehttpwwwgithubcomyishuiliuniandzurlroute&quot;&gt;&lt;a href=&quot;http://www.github.com/yishuiliunian/DZURLRoute&quot;&gt;DZURLRoute&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;whats-it&quot;&gt;What’s it&lt;/h2&gt;
+&lt;p&gt;DZURLRoute是支持基于标准URL进行Native页面间跳转的Objective-C实现。方便您架构页面之间高内聚低耦合的开发模式。他的核心思想是把每一个页面当成一个资源，通过标准的URL协议（统一资源定位符）来定位到每一个可触达的页面（资源）。&lt;/p&gt;
+
+&lt;p&gt;在设计该类库的时候，进行了多伦次抽象。最后突然灵光一现，应该首先设计的是页面之间的规则。而当我们把页面看成一种资源，页面之间的的调用看成资源寻址和调用的时候。很容易就想到了URL的方式。通过一个简单的规则（URL）来页面之间的关系。没有那么多复杂的机制。只是一个规则，这个东西简单而美丽。一旦有了这个规则，剩下的事情就是如果去实现这个了。而DZURLRoute只是其中的一种实现，相信其他人还会有更好的实现版本，欢迎分享。&lt;/p&gt;
+
+&lt;h3 id=&quot;features&quot;&gt;Features&lt;/h3&gt;
+&lt;h4 id=&quot;url&quot;&gt;URL唤起任意见面&lt;/h4&gt;
+&lt;p&gt;采用标准的正则表达式匹配URL，通过URL来定为每一个资源，唤起页面只需要拼装好需要跳转的URL，通过DZURLRoute进行转发就好。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[[DZURLRoute defaultRoute] routeURL:[NSURL URLWithString:@&quot;scheme://host/path?query=xx&quot;]];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;urlblock&quot;&gt;采用标准的通配符进行URL匹配，并使用block的方式来处理请求。扩展性好。&lt;/h4&gt;
+
+&lt;p&gt;注册匹配规则的地方接受收入标注的通配符规则，内部通过正则表达式进行匹配。方便您将一类URL统一定位到一个资源。同时，采用通配符匹配而非字符串对比也是考虑到未来的可扩展性。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface YHActionGroupDetailElement : UIViewController
+@end
+
+@implementation YHActionGroupDetailElement
++ (void) load
+{
+    [[DZURLRoute defaultRoute] addRoutePattern:@&quot;scheme://host/path&quot; handler:^BOOL(DZURLRouteRequest *request) {
+        ActionGroup* profile = [request.paramters protobuffInstanceForKey:kYHURLQueryParamterProfile kindOf:[ActionGroup class]];
+        YHActionGroupDetailElement* vcx = [[YHActionGroupDetailViewController alloc] initWithprofile:profile];
+        [request.topNavigationController pushViewController:vcx animated:YES];
+        return YES;
+    }];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h5 id=&quot;block304&quot;&gt;您可以在block中自定义行为，比如类似304跳转的行为&lt;/h5&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;携带页面跳转需要的上下文环境&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface DZURLRouteRequest : NSObject
+......
+@property (nonatomic, strong, readonly) NSArray* viewControllerStack;
+@property (nonatomic, strong, readonly) UIViewController* topViewController;
+@property (nonatomic, strong, readonly) UINavigationController* topNavigationController;
+......
+@end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们加载一个页面在iOS中有两种比较标准的方式：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;UINavigationController push&lt;/li&gt;
+  &lt;li&gt;UIViewController present&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这两种方式都需要从唤起页面的地方开始调用，这也是之前页面之间耦合性很高的原因。在调用的地方需要知道被调用页面的类和初始化方法，才能正确的创建和初始化被调用方的变量。在DZURLRoute中，通过维护全局的可展示的UI栈。可以把整个用户界面显示中的UIViewController的上下文情况得到。并通过DZURLRequest传递给处理函数。在处理函数内部可以直接通过该上下文来唤起当前界面。推荐在+load方法中注册当前类的通配符规则，这样可以保持较好的封闭性（该类的处理，在该类内部完成）。例如在上个特性中展示的代码。&lt;/p&gt;
+
+&lt;p&gt;这个能够实现携带UI堆栈上下文还要得力于另外一个库&lt;a href=&quot;&quot;&gt;DZUIViewControllerLifeCircleAction&lt;/a&gt;，提供了对于UIViewController进行AOP编程的基础。&lt;/p&gt;
+
+&lt;h4 id=&quot;urlurl&quot;&gt;支持&lt;a href=&quot;标准URL协议链接&quot;&gt;标准的URL协议&lt;/a&gt;&lt;/h4&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;scheme://host/path?query&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;会自动解析出URL中相关的属性，同时将其他相关传递处理:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;名称&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;含义&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;备注&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;originURL&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;原始的跳转URL&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;scheme&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;scheme&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;module&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;URL的host&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;method&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;URL中Path部分的第一层&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;paramters&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;以字典形式提供的query中的Key-Value对&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;pre&gt;&lt;code&gt;@interface DZURLRouteRequest : NSObject
+.......
+@property (nonatomic, strong, readonly) NSURL* originURL;
+@property (nonatomic, strong, readonly) NSString* scheme;
+@property (nonatomic, strong, readonly) NSString* module;
+@property (nonatomic, strong, readonly) NSString* method;
+@property (nonatomic, strong, readonly) NSDictionary* paramters;
+......
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-1&quot;&gt;支持降级策略&lt;/h4&gt;
+&lt;p&gt;支持类似HTTP404错误的处理方式，在本地不支持某个URL处理的时候，将请求转发到统一的404处理页面。在该页面内部，用户可以自己写处理逻辑，将原始URL带到服务器后端，服务器设置降级策略将Native请求跳转到H5页面。&lt;/p&gt;
+
+&lt;h4 id=&quot;scheme&quot;&gt;支持外部scheme跳转&lt;/h4&gt;
+
+&lt;p&gt;因为支持标准的URL处理，如果需要处理外部的URL跳转，只要在appdelgate中进行直接调用路由转发即可:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;(BOOL) application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return [[NSURLRoute defaultRoute] routeURL:url]
+}&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;abtest&quot;&gt;ABTest等扩展需求支持&lt;/h4&gt;
+
+&lt;p&gt;对于某些业务会有的在ABTest的方案，也是支持良好只需要在URL中携带相关ABTest的参数即可。在该方案设计中，每个类在自己的+load方法中注册自己的唤起方法。其中包括实例初始化，必要参数传递，还有页面跳转。因而，在注册唤起定位方位时，可以将ABTest的实验数据通过URL query传输过来，在初始化过程中传递之。并在实验中根据不同的实验条件进行实验。&lt;/p&gt;
+
+&lt;h2 id=&quot;example&quot;&gt;Example&lt;/h2&gt;
+
+&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
+
+&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;s.dependency  'DZViewControllerLifeCircleAction'
+s.dependency 'NSString-UrlEncode'
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;DZURLRoute is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
+it, simply add the following line to your Podfile:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;pod &quot;DZURLRoute&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
+
+&lt;p&gt;yishuiliunian, yishuiliunian@gmail.com&lt;/p&gt;
+
+&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
+
+&lt;p&gt;DZURLRoute is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
+
+&lt;p&gt;Copyright (c) 2016 yishuiliunian &lt;a href=&quot;mailto:yishuiliunian@gmail.com&quot;&gt;yishuiliunian@gmail.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the “Software”), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:&lt;/p&gt;
+
+&lt;p&gt;The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.&lt;/p&gt;
+
+&lt;p&gt;THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.&lt;/p&gt;
+</description>
+      </item>
+    
+      <item>
         <title>MRLogicInjection</title>
         <link>http://dzpqzb.com/2016/08/18/mrlogicinjection.html</link>
         <guid isPermaLink="true">http://dzpqzb.com/2016/08/18/mrlogicinjection.html</guid>
@@ -25,9 +209,8 @@
 &lt;p&gt;MRLogicInjection is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
 it, simply add the following line to your Podfile:&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;ruby
-pod &quot;MRLogicInjection&quot;
-&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-ruby&quot;&gt;pod &quot;MRLogicInjection&quot;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&quot;section-2&quot;&gt;功能点&lt;/h2&gt;
 
@@ -270,7 +453,7 @@ FOUNDATION_EXTERN BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector);
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这里定义了两个宏~~~&lt;strong&gt;IMP_CLASS&lt;/strong&gt;~~~用于指称当前方法实现所在的类，~~~&lt;strong&gt;DZSuperResponseCMD&lt;/strong&gt;~~~用于检查父类是否实现了该方法。&lt;/p&gt;
+&lt;p&gt;这里定义了两个宏~&lt;del&gt;&lt;strong&gt;IMP_CLASS&lt;/strong&gt;&lt;/del&gt;~用于指称当前方法实现所在的类，~&lt;del&gt;&lt;strong&gt;DZSuperResponseCMD&lt;/strong&gt;&lt;/del&gt;~用于检查父类是否实现了该方法。&lt;/p&gt;
 
 &lt;p&gt;测试一下，在A类中添加测试函数test2:&lt;/p&gt;
 
@@ -388,15 +571,15 @@ FOUNDATION_EXTERN BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector);
 
 &lt;p&gt;好了下面我们就开始看看一个VC都有哪些流程需要注意的.btw，穷举所有的流程是一个费时费力的事情，所以会只摘几个比较关键的流程来描述和讲解。最重要的目的还是在于能够启发各位用流程建模这个视角来思考编程的一些问题：），偷懒了。&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;内存使用流程&lt;/h2&gt;
-&lt;p&gt;VC的实例在内存使用上面，打的流程和其他对象实例的使用类似,都要经过下述的一些过程：&lt;/p&gt;
+&lt;p&gt;##内存使用流程
+VC的实例在内存使用上面，打的流程和其他对象实例的使用类似,都要经过下述的一些过程：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;创建-&amp;gt;初始化-&amp;gt;使用-&amp;gt;销毁
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;后面的阐述也是类似，我们先说流程。然后再具体到函数的使用。因为我们在使用一个库或者框架的时候，首先要关注的是他的模型。尤其是流程模型。而具体的函数往往是在该模型基础上，实践下来的产物。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;(1)创建&lt;/h3&gt;
+&lt;p&gt;###(1)创建&lt;/p&gt;
 
 &lt;p&gt;苹果在内存处理上使用的是&lt;strong&gt;两段式&lt;/strong&gt;构造的思想：&lt;/p&gt;
 
@@ -406,15 +589,14 @@ FOUNDATION_EXTERN BOOL DZCheckSuperResponseToSelector(Class cla, SEL selector);
 
 &lt;p&gt;创建的核心关注点在于内存分配。从堆栈上批出一块内存给对象使用。至于该对象，如何使用该内存（初始化）则是另外的函数的事情。经过创建和初始化两步之后，才能够给出一个干净可以使用的对象实例。&lt;/p&gt;
 
-&lt;p&gt;在创建的时候，一般涉及到的函数为：
-~~~
-+ (instancetype)alloc
+&lt;p&gt;在创建的时候，一般涉及到的函数为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;+ (instancetype)alloc
 + (instancetype)allocWithZone:(struct _NSZone *)zone
-~~~
-这两个函数为系统函数，我们不能重载该函数。这点是苹果在文档中格外强调的。因而，对于创建我们也只是调用一下系统函数的事情，没有太多自定义的工作需要我们去做。&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这两个函数为系统函数，我们不能重载该函数。这点是苹果在文档中格外强调的。因而，对于创建我们也只是调用一下系统函数的事情，没有太多自定义的工作需要我们去做。&lt;/p&gt;
 
-&lt;h3 id=&quot;raiihttpbaikebaiducomitemraii&quot;&gt;(2)初始化 (&lt;a href=&quot;http://baike.baidu.com/item/RAII&quot;&gt;RAII&lt;/a&gt;)&lt;/h3&gt;
-&lt;p&gt;初始化是两段式构造的第二步，对象实例只有经过该步骤之后，才是一个干净可以使用的对象。这种思想在很多编程语言中我们可以看到，比如C++。当然也有很多一段式构造的例子比如C语言。&lt;/p&gt;
+&lt;p&gt;###(2)初始化 (&lt;a href=&quot;http://baike.baidu.com/item/RAII&quot;&gt;RAII&lt;/a&gt;)
+初始化是两段式构造的第二步，对象实例只有经过该步骤之后，才是一个干净可以使用的对象。这种思想在很多编程语言中我们可以看到，比如C++。当然也有很多一段式构造的例子比如C语言。&lt;/p&gt;
 
 &lt;p&gt;而在OC中，初始化使我们进行对象自定义操作的开始。这里我们需要初始化一些当前类特有的属性的值，以保证后续业务逻辑能够够正常。比如当我们从xib文件中加载VC的使用我们会使用到函数：&lt;/p&gt;
 
@@ -493,7 +675,7 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;在.h文件中进行变量声明的时候，如果不需要外部多次修改的变量，就不要暴漏了，做成私有变量，如果该变量初始化时所需的，那么就写成初始化函数哈。因为@property这种语法的存在，削弱了OC中作用域的概念，从而导致了大家对于publick，private，protected等概念不是很清晰，从初始化这个事情上可见一斑。然，这些概念对于程序的健壮性又是多么的至关重要。还是应该拾起来的。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;常用的函数&lt;/h4&gt;
+&lt;p&gt;####常用的函数&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;- init;
 - (instancetype _Nonnull)initWithNibName:(NSString * _Nullable)nibName bundle:(NSBundle * _Nullable)nibBundle
 - (instancetype _Nonnull) initWith****
@@ -501,13 +683,13 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;其中&lt;code&gt;init&lt;/code&gt;函数为所有OC对象都有的&lt;/p&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;(3)使用&lt;/h3&gt;
+&lt;p&gt;###(3)使用&lt;/p&gt;
 
 &lt;p&gt;关于使用这个其实是最重要的部分，而对象一旦创建并初始化完成之后，就可以嵌入到除了内存使用流程之外的流程之中。而在内存流程中我们所谓的使用，就是在其他流程中，对该内存对象进行的一系列的操作，包括且不止于：增删改查。&lt;/p&gt;
 
 &lt;p&gt;对于使用的细节，可参考其他流程的介绍。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-4&quot;&gt;(4)销毁&lt;/h3&gt;
+&lt;p&gt;###(4)销毁&lt;/p&gt;
 
 &lt;p&gt;对象在完成使命之后，自然要被销毁，来释放其持有的资源。所谓有借有还再借不难，在创建过程中占用的内存，在初始化过程中持有的其他系统资源，在这个时候要做统一的释放。而且这是最后的释放时机，不然这个对象就成了小偷，会永久性的把资源偷走，比如在传统MRC的情境下，在init中分配是有了一个array，但是在dealloc中没有release，那么这个数组所占用的内存就写漏掉了。&lt;/p&gt;
 
@@ -515,40 +697,37 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;这个问题我们在Notification的使用中，经常会碰到crash的情况，一般都是因为没有正确的removeObser导致的脏内存引起的。我们可以把addObserve看成资源持有，而removeObserver看成资源释放。实际上也是如此，这对函数会对observe的引用计数进行加减操作。那么对于Notification这个事情也可以参考上述的流程来考虑。但这得和业务场景匹配才行，有些情况下接受通知可以伴随着对象的生命周期，建议在init-dealloc这对中注册取消。如果是伴随着UI显示而接收通知，则在didappear和diddisappear中进行最好（and在dealloc补充个取消，因为在navigation poptoroot的时候，中间的一些VC不会出发disappear等函数）。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-5&quot;&gt;(5)异常&lt;/h3&gt;
+&lt;p&gt;###(5)异常&lt;/p&gt;
 
 &lt;p&gt;这个没有罗列在最初的那么内存流程模型当中，因为这样的，在建模的时候，首先要做的是让整个模型Work起来，而后再去处理各种边界问题。如果一上来就把精力集中在边界问题的处理上，就会无限制的放大问题的复杂度，增加处理的麻烦。&lt;/p&gt;
 
 &lt;p&gt;而我们在看了基础的内存使用流程模型之后，在看在异常情况下apple是怎样处理的。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-6&quot;&gt;初始化内存不足&lt;/h4&gt;
+&lt;p&gt;####初始化内存不足&lt;/p&gt;
 
 &lt;p&gt;直接返回nil&lt;/p&gt;
 
-&lt;h4 id=&quot;section-7&quot;&gt;使用期间内存不足&lt;/h4&gt;
-&lt;p&gt;我们这里之说iOS6.0以上的情况，6.0之后viewDidUnload等被废弃，而且目前市面上6.0以下的机器也快成古董了。&lt;/p&gt;
+&lt;p&gt;####使用期间内存不足
+我们这里之说iOS6.0以上的情况，6.0之后viewDidUnload等被废弃，而且目前市面上6.0以下的机器也快成古董了。&lt;/p&gt;
 
-&lt;p&gt;当系统遭遇内存警告的时候，会调用VC的下述函数，在该函数内存，我们可以释放一些能够再次被创建的资源，比如维持的从网络或者数据库来的数据等等。
-~~~&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;(void)didReceiveMemoryWarning {
-  [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
+&lt;p&gt;当系统遭遇内存警告的时候，会调用VC的下述函数，在该函数内存，我们可以释放一些能够再次被创建的资源，比如维持的从网络或者数据库来的数据等等。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
-~~~&lt;/li&gt;
-&lt;/ul&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&quot;section-8&quot;&gt;视图管理流程&lt;/h2&gt;
+&lt;p&gt;##视图管理流程&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1ez0b3hn5jmj207o0egwf8.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;先来看一张比较大的图，这是apple目前提供的和View控制相关的一些函数的摘录（UIViewController中的函数).而这也是一个调用的时序关系图。VC的view还有其子View的创建使用，都在这个流程之中。&lt;/p&gt;
 
-&lt;h3 id=&quot;section-9&quot;&gt;流程解释&lt;/h3&gt;
+&lt;p&gt;###流程解释&lt;/p&gt;
 
-&lt;h4 id=&quot;section-10&quot;&gt;创建根视图&lt;/h4&gt;
-&lt;p&gt;当VC.view为空的时候，并且第一次调用vc.view的时候，会调用loadView函数来加载跟视图。&lt;/p&gt;
+&lt;p&gt;####创建根视图
+当VC.view为空的时候，并且第一次调用vc.view的时候，会调用loadView函数来加载跟视图。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;- (void) loadView
 {
@@ -558,8 +737,8 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;在这个函数中你可以使用self.view = **来对根视图进行赋值，而且建议也是只在这里进行根视图的赋值操作。因为一旦根视图确定后，外部会对根视图进行一些布局了之类的操作，如果在使用过程中随意的更换根视图，上述的这些操作将很难重放。导致界面的一些异常。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-11&quot;&gt;初始化根视图上子视图&lt;/h4&gt;
-&lt;p&gt;当调用了loadView加载了根视图之后，系统会触发VC的ViewDidLoad函数。这个使用self.view已经有值，可以在其上addSubView了。&lt;/p&gt;
+&lt;p&gt;####初始化根视图上子视图
+当调用了loadView加载了根视图之后，系统会触发VC的ViewDidLoad函数。这个使用self.view已经有值，可以在其上addSubView了。&lt;/p&gt;
 
 &lt;p&gt;在这里我们一般会做一些处理初始化子视图，并且addSubView之类的操作。注意布局的事情，就不要在这里做了，因为系统为我们提供了专门的函数来做这个事情。而且这个地方你拿到的self.view的frame信息是不准确的。比如刚才我们在loadView中没有对view进行布局初始化，给他设置一个frame。到了这个ViewDidLoad的地方的时候，你拿到的self.view.frame就是{0,0,0,0}。也就是说，你在这里进行布局的话，非常有可能是乱的。&lt;/p&gt;
 
@@ -571,8 +750,8 @@ vc.name = @&quot;xx&quot;;
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&quot;section-12&quot;&gt;布局&lt;/h4&gt;
-&lt;p&gt;一般情况下，对于VC的根视图的操作是外部进行的，比如UINavigationController去push一个VC的时候，就会对vc.view.frame进行赋值，来控制VC的布局。而系统的这些试图控制器（导航了，之类的东西），都实现了CALayer的delegate，当vc的根视图的frame发生变化的时候会接受到通知&lt;/p&gt;
+&lt;p&gt;####布局
+一般情况下，对于VC的根视图的操作是外部进行的，比如UINavigationController去push一个VC的时候，就会对vc.view.frame进行赋值，来控制VC的布局。而系统的这些试图控制器（导航了，之类的东西），都实现了CALayer的delegate，当vc的根视图的frame发生变化的时候会接受到通知&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;- layoutSublayersOfLayer:
 &lt;/code&gt;&lt;/pre&gt;
@@ -587,7 +766,7 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;而且，如果在这两个函数里面进行相对布局操作的话，将会让VC的根视图拥有适配不同屏幕的能力，同时当调整根视图的frame的时候，整个视图的布局也能够作出相应的变化。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-13&quot;&gt;显示流程&lt;/h4&gt;
+&lt;p&gt;####显示流程&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;- viewWillAppear:
 – viewDidAppear:
@@ -616,7 +795,7 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;但是当你做业务逻辑的时候，一定要考虑这个函数在整个流程中的时序关系和他所代表的涵义。尤其是在每个视图管理器中的控制流程中，比如最开始提到的去获取self.navigationController为空的问题。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-14&quot;&gt;总结&lt;/h2&gt;
+&lt;p&gt;##总结&lt;/p&gt;
 
 &lt;p&gt;关于ViewController的关键的流程，先谈内存和视图管理这两个。当然其还有其他的一些流程，要说完有点太复杂了。希望通过上述的两个例子，能够展示一下流程建模在理解框架和使用框架上的一些的裨益。能够使用这种思想来思考日常的编程问题。&lt;/p&gt;
 
@@ -628,11 +807,11 @@ vc.name = @&quot;xx&quot;;
         <link>http://dzpqzb.com/2015/11/28/optime-logic-method.html</link>
         <guid isPermaLink="true">http://dzpqzb.com/2015/11/28/optime-logic-method.html</guid>
         <pubDate>Sat, 28 Nov 2015 18:30:34 +0800</pubDate>
-        <description>&lt;h1 id=&quot;section&quot;&gt;如何进行技术方案优化&lt;/h1&gt;
+        <description>&lt;p&gt;#如何进行技术方案优化&lt;/p&gt;
 
 &lt;p&gt;首先这是一个很宏大的题目，我也只能窥其一斑。只说说自己的一些浅见和反思。因为之前有一段时间，在面对说要技术方案优化的时候，自己也有过一段不知所措的时期。后来才开始慢慢觉得自己找到点门道了，这片文章也算是自己的一个总结吧。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-1&quot;&gt;什么是优化&lt;/h2&gt;
+&lt;p&gt;##什么是优化&lt;/p&gt;
 
 &lt;p&gt;首先我们先破题，来谈谈“优化”这个事情。通常情况下，我们说到优化的时候，往往会伴随着对之前系统的吐槽。或是不好用，或是性能低，或是用起来很麻烦。巴拉巴拉。是的，当我们对原先的系统有槽点的时候，我们会谈到“优化”。而“优化”的前提也是，之前已经有过一个东西存在，而且真对目前的场景应景不再适合。这个是有需要对原有系统进行调整，以满足当前的场景与需求。那么所谓优化即是：对原有系统进行有目的的改造。&lt;/p&gt;
 
@@ -667,7 +846,7 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;好了这是一个优化的例子：始于发现问题，止于目标达成。而重要的是其过程，描述问题！！！！&lt;/p&gt;
 
-&lt;h2 id=&quot;or&quot;&gt;分析问题 (定性or定量)&lt;/h2&gt;
+&lt;p&gt;##分析问题 (定性or定量)&lt;/p&gt;
 
 &lt;p&gt;其实，我一直比较坚信一句话：当你能够准确的描述一个问题的时候，你到解决问题就没剩几步了。比如刚才说的卡顿的问题，我们当时是这么描述的：图片读取发生了主线程，主线程中有一部分CPU片段用于文件读取和图片解码，造成主线程阻塞，从而导致帧率下降。当描述到这里的时候，解决方案就比较显而易见了，挪呗。搞到其他线程中之行。把主线程空出来。&lt;/p&gt;
 
@@ -682,19 +861,19 @@ vc.name = @&quot;xx&quot;;
   &lt;li&gt;或许你的编程功底很深，或许很浅，或许你尝试分析而没有结果。那么可以使用改改代码试试的方法了。我们称之为：实验法。&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&quot;section-2&quot;&gt;逻辑分析法， 原理性分析&lt;/h3&gt;
+&lt;p&gt;###逻辑分析法， 原理性分析&lt;/p&gt;
 
 &lt;p&gt;哈哈，套用马哲的一句话：事物是普遍联系的。既然是普遍联系的，不说必然存在因果，那么通过一定的逻辑分析。是可以找到他们之间的一些蛛丝马迹的关联的。这些关联或许可以解释一些什么。比如刚才卡顿的问题：原理就是主线程CPU被消耗过多，无法及时处理UI任务导致的。这只是一个例子。&lt;/p&gt;
 
 &lt;p&gt;我们进行逻辑分析的目的，是为了找到我们的某些代码和问题之间的&lt;strong&gt;因果性&lt;/strong&gt;联系。就是说，我们能够明确知道造成UI卡顿的问题，就是因为IO的问题之类。这个话题说起来，比较深邃了。其中绝大部分实践的方法可以从《数理逻辑》这本书中找到。不过这是本讲数学的书，咱们得稍微换下脑子，把其中的定理，在编程中应用一下。因为我也只是意会了其中的某些东西，讲出来还没有那么功底。就只能麻烦各位自己去琢磨了。：）&lt;/p&gt;
 
-&lt;h3 id=&quot;assume-action-response-test-assume&quot;&gt;实验法,Assume-Action-Response-Test-Assume&lt;/h3&gt;
+&lt;p&gt;###实验法,Assume-Action-Response-Test-Assume&lt;/p&gt;
 
 &lt;p&gt;我称这个过称为&lt;strong&gt;AARTA&lt;/strong&gt;。这是一个一直往复的过程，在分析的过程中，你得一次次的重复这个过程来找到真正问题的所在。其实，这个方法比较常应用在改BUG这个场景上。其实如果从广义上讲，按照上面咱们对技术优化的定义，改bug也算是一种优化。只不过这个场景比价特殊而已。当无法准确的分析原理，或者当前程序的复杂性过高（低内聚高耦合）已经超出人脑的计算能力范围的时候，那么就可以“猜”了。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1eyhrrytgv2j209408g3yn.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;assume&quot;&gt;（1）假设 assume&lt;/h4&gt;
+&lt;p&gt;####（1）假设 assume&lt;/p&gt;
 
 &lt;p&gt;根据以往的经验来，设定一个和问题域相关的假设。比如UI卡顿的问题，你怀疑是不是因为图片的问题呢。那么现在就假设是图片的问题！&lt;/p&gt;
 
@@ -710,13 +889,13 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;根据，程序的反馈和我们预先设定的目标来判断一下，当前改动是否满足了我们设计的目标。如果有，那么你大概就找到了问题的一个原因。如果没有那么进行下一步。&lt;/p&gt;
 
-&lt;h4 id=&quot;assume-1&quot;&gt;（5） 重新提出假设 Assume&lt;/h4&gt;
+&lt;h4 id=&quot;assume&quot;&gt;（5） 重新提出假设 Assume&lt;/h4&gt;
 
 &lt;p&gt;既然不是图片的问题，那么会不会是其他事情上耗费了CPU呢。比如布局样式的计算。那么重新假设是局部样式的问题。在执行（2）过程。&lt;/p&gt;
 
 &lt;p&gt;所谓实验，即是大胆假设，小心取证，如此往复，以求终解。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-3&quot;&gt;监控&lt;/h2&gt;
+&lt;p&gt;##监控&lt;/p&gt;
 
 &lt;p&gt;上面只是进行了一些方法论的探讨。但是有一件事情，是若要优化一定要做的。那就是“监控”。&lt;/p&gt;
 
@@ -730,7 +909,7 @@ vc.name = @&quot;xx&quot;;
 
 &lt;p&gt;而且，监控也是优化的数据来源。他能够通过数据的指标来非常直观的告诉你，程序哪里有问题，你优化之后，效果是怎样的。现在网上有很多这方面的服务提供出来，比如bugly之类的，甚至有些是APM（application performance manager)，直接监控到程序的运行状态和性能。google一下，能搜出不少来。可以酌情，应用在自己开发的app中。&lt;/p&gt;
 
-&lt;h2 id=&quot;section-4&quot;&gt;总结&lt;/h2&gt;
+&lt;p&gt;##总结&lt;/p&gt;
 
 &lt;p&gt;说了半天，总结一下。优化是在可控的范围内有目的性的对现有程序的修改。一般可以使用逻辑分析法和实验法来定位、分析、描述问题。或者定性或者定量。无论哪种，要想优化，你得先建立起对自己app运行的监控体系。&lt;/p&gt;
 
@@ -754,7 +933,7 @@ vc.name = @&quot;xx&quot;;
         <pubDate>Thu, 19 Nov 2015 19:41:34 +0800</pubDate>
         <description>&lt;p&gt;随着XCode7的发布，Apple提供了一项新的技术来支持App瘦身功能，那就是Bitcode。本文章将会结合自己在支持bitcode过程中遇到的问题，来阐述支持bitcode的过程。&lt;/p&gt;
 
-&lt;h2 id=&quot;bitcode&quot;&gt;BitCode是什么&lt;/h2&gt;
+&lt;p&gt;##BitCode是什么&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;Bitcode is an intermediate representation of a compiled program. Apps you upload to iTunes Connect that contain bitcode will be compiled and linked on the store. Including bitcode will allow Apple to re-optimize your app binary in the future without the need to submit a new version of your app to the store.
 
@@ -767,7 +946,7 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 &lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1ey79g6evsij20kb08rmxg.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h3 id=&quot;section&quot;&gt;一点编译原理&lt;/h3&gt;
+&lt;p&gt;###一点编译原理&lt;/p&gt;
 
 &lt;p&gt;为了更好的理解什么是bitcode，我们简短的看一下编译器编译的过程：&lt;/p&gt;
 
@@ -790,7 +969,7 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 &lt;p&gt;在前后端之间传递的就是IR（中间码），而bitcode就是一种特殊形式的中间码。原本前后端的工作都是在本地LLVM中完成，虽然Apple没有给出具体的Bitcode实现，但是通过他们的文档可以猜测，是将一部分后端的工作移到了服务器进行。从Xcode上传IR到服务器，服务器来真对不同的机型进行后续操作。从而达到真对不同机型生成对应指令集的二进制，而减小报体积的目的。&lt;/p&gt;
 
-&lt;h2 id=&quot;bitcode-1&quot;&gt;打开bitcode设置&lt;/h2&gt;
+&lt;p&gt;##打开bitcode设置&lt;/p&gt;
 
 &lt;p&gt;实际上在Xcode 7中，我们新建一个iOS程序时，bitcode选项默认是设置为YES的。我们可以在”Build Settings”-&amp;gt;”Enable Bitcode”选项中看到这个设置。&lt;/p&gt;
 
@@ -808,7 +987,7 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 &lt;p&gt;但是如果其中包含第三方库，不支持bitcode时候。需要将”Enable BitCode”设置成NO。而且这个选项是，只要有一个第三方库不支持，就不能开的。否则连接错误。&lt;/p&gt;
 
-&lt;h2 id=&quot;fembed-bitcode-fembed-bitcode-maker&quot;&gt;确保打包的时候使用的是&lt;code&gt;fembed-bitcode&lt;/code&gt;, 而不是&lt;code&gt;fembed-bitcode-maker&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;##确保打包的时候使用的是&lt;code&gt;fembed-bitcode&lt;/code&gt;, 而不是&lt;code&gt;fembed-bitcode-maker&lt;/code&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;You should be aware that a normal build with the -fembed-bitcode-marker option will produce minimal size embedded bitcode sections without any real content. This is done as a way of testing the bitcode-related aspects of your build without slowing down the build process. The actual bitcode content is included when you do an Archive build.&lt;/p&gt;
@@ -823,11 +1002,11 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 &lt;p&gt;如果您开发的是app那么走正常的打包archive流程就好了。如果你正在开发.a静态库或者framework，请注意打包方式设置为archive,或者在打包脚本中加入-fembed-bitcode参数。如果需要的话，需要在Build Settings中打开 DEPLOYMENT_POSTPROCESSING=YES，设置Strip Style为debugging。&lt;/p&gt;
 
-&lt;h2 id=&quot;bitcode-2&quot;&gt;检测是否打开Bitcode&lt;/h2&gt;
+&lt;p&gt;##检测是否打开Bitcode&lt;/p&gt;
 
 &lt;p&gt;当打开bitcdoe选项之后，我们可以使用otool工具来检查二进制文件中是否包含bitcode段。&lt;/p&gt;
 
-&lt;h3 id=&quot;a&quot;&gt;针对于静态链接库.a文件&lt;/h3&gt;
+&lt;p&gt;###针对于静态链接库.a文件&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;otool -arch armv7 -l xxxx.a | grep __bitcode | wc -l
 &lt;/code&gt;&lt;/pre&gt;
@@ -840,7 +1019,7 @@ Xcode hides symbols generated during build time by default, so they are not read
 
 &lt;p&gt;上述命令只检查了armv7架构，同时，也必须使用改指令检查其他的指令集是否包含bitcode如：arm64，armv7s等等&lt;/p&gt;
 
-&lt;h3 id=&quot;appframeworkbitcode&quot;&gt;检查app或者framework中是否包含bitcode&lt;/h3&gt;
+&lt;p&gt;###检查app或者framework中是否包含bitcode&lt;/p&gt;
 
 &lt;p&gt;由于app中二进制和framework中二进制文件与.a文件存在差异，因为需要检查的是__LLVM段，当出现该段的时候，则表示支持bitcdoe，否则不支持。&lt;/p&gt;
 
@@ -856,34 +1035,34 @@ Xcode hides symbols generated during build time by default, so they are not read
   &lt;p&gt;BUT, 上述检查过了之后，也不一定是真的支持bitcode，在实际的测试中，发现上述检测命令通过之后，某个使用的第三方库，依然报错不支持bitcode。因而最终结果，还是需要以是否能够连接成功为准。重要事情说三遍，上述网上流传的检测方法只做参考，最终还是要以实际效果为准。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id=&quot;section-1&quot;&gt;最终结果检查&lt;/h3&gt;
+&lt;p&gt;###最终结果检查&lt;/p&gt;
 
 &lt;p&gt;如果您是一个APP，可以直接进行Archive打包，如果是一个库，则建议建一个Demo工程进行打包，记得要打开bitcode设置。&lt;/p&gt;
 
-&lt;h4 id=&quot;checkpoint1--&quot;&gt;CheckPoint1  连接是否报错&lt;/h4&gt;
+&lt;p&gt;####CheckPoint1  连接是否报错&lt;/p&gt;
 
 &lt;p&gt;如果有任何一个库没有打开bitcode链接，将会出现类似下方的错误。只要链接过了，那么恭喜了，基本上是OK了。
 &lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1eyc7gbmexbj21fy04o7as.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;checkpoint2-&quot;&gt;CheckPoint2 检查最终效果&lt;/h4&gt;
+&lt;p&gt;####CheckPoint2 检查最终效果&lt;/p&gt;
 
-&lt;h5 id=&quot;ipa&quot;&gt;使用开发模式导出ipa&lt;/h5&gt;
+&lt;p&gt;#####使用开发模式导出ipa&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://ww3.sinaimg.cn/large/7df22103jw1eyc7nexdfbj206t07qmxo.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/7df22103jw1eyc7o22jrtj20g409qmyv.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h5 id=&quot;section-2&quot;&gt;选择出包的方式&lt;/h5&gt;
+&lt;p&gt;#####选择出包的方式&lt;/p&gt;
 
 &lt;p&gt;这里建议使用第二种，生成真对具体机型的包&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://ww2.sinaimg.cn/large/7df22103jw1eyc7occxdqj20g409q408.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h5 id=&quot;compiling-bitcode&quot;&gt;出现了，Compiling Bitcode，这个过程！！！！！&lt;/h5&gt;
+&lt;p&gt;#####出现了，Compiling Bitcode，这个过程！！！！！&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://ww4.sinaimg.cn/large/7df22103jw1eyc7pqgxolj20g409q3ys.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;h5 id=&quot;section-3&quot;&gt;最终结果&lt;/h5&gt;
+&lt;p&gt;#####最终结果&lt;/p&gt;
 
 &lt;p&gt;在最后输出的文件中，你能够看到一个App Thinning的结果，里面有针对各个机型的ipa包。&lt;/p&gt;
 
@@ -911,7 +1090,7 @@ On Demand Resources size: Zero KB compressed, Zero KB uncompressed
         <pubDate>Tue, 17 Nov 2015 22:25:03 +0800</pubDate>
         <description>&lt;p&gt;这边的产品需求，需要在某些场景下进行清场操作，将所有的ViewController堆栈清空，页面回滚到首页。我们内部的页面都能够完成这个操作。但是有些第三方的页面，怎么都搞不掉。比如支付宝的页面。因为是引入的SDK，没有代码，所以第一方案，向支付宝侧提出需求，要求提供一个函数接口，能够清退他们的界面，但是他们说不能满足该需求。所以，我们只能开始了黑科技之旅。&lt;/p&gt;
 
-&lt;h2 id=&quot;view&quot;&gt;首先寻找支付宝的View&lt;/h2&gt;
+&lt;p&gt;##首先寻找支付宝的View&lt;/p&gt;
 
 &lt;p&gt;因为我们的目标是干掉支付宝SDK自己弹出来的页面，那么我们第一件事情就是找到该页面。我们使用Xcode7.1的视图查看功能，找到了支付宝的View：&lt;/p&gt;
 
@@ -966,17 +1145,16 @@ On Demand Resources size: Zero KB compressed, Zero KB uncompressed
 
 &lt;p&gt;这三个类一看就是支付宝的类，我们用上面类似的方法，查看这三个类的属性变量，就真的发现了一个webViewController。&lt;/p&gt;
 
-&lt;p&gt;APayRoute的属性变量结构：
-~~~
- name is _infostr          type is  @”nsstring”
- name is _schemestr        type is  @”nsstring”
+&lt;p&gt;APayRoute的属性变量结构：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; name is _infostr          type is  @&quot;nsstring&quot;
+ name is _schemestr        type is  @&quot;nsstring&quot;
  name is _resultblock      type is  @?
  name is _wapviewcontroller        type is
-~~~&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;没错就是那个wapviewcontroller。不管怎样我们找到这个VC了。那么剩下的就是干掉他了。&lt;/p&gt;
 
-&lt;h2 id=&quot;section&quot;&gt;删掉界面&lt;/h2&gt;
+&lt;p&gt;##删掉界面&lt;/p&gt;
 
 &lt;p&gt;其实就是从AlipaySDK的单例这段内存开始，一直往下找实例。直到找到这个VC为止。&lt;/p&gt;
 
@@ -1363,8 +1541,8 @@ NSLog(@&quot;%x&quot;,errPtr);
     
       <item>
         <title>解决Instruments无法找到调试符号表的问题</title>
-        <link>http://dzpqzb.com/2015/11/11/instruments-symbols-problem.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/instruments-symbols-problem.html</guid>
+        <link>http://dzpqzb.com/2015/11/11/instruments_symbols_problem.html</link>
+        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/instruments_symbols_problem.html</guid>
         <pubDate>Wed, 11 Nov 2015 20:30:53 +0800</pubDate>
         <description>&lt;p&gt;在使用Instruments中的time profile调试QQMSF的时候，发现原先有的可以定位到具体函数的功能怎么也掉不出来。Instruments只能定位到一个函数地址，没有具体的函数名。分析应该是调试符号表没有找到的问题。于是去工程设置里面找关于这个选项。有几个地方需要注意：&lt;/p&gt;
 
@@ -1390,7 +1568,7 @@ NSLog(@&quot;%x&quot;,errPtr);
         <link>http://dzpqzb.com/2015/11/11/dzpulldownviewcontroller.html</link>
         <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/dzpulldownviewcontroller.html</guid>
         <pubDate>Wed, 11 Nov 2015 19:46:08 +0800</pubDate>
-        <description>&lt;h1 id=&quot;dzpulldownviewcontrollerhttpsgithubcomyishuiliuniandzpulldownviewcontroller&quot;&gt;&lt;a href=&quot;https://github.com/yishuiliunian/DZPullDownViewController&quot;&gt;DZPullDownViewController&lt;/a&gt;&lt;/h1&gt;
+        <description>&lt;p&gt;#&lt;a href=&quot;https://github.com/yishuiliunian/DZPullDownViewController&quot;&gt;DZPullDownViewController&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;两层结构的视图控制器，下拉的时候，上层的视图滑动，显示出下层的视图。如果上层视图控制器的rootView是UIScrollView或其子类（比如UITableView），在滑到头的时候，继续往下拉，会显示出下面的视图。&lt;/p&gt;
 </description>
@@ -1431,44 +1609,6 @@ it, simply add the following line to your Podfile:&lt;/p&gt;
 &lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
 
 &lt;p&gt;DZCDNFiles is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
-</description>
-      </item>
-    
-      <item>
-        <title>MSHttpRPC</title>
-        <link>http://dzpqzb.com/2015/11/11/mshttprpc.html</link>
-        <guid isPermaLink="true">http://dzpqzb.com/2015/11/11/mshttprpc.html</guid>
-        <pubDate>Wed, 11 Nov 2015 19:43:55 +0800</pubDate>
-        <description>&lt;h1 id=&quot;mshttprpc&quot;&gt;MSHttpRPC&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://travis-ci.org/stonedong/MSHttpRPC&quot;&gt;&lt;img src=&quot;http://img.shields.io/travis/stonedong/MSHttpRPC.svg?style=flat&quot; alt=&quot;CI Status&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/MSHttpRPC&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/v/MSHttpRPC.svg?style=flat&quot; alt=&quot;Version&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/MSHttpRPC&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/l/MSHttpRPC.svg?style=flat&quot; alt=&quot;License&quot; /&gt;&lt;/a&gt;
-&lt;a href=&quot;http://cocoapods.org/pods/MSHttpRPC&quot;&gt;&lt;img src=&quot;https://img.shields.io/cocoapods/p/MSHttpRPC.svg?style=flat&quot; alt=&quot;Platform&quot; /&gt;&lt;/a&gt;
-#介绍
-MSHttpRPC是一个简单基于Http的RPC框架,完成了主体的HTTP-RPC的CS交互的工作，用户可通过注册相应的关键性的Block来完成自定义的功能。已经完成了初步的RPC交互框架。
-## Usage&lt;/p&gt;
-
-&lt;p&gt;To run the example project, clone the repo, and run &lt;code&gt;pod install&lt;/code&gt; from the Example directory first.&lt;/p&gt;
-
-&lt;h2 id=&quot;requirements&quot;&gt;Requirements&lt;/h2&gt;
-
-&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
-
-&lt;p&gt;MSHttpRPC is available through &lt;a href=&quot;http://cocoapods.org&quot;&gt;CocoaPods&lt;/a&gt;. To install
-it, simply add the following line to your Podfile:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;ruby
-pod &quot;MSHttpRPC&quot;
-&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;author&quot;&gt;Author&lt;/h2&gt;
-
-&lt;p&gt;stonedong, yishuiliunian@gmail.com&lt;/p&gt;
-
-&lt;h2 id=&quot;license&quot;&gt;License&lt;/h2&gt;
-
-&lt;p&gt;MSHttpRPC is available under the MIT license. See the LICENSE file for more info.&lt;/p&gt;
 </description>
       </item>
     

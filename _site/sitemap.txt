@@ -13,6 +13,8 @@
 
 
 
+  /2016/11/08/dzurlrouter.html
+
   /2016/08/18/mrlogicinjection.html
 
   /2016/08/16/debug-sdk-with-injection.html
@@ -45,7 +47,7 @@
 
   /2015/11/11/tools-for-program.html
 
-  /2015/11/11/instruments-symbols-problem.html
+  /2015/11/11/instruments_symbols_problem.html
 
   /2015/11/11/dzpulldownviewcontroller.html
 
@@ -83,7 +85,7 @@
 
   /2015/11/11/youxugoujian.html
 
-  /2015/11/11/swift-compare-oc.html
+  /2015/11/11/swift_compare_oc.html
 
   /2015/11/11/objective-c.html
 
@@ -99,7 +101,7 @@
 
   /2015/08/10/stylesheet.html
 
-  /2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html
+  /2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html
 
   /2015/08/03/tmuxpei-zhi.html
 

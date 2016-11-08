@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/11/08/dzurlrouter.html"><span class="pl__circle"></span><span class="pl__title">DZURLRouter</span><span class="pl__date">Nov 2016</span></a>
+    
       <a class="开源组件 pl__all" href="/2016/08/18/mrlogicinjection.html"><span class="pl__circle"></span><span class="pl__title">MRLogicInjection</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
@@ -100,7 +102,7 @@
     
       <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/instruments_symbols_problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
     
@@ -138,7 +140,7 @@
     
       <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/swift_compare_oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
     
@@ -154,7 +156,7 @@
     
       <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
     
-      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
     
       <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
     
@@ -172,7 +174,7 @@
       <div id="pjax">
         <article id="post__content">
   <h1 id="post__title" data-identifier="20151111">Objective-C编码建议</h1>
-  <h1 id="objective-c-">Objective-C 编码建议</h1>
+  <p>#Objective-C 编码建议</p>
 
 <blockquote>
   <p>神在细节之中</p>
@@ -190,7 +192,7 @@
 
 <p>（PS：当你真的按照这些看似偏执的规则去做的时候，你就真的能够发现“伟大来自细节”，而且会受益匪浅。保剑锋自磨砺出，梅花香自苦寒来。）</p>
 
-<h2 id="section">总则</h2>
+<p>##总则</p>
 
 <ol>
   <li>Don’t repeat your self.</li>
@@ -200,7 +202,7 @@
   <li>借用美国童子军军规：让营地比你来时更干净。</li>
 </ol>
 
-<h2 id="section-1">格式</h2>
+<p>##格式</p>
 
 <ol>
   <li>任意函数长度不得超过50行。</li>
@@ -243,12 +245,12 @@
   </li>
 </ol>
 
-<h2 id="section-2">命名</h2>
+<p>##命名</p>
 
 <p>命名是编程中最基本的技能，我们给变量、函数、类、包等等命名。给他们以名字，让他们有意义，既能表示他们到底是做什么的，也能将其与其他变量区别开来。而通过，语言的发展史，我们也能够看到“方便编程人员理解和使用”一直都是编程语言发展的动力之一，而命名则是其最最核心的环节。像人一样娶一个好名字至关重要，“丁当”总比“狗蛋”来的好听。
-为什么要命名？命名代表着抽象，我们使用名字将一些没必要关系的细节隐去，减少我们自己的记忆成本，也更加方便我们理解。用过C语言的人都知道，一个变量名最终会转化成类似于~~~0x11111111~~~之类的地址，相比去理解和记忆这些地址，用一个更加抽象的变量名来代表这些地址。无论从理解还是记忆上都要方便的。</p>
+为什么要命名？命名代表着抽象，我们使用名字将一些没必要关系的细节隐去，减少我们自己的记忆成本，也更加方便我们理解。用过C语言的人都知道，一个变量名最终会转化成类似于~<del>0x11111111</del>~之类的地址，相比去理解和记忆这些地址，用一个更加抽象的变量名来代表这些地址。无论从理解还是记忆上都要方便的。</p>
 
-<h3 id="section-3">命名一定要“名副其实”，尽可能使用有意的名称，而且这个意义和指称的变量真实意义相关。</h3>
+<p>###命名一定要“名副其实”，尽可能使用有意的名称，而且这个意义和指称的变量真实意义相关。</p>
 
 <p>尽量不要出现没有任何意义的命名类似于下述形式的命名：</p>
 
@@ -265,27 +267,25 @@
     ~~~
 </code></pre>
 
-<h3 id="section-4">命名首字母大写，其他命名首字母小写。并且采用驼峰格式分割单词。</h3>
+<p>###命名首字母大写，其他命名首字母小写。并且采用驼峰格式分割单词。</p>
 
-<p>例如：~~~BWTest~~~</p>
+<p>例如：~<del>BWTest</del>~</p>
 
-<h3 id="section-5">使用能够读出来的名称</h3>
-<p>人类长于记忆和使用单词。大脑中的相当一部分就是用来容纳和处理单词的。单词如果能够读的出来，则非常方便我们阅读和理解。</p>
+<p>###使用能够读出来的名称
+人类长于记忆和使用单词。大脑中的相当一部分就是用来容纳和处理单词的。单词如果能够读的出来，则非常方便我们阅读和理解。</p>
 
-<p>错误的示例：
-~~~
-genymdhms （生成日期,年、月、日、时、分、秒）
-~~~</p>
+<p>错误的示例：</p>
+<pre><code>genymdhms （生成日期,年、月、日、时、分、秒）
+</code></pre>
 
-<p>正确的实例：
-~~~
-generationTimeStamp
-~~~</p>
+<p>正确的实例：</p>
+<pre><code>generationTimeStamp
+</code></pre>
 
-<h3 id="section-6">使用可搜索的名称。</h3>
-<p>单字母名称和数字常量有一个问题，就是很难在一大篇文字中找出来。试想一下，你找~~~MAX_CLASSES_PER_STUDENT~~~容易还是找数字7容易。</p>
+<p>###使用可搜索的名称。
+单字母名称和数字常量有一个问题，就是很难在一大篇文字中找出来。试想一下，你找~<del>MAX_CLASSES_PER_STUDENT</del>~容易还是找数字7容易。</p>
 
-<h3 id="section-7">文件名</h3>
+<p>###文件名</p>
 <blockquote>
   <p>文件名反映出了其实现了什么类（包括大小写），你需要遵循所参与醒目的约定。</p>
 </blockquote>
@@ -323,13 +323,12 @@ generationTimeStamp
   </tbody>
 </table>
 
-<h4 id="section-8">类别的扩展名以“被扩展的类名+自定义命名部分组成”</h4>
-<p>例如：
-~~~
-NSSstring+Utils.h
-~~~</p>
+<p>####类别的扩展名以“被扩展的类名+自定义命名部分组成”
+例如：</p>
+<pre><code>NSSstring+Utils.h
+</code></pre>
 
-<h3 id="section-9">缩略词</h3>
+<p>###缩略词</p>
 
 <p>虽然方法命名不应使用缩略词，然而有些缩略词在过去被反复的使用，所以使用这些缩略词能更好的的表达代码的含义。下表列出了Cocoa可接受的缩略词。</p>
 
@@ -412,42 +411,42 @@ NSSstring+Utils.h
   </tbody>
 </table>
 
-<p>以下是一些常用的首字母缩略词：~~~ASCII,PDF,XML,HTML,URL,RTF,HTTP,TIFF,JPG,PNG,GIF,LZW,ROM,RGB,CMYK,MIDI,FTP…~~~</p>
+<p>以下是一些常用的首字母缩略词：~<del>ASCII,PDF,XML,HTML,URL,RTF,HTTP,TIFF,JPG,PNG,GIF,LZW,ROM,RGB,CMYK,MIDI,FTP…</del>~</p>
 
-<h3 id="define-bwdebug-1">宏定义全部字母大写，例如:~~~#define BW_DEBUG 1~~~</h3>
+<p>###宏定义全部字母大写，例如:~<del>#define BW_DEBUG 1</del>~</p>
 
-<h3 id="k">常量定义，字符串定义以小写字母~~~k~~~开头，随后首字母大写</h3>
+<p>###常量定义，字符串定义以小写字母~~~k~~~开头，随后首字母大写</p>
 
 <pre><code>static NSString* const kBWBarTitle = @"动态";
 </code></pre>
 
-<h3 id="static-const">如果要定义常量使用static const优于宏定义，前者会进行类型检查</h3>
+<p>###如果要定义常量使用static const优于宏定义，前者会进行类型检查</p>
 
-<h3 id="ocnsobjectns">因为OC没有命名空间的概念，所以使用前两个或者多个字母来表示命名空间，例如”NSObject中的NS”，我们也使用自己的命名空间。比如</h3>
+<p>###因为OC没有命名空间的概念，所以使用前两个或者多个字母来表示命名空间，例如”NSObject中的NS”，我们也使用自己的命名空间。比如</p>
 
 <pre><code>红点中使用了VAS:VASAddValueInfo...
 钱包中使用了QW:QWApplication....
 </code></pre>
 
-<h2 id="section-10">注释</h2>
+<p>##注释</p>
 
-<h3 id="section-11">让代码自注释，不要依赖注释来解释自己的设计或者编码意图。除了特殊情况外，代码中不要有多余的注释。</h3>
+<p>###让代码自注释，不要依赖注释来解释自己的设计或者编码意图。除了特殊情况外，代码中不要有多余的注释。</p>
 
-<h2 id="section-12">函数</h2>
+<p>##函数</p>
 
-<h3 id="section-13">函数长度不要超过50行，小函数要比大函数可阅读性和可复用性强。</h3>
+<p>###函数长度不要超过50行，小函数要比大函数可阅读性和可复用性强。</p>
 
-<h3 id="section-14">零元函数最好，一元函数也不错，二元函数担心了，三元函数有风险，高于三元需重构。函数的参数越多，引起其变化的因素就越多。越不利于以后的修改。</h3>
+<p>###零元函数最好，一元函数也不错，二元函数担心了，三元函数有风险，高于三元需重构。函数的参数越多，引起其变化的因素就越多。越不利于以后的修改。</p>
 
 <p>不知道当你看到如下形式的函数的时候，是什么想法：</p>
 
 <pre><code>- (void)RequestGetLocation:(int)lat lon:(int)lon alt:(int)alt isMars:(BOOL)yn bJiejingSOSO:(BOOL)bJiejingSOSO;
 </code></pre>
 
-<h3 id="section-15">尽量少的写有副作用的函数</h3>
+<p>###尽量少的写有副作用的函数</p>
 
-<h3 id="section-16">尽量不要出现火车链式的命名，如果可以尽量使用过程变量替代。</h3>
-<p>反例例如：</p>
+<p>###尽量不要出现火车链式的命名，如果可以尽量使用过程变量替代。
+反例例如：</p>
 
 <pre><code>_needLogoutAccount = [[[[BWAppSetting GetInstance] appSetting] valueForKey:NeedLogoutAccounts] retain];
 </code></pre>
@@ -458,7 +457,7 @@ BWLockDictionary* defaultSettings = [shareSetting appSetting];
 _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retain];
 </code></pre>
 
-<h3 id="section-17">调用时所有参数应该在同一行</h3>
+<p>###调用时所有参数应该在同一行</p>
 
 <pre><code>[myObject doFooWith:arg1 name:arg2 error:arg3];
 </code></pre>
@@ -483,7 +482,7 @@ _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retai
           error:arg3];
 </code></pre>
 
-<h3 id="ifobjc">如果对传入参数进行数据保护尽量不要用~~~if(!objc)~~~,使用断言来处理。</h3>
+<p>###如果对传入参数进行数据保护尽量不要用~<del>if(!objc)</del>~,使用断言来处理。</p>
 
 <pre><code>- (void) sendArgs:(NSDictionary*)args {
         NSAssert(args, @"args is nil");
@@ -491,7 +490,7 @@ _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retai
 }
 </code></pre>
 
-<h3 id="theannew">方法参数名前一般使用的前缀包括“the”、“an”、“new”。</h3>
+<p>###方法参数名前一般使用的前缀包括“the”、“an”、“new”。</p>
 
 <p>示例:</p>
 
@@ -506,9 +505,9 @@ _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retai
 - (CDCEmail *) emailForRecipients: (NSArray *)    theRecipients;
 </code></pre>
 
-<h4 id="block">Block相关</h4>
+<p>####Block相关</p>
 
-<h6 id="blockselfweakstrong">在block中使用到self变量的时候，一定要先weak再strong.</h6>
+<p>######在block中使用到self变量的时候，一定要先weak再strong.</p>
 
 <pre><code>__weak typeof(self) weakSelf = self;
 [self doABlockOperation:^{
@@ -519,16 +518,16 @@ _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retai
 }];
 </code></pre>
 
-<h2 id="section-18">控制结构</h2>
+<p>##控制结构</p>
 
-<h3 id="section-19">顺序结构</h3>
+<p>###顺序结构</p>
 
-<h3 id="section-20">分支结构</h3>
+<p>###分支结构</p>
 
-<h4 id="if-elseifelse">if-else结构超过四层的时候，要考虑重构。多层的ifelse结构极其难维护。</h4>
+<p>####if-else结构超过四层的时候，要考虑重构。多层的ifelse结构极其难维护。</p>
 
-<h4 id="ifreturn">当需要满足一定条件时才执行某项操作时，最左边缘应该是愉快路径代码。不要将愉快路径代码内嵌到if语句中。多个return是正常合理的。</h4>
-<p>良好的风格：</p>
+<p>####当需要满足一定条件时才执行某项操作时，最左边缘应该是愉快路径代码。不要将愉快路径代码内嵌到if语句中。多个return是正常合理的。
+良好的风格：</p>
 
 <pre><code>- (void) someMethod {
   if (![someOther boolValue]) {
@@ -547,7 +546,7 @@ _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retai
 }
 </code></pre>
 
-<h4 id="section-21">所有的逻辑块必须使用花括号包围，即使条件体只需编写一行代码也必须使用花括号。</h4>
+<p>####所有的逻辑块必须使用花括号包围，即使条件体只需编写一行代码也必须使用花括号。</p>
 
 <p>良好的风格：</p>
 
@@ -564,9 +563,9 @@ _needLogoutAccount = [[defaultSettings valueForKeyPath:NeedLogoutAccounts] retai
 if (!error) return success;
 </code></pre>
 
-<h3 id="section-22">循环结构</h3>
+<p>###循环结构</p>
 
-<h4 id="copy">遍历可变容器之前，需要复制该容器，遍历该容器的Copy.</h4>
+<p>####遍历可变容器之前，需要复制该容器，遍历该容器的Copy.</p>
 
 <pre><code>//typeof(self.cells) is NSMutableArray
 NSArray* cellArrays = [self.cells copy];
@@ -575,11 +574,11 @@ for(UITableViewCell* cell in cellArrays) {
 }
 </code></pre>
 
-<h3 id="section-23">尽量不要使用异常，尤其是不要将异常做为业务逻辑的一部分，在异常中尝试进行灾难恢复。</h3>
+<p>###尽量不要使用异常，尤其是不要将异常做为业务逻辑的一部分，在异常中尝试进行灾难恢复。</p>
 
-<h2 id="section-24">类与对象</h2>
+<p>##类与对象</p>
 
-<h3 id="section-25">明确指定构造函数</h3>
+<p>###明确指定构造函数</p>
 <blockquote>
   <p>注释并且明确指定你的类的构造函数。</p>
 </blockquote>
@@ -593,19 +592,19 @@ for(UITableViewCell* cell in cellArrays) {
 
 <p>如果你没有重载父类的指定构造函数，你的构造函数有时可能不会被调用，这会导致非常隐秘而且难以解决的 bug。</p>
 
-<h3 id="nsobject-">重载 NSObject 的方法</h3>
+<p>###重载 NSObject 的方法</p>
 <blockquote>
   <p>如果重载了 NSObject 类的方法，强烈建议把它们放在 @implementation 内的起始处，这也是常见的操作方法。</p>
 </blockquote>
 
-<p>通常适用（但不局限）于 ~~~init…，copyWithZone:~~~，以及~~~ dealloc ~~~方法。所有 ~~~init… ~~~方法应该放在一起~~~，copyWithZone: ~~~紧随其后，最后才是~~~ dealloc ~~~方法</p>
+<p>通常适用（但不局限）于 ~<del>init…，copyWithZone:</del>~，以及~~~ dealloc ~<del>方法。所有 ~~~init… ~~~方法应该放在一起</del>~，copyWithZone: ~<del>紧随其后，最后才是</del>~ dealloc ~~~方法</p>
 
-<h3 id="section-26">初始化</h3>
+<p>###初始化</p>
 
-<h4 id="init--0--nil">不要在 init 方法中，将成员变量初始化为 0 或者 nil；毫无必要。</h4>
-<p>现代的 Ojbective-C 代码通过调用 alloc 和 init 方法来创建并 retain 一个对象。由于类方法 new 很少使用，这使得有关内存分配的代码审查更困难。</p>
+<p>####不要在 init 方法中，将成员变量初始化为 0 或者 nil；毫无必要。
+现代的 Ojbective-C 代码通过调用 alloc 和 init 方法来创建并 retain 一个对象。由于类方法 new 很少使用，这使得有关内存分配的代码审查更困难。</p>
 
-<h4 id="initinit50">保持init函数简洁，不要让init函数成为千行的大函数，当超过50行的时候，适当考虑分拆一下。</h4>
+<p>####保持init函数简洁，不要让init函数成为千行的大函数，当超过50行的时候，适当考虑分拆一下。</p>
 
 <p>良好的风格实例：</p>
 
@@ -626,11 +625,11 @@ for(UITableViewCell* cell in cellArrays) {
 }
 </code></pre>
 
-<h4 id="uiviewlayoutsubviews">UIView的子类初始化的时候，不要进行任何布局操作。布局操作在LayoutSubViews里面做。</h4>
+<p>####UIView的子类初始化的时候，不要进行任何布局操作。布局操作在LayoutSubViews里面做。</p>
 
-<h4 id="uiviewlayoutsubviewssetneedlayoutviewlayoutsubviews">UIView的子类布局必须在layoutSubViews里面进行，需要布局的时候调用~~~setNeedLayout~~~来告诉系统，需要重新布局该View，不要直接调用~~~layoutSubViews~~~</h4>
+<p>####UIView的子类布局必须在layoutSubViews里面进行，需要布局的时候调用~<del>setNeedLayout</del>~来告诉系统，需要重新布局该View，不要直接调用~<del>layoutSubViews</del>~</p>
 
-<h3 id="api-">保持公共 API 简单</h3>
+<p>###保持公共 API 简单</p>
 <blockquote>
   <p>保持类简单；避免 “厨房水槽（kitchen-sink）” 式的 API。如果一个函数压根没必要公开，就不要这么做。用私有类别保证公共头文件整洁。</p>
 </blockquote>
@@ -658,11 +657,11 @@ for(UITableViewCell* cell in cellArrays) {
 <pre><code>@interface GMFoo () { ... }
 </code></pre>
 
-<h3 id="section-27">每个文件中只创建或者实现一个类。同一个文件中不要存在多个类。</h3>
+<p>###每个文件中只创建或者实现一个类。同一个文件中不要存在多个类。</p>
 
-<h3 id="protocol">Protocol单独用一个文件来创建。尽量不要与相关类混在一个文件中。</h3>
+<p>###Protocol单独用一个文件来创建。尽量不要与相关类混在一个文件中。</p>
 
-<h3 id="section-28">类的私有变量以”_“开头。</h3>
+<p>###类的私有变量以”_“开头。</p>
 
 <p>创建私有变量，份两种情况。
 第一种情况子类需要继承的，在头文件中定义：</p>
@@ -690,41 +689,40 @@ for(UITableViewCell* cell in cellArrays) {
 ~~~
 </code></pre>
 
-<h3 id="property--">公有变量在一般使用属性的方法定义~~~@property (….) …~~~</h3>
+<p>###公有变量在一般使用属性的方法定义~<del>@property (….) …</del>~</p>
 
-<h4 id="delegatearcweakmrcretaindealloc">使用委托模式，设置delegate的时候，在ARC下使用~~~weak~~~;在MRC下使用~~~retain~~~,并且在dealloc中将其指针置空。</h4>
+<p>####使用委托模式，设置delegate的时候，在ARC下使用~<del>weak</del>~;在MRC下使用~<del>retain</del>~,并且在dealloc中将其指针置空。</p>
 
-<h4 id="setreadonly">外部引用对象，外部不会发生set操作的对象，比如在创建界面元素的时候，使用readonly属性。</h4>
-<pre><code>~~~
-@interface BWView : UIView
-@property (nonatomic, strong, readonly) UIView* backgoundView;
-@end
+<p>####外部引用对象，外部不会发生set操作的对象，比如在创建界面元素的时候，使用readonly属性。
+    ~~~
+    @interface BWView : UIView
+    @property (nonatomic, strong, readonly) UIView* backgoundView;
+    @end</p>
 
-@implementation BWView
+<pre><code>@implementation BWView
 @end
 ~~~
 </code></pre>
 
-<h3 id="class">在类定义中使用到自己定义的类的时候，尽量不要在头文件中引入自己定义的类的同文件，使用~~~@class~~~替换。在实现文件中引入相应头文件。</h3>
+<p>###在类定义中使用到自己定义的类的时候，尽量不要在头文件中引入自己定义的类的同文件，使用~<del>@class</del>~替换。在实现文件中引入相应头文件。</p>
 
-<p>例如：
-~~~
-//BWTest.h
+<p>例如：</p>
+<pre><code>//BWTest.h
 @class BWDataCenter;
 @interface BWTest : NSObject
 @property (nonatomic, strong) BWDataCenter* dataCenter;
-@end</p>
-
-<p>//BWTest.m</p>
-
-<h1 id="import-bwdatacenterh">import “BWDataCenter.h”</h1>
-<p>@implementation BWTest
 @end
-~~~</p>
 
-<h3 id="dtodata-transfer-objectclass">如果一个类只是DTO(data transfer object)，只是作为数据传输使用，可以不用引入使用的自定义的类的头文件，只是用~~~@class~~~，表明相应的自定义的类型。</h3>
+//BWTest.m
 
-<h3 id="dtokvc">对于DTO类型的对象，在给其成员变量设置值的时候可以考虑使用KVC，实现下述函数：</h3>
+#import "BWDataCenter.h"
+@implementation BWTest
+@end
+</code></pre>
+
+<p>###如果一个类只是DTO(data transfer object)，只是作为数据传输使用，可以不用引入使用的自定义的类的头文件，只是用~<del>@class</del>~，表明相应的自定义的类型。</p>
+
+<p>###对于DTO类型的对象，在给其成员变量设置值的时候可以考虑使用KVC，实现下述函数：</p>
 
 <pre><code>- (void) setValue:(id)value forKey:(NSString *)key
 {
@@ -739,8 +737,8 @@ for(UITableViewCell* cell in cellArrays) {
 }
 </code></pre>
 
-<h3 id="section-29">点标记语法</h3>
-<p>属性和幂等方法（多次调用和一次调用返回的结果相同）使用点标记语法访问，其他的情况使用方括号标记语法。
+<p>###点标记语法
+属性和幂等方法（多次调用和一次调用返回的结果相同）使用点标记语法访问，其他的情况使用方括号标记语法。
 良好的风格：</p>
 
 <pre><code>view.backgroundColor = [UIColor orangeColor];
@@ -753,13 +751,13 @@ for(UITableViewCell* cell in cellArrays) {
 UIApplication.sharedApplication.delegate;
 </code></pre>
 
-<h2 id="cocoa">Cocoa相关</h2>
+<p>##Cocoa相关</p>
 
-<h3 id="nsobject">每个NSObject都有其生命周期，要在其生命周期的合适的时机做合适的事情。</h3>
-<p>例如：在初始化的时候，进行变量初始化，在销毁的时候，销毁变量等等。</p>
+<p>###每个NSObject都有其生命周期，要在其生命周期的合适的时机做合适的事情。
+例如：在初始化的时候，进行变量初始化，在销毁的时候，销毁变量等等。</p>
 
-<h3 id="section-30">尽量不要在界面布局的写任何死数字</h3>
-<p>错误的示范：</p>
+<p>###尽量不要在界面布局的写任何死数字
+错误的示范：</p>
 
 <pre><code> CGFloat delta = SYSTEM_VERSION &gt;= 7.0 ? 0.0f : -14.0f;
  newFrame = CGRectMake(245 + delta,
@@ -786,11 +784,11 @@ numFrame.size = CGSizeMake(cellWidth,cellHeight);
 ...
 </code></pre>
 
-<h3 id="viewview">布局时尽量使用相对布局，比如使用子View在父View中的相对位置。</h3>
+<p>###布局时尽量使用相对布局，比如使用子View在父View中的相对位置。</p>
 
-<h3 id="uitableviewuitableviewcellcellcell">在使用UITableView和UITableViewCell的时候一定要考虑到cell被复用的情况，在合适的时机对重用的cell进行清除操作。</h3>
+<p>###在使用UITableView和UITableViewCell的时候一定要考虑到cell被复用的情况，在合适的时机对重用的cell进行清除操作。</p>
 
-<h3 id="uitableviewcellviewdelegatecellviewcellcellview">为UITableViewCell功能或者子View的时候有限考虑子类化。尽量不要使用在delegate中为Cell添加View。子类化，利于Cell重用和对cell内新添加的子View的布局。</h3>
+<p>###为UITableViewCell功能或者子View的时候有限考虑子类化。尽量不要使用在delegate中为Cell添加View。子类化，利于Cell重用和对cell内新添加的子View的布局。</p>
 
 <p>良好的风格示例：</p>
 
@@ -846,12 +844,12 @@ numFrame.size = CGSizeMake(cellWidth,cellHeight);
 ...
 </code></pre>
 
-<h2 id="section-31">设计模式相关</h2>
+<p>##设计模式相关</p>
 
 <p>使用设计模式的最基本原则，除非你明确知道自己要做件什么事情，而且知道使用特定设计模式带来的影响，否则不要刻意的使用设计模式。</p>
 
-<h3 id="section-32">单例模式</h3>
-<p>创建一个单例模式可以使用dispatch_once</p>
+<p>###单例模式
+创建一个单例模式可以使用dispatch_once</p>
 
 <pre><code>+ (instancetype)defaultManager
 {
@@ -865,15 +863,15 @@ numFrame.size = CGSizeMake(cellWidth,cellHeight);
 }
 </code></pre>
 
-<h3 id="section-33">观察者模式</h3>
+<p>###观察者模式</p>
 
-<h4 id="section-34">如果只是单纯的传递数据，不要使用观察者模式，容易导致逻辑链断裂。</h4>
+<p>####如果只是单纯的传递数据，不要使用观察者模式，容易导致逻辑链断裂。</p>
 
-<h2 id="section-35">抽象</h2>
+<p>##抽象</p>
 
-<h2 id="section-36">逻辑连贯性</h2>
+<p>##逻辑连贯性</p>
 
-<h2 id="section-37">参考资料</h2>
+<p>##参考资料</p>
 <ol>
   <li>《<a href="http://item.jd.com/10064006.html">Clean Code</a>》</li>
   <li>《<a href="http://item.jd.com/11020839.html">编写可阅读代码的艺术</a>》</li>
@@ -882,7 +880,7 @@ numFrame.size = CGSizeMake(cellWidth,cellHeight);
   <li>《<a href="http://www.cnblogs.com/xdream86/p/3309345.html">iOS应用开发最佳实践系列一：编写高质量的Objective-C代码</a>》</li>
 </ol>
 
-<h2 id="section-38">版本修订记录</h2>
+<p>##版本修订记录</p>
 
 <table>
   <thead>

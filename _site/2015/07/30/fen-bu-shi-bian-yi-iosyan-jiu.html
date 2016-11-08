@@ -68,6 +68,8 @@
 
     <nav id="pl__container">
     
+      <a class="iOS pl__all" href="/2016/11/08/dzurlrouter.html"><span class="pl__circle"></span><span class="pl__title">DZURLRouter</span><span class="pl__date">Nov 2016</span></a>
+    
       <a class="开源组件 pl__all" href="/2016/08/18/mrlogicinjection.html"><span class="pl__circle"></span><span class="pl__title">MRLogicInjection</span><span class="pl__date">Aug 2016</span></a>
     
       <a class="iOS pl__all" href="/2016/08/16/debug-sdk-with-injection.html"><span class="pl__circle"></span><span class="pl__title">利用动态库注入调试SDK</span><span class="pl__date">Aug 2016</span></a>
@@ -100,7 +102,7 @@
     
       <a class="工具链 pl__all" href="/2015/11/11/tools-for-program.html"><span class="pl__circle"></span><span class="pl__title">MAC下面提高工作效率的一些非常好用的工具</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/instruments-symbols-problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/instruments_symbols_problem.html"><span class="pl__circle"></span><span class="pl__title">解决Instruments无法找到调试符号表的问题</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="开源组件 pl__all" href="/2015/11/11/dzpulldownviewcontroller.html"><span class="pl__circle"></span><span class="pl__title">DZPullDownViewController</span><span class="pl__date">Nov 2015</span></a>
     
@@ -138,7 +140,7 @@
     
       <a class="设计思想 pl__all" href="/2015/11/11/youxugoujian.html"><span class="pl__circle"></span><span class="pl__title">有序构建之概念篇</span><span class="pl__date">Nov 2015</span></a>
     
-      <a class="iOS pl__all" href="/2015/11/11/swift-compare-oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
+      <a class="iOS pl__all" href="/2015/11/11/swift_compare_oc.html"><span class="pl__circle"></span><span class="pl__title">SWIFT与OC的比较</span><span class="pl__date">Nov 2015</span></a>
     
       <a class="iOS pl__all" href="/2015/11/11/objective-c.html"><span class="pl__circle"></span><span class="pl__title">Objective-C编码建议</span><span class="pl__date">Nov 2015</span></a>
     
@@ -154,7 +156,7 @@
     
       <a class="开源组件 pl__all" href="/2015/08/10/stylesheet.html"><span class="pl__circle"></span><span class="pl__title">StyleSheet</span><span class="pl__date">Aug 2015</span></a>
     
-      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
+      <a class="设计思想 pl__all" href="/2015/08/04/fen-ceng-,na-dao-qie-de-shi-fou-jing-zhun.html"><span class="pl__circle"></span><span class="pl__title">分层，那一刀切的是否精准？</span><span class="pl__date">Aug 2015</span></a>
     
       <a class="工具链 pl__all" href="/2015/08/03/tmuxpei-zhi.html"><span class="pl__circle"></span><span class="pl__title">tmux配置</span><span class="pl__date">Aug 2015</span></a>
     
@@ -172,13 +174,13 @@
       <div id="pjax">
         <article id="post__content">
   <h1 id="post__title" data-identifier="20150730">分布式编译ios研究</h1>
-  <h1 id="ios">分布式编译IOS研究</h1>
+  <p>#分布式编译IOS研究</p>
 
 <p>目前手Q编译过程异常缓慢，尤其是在一些性能相对较差的机器上面，简直不堪忍受。以往在解决编译过程过慢的问题的时候，我们会考虑使用分布式编译的策略。那么在XCode上使用了分布式编译的效果到底怎样呢？这里我们使用distcc处理分布式编译的任务。XCode4.2及以前版本一直在使用distcc做为分布式构建的基础组件，但是4.3之后，苹果突然删去了分布式构建的选项和对distcc的支持，开始强制要求开发者转向使用llvm进行编译。官方并没有给出任何原因，就强制到删掉了distcc的支持。现在在XCode6下面使用distcc就需要我们手工处理。</p>
 
 <p>现在要想使用distcc只能自己手工处理了。</p>
 
-<h2 id="distccxcode">一、distcc的安装和XCode环境配置：</h2>
+<p>##一、distcc的安装和XCode环境配置：</p>
 
 <p>安装附件中的distcc，因为打过一个patch，建议不要从官方下，直接使用附件中的版本。</p>
 
@@ -207,10 +209,10 @@ sudo sed -i "_backup" "s/ExecPath = \"clang\";/ExecPath = \"distcc\";/g" "./Clan
 ##sudo sed -i "" "s/ExecPath = \"distcc\";/ExecPath = \"clang\";/g" "./Clang LLVM 1.0.xcspec"
 </code></pre>
 
-<h2 id="section">二、配置和使用</h2>
+<p>##二、配置和使用</p>
 
-<h3 id="section-1">服务器配置</h3>
-<p>启动服务器</p>
+<p>###服务器配置
+启动服务器</p>
 
 <pre><code>touch distccd.log
 distccd  --daemon --allow 127.0.0.1 --allow 10.64.68.102 -j 8 --stats --log-level info --log-file=distccd.log
@@ -222,7 +224,7 @@ distccd  --daemon --allow 127.0.0.1 --allow 10.64.68.102 -j 8 --stats --log-leve
 
 <p><img src="http://ww4.sinaimg.cn/large/7df22103jw1eukst35hq8j209m0dytbl.jpg" alt="" /></p>
 
-<h3 id="section-2">客户端配置</h3>
+<p>###客户端配置</p>
 <ol>
   <li>
     <p>在~/.distcc/hosts或/usr/local/etc/distcc/hosts添加sever的服务器地址</p>
@@ -240,17 +242,17 @@ distccd  --daemon --allow 127.0.0.1 --allow 10.64.68.102 -j 8 --stats --log-leve
 <pre><code>xcodebuild -target QQ
 </code></pre>
 
-<p>在服务器端使用~~~./distccmon-text 5~~~可以实时监测编译的情况。</p>
+<p>在服务器端使用~<del>./distccmon-text 5</del>~可以实时监测编译的情况。</p>
 
-<h2 id="section-3">三、实验数据和总结</h2>
+<p>##三、实验数据和总结</p>
 
-<h3 id="distcc">第一组对比数据（编译distcc源码）</h3>
+<p>###第一组对比数据（编译distcc源码）</p>
 <ol>
   <li>使用原生单机编译约5秒左右</li>
   <li>使用make CC=”distcc gcc”时间为30s左右。</li>
 </ol>
 
-<h3 id="section-4">第二组实验数据对比</h3>
+<p>###第二组实验数据对比</p>
 <ol>
   <li>xcode直接编译手Q项目，约6分钟左右。</li>
   <li>使用distcc在命令行中调用xcodebuild -target QQ编译，运行了一个小时没有编译完成，就放弃编译过程了。</li>
@@ -262,7 +264,7 @@ distccd  --daemon --allow 127.0.0.1 --allow 10.64.68.102 -j 8 --stats --log-leve
 
 <p>中间出现的一个奇怪的现象是在使用了distcc之后编译性能不但没有提升，反而有所下降。此处存疑，后续就绪研究原因。</p>
 
-<h3 id="section-5">参考资料：</h3>
+<p>###参考资料：</p>
 
 <ol>
   <li><a href="http://www.freemindworld.com/blog/2010/100105_make_complie_process_faster.shtml">加速Linux程序编译</a></li>
