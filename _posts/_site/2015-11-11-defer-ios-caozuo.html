@@ -1,0 +1,91 @@
+<p>类似于 golang的defer  将一个操作延迟到作用域结束的时候 执行：常见于 关闭文件等。。。。这是异常处理的一种替代方案。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#define DEFER(block) __unused OCDefer* defer___ = [[OCDefer alloc] initWithBlock:block];
+</span>
+<span class="k">typedef</span> <span class="kt">void</span><span class="p">(</span><span class="o">^</span><span class="n">OCDeferBlock</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="k">@interface</span> <span class="nc">OCDefer</span> <span class="p">:</span> <span class="nc">NSObject</span>
+
+<span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span> <span class="nf">initWithBlock</span><span class="p">:(</span><span class="n">OCDeferBlock</span><span class="p">)</span><span class="nv">block</span><span class="p">;</span>
+
+<span class="k">@end</span>
+
+<span class="k">@interface</span> <span class="nc">OCDefer</span> <span class="p">()</span>
+
+<span class="p">{</span>
+
+    <span class="n">OCDeferBlock</span> <span class="n">_block</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="k">@end</span>
+
+<span class="k">@implementation</span> <span class="nc">OCDefer</span>
+
+<span class="k">-</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span> <span class="nf">initWithBlock</span><span class="p">:(</span><span class="n">OCDeferBlock</span><span class="p">)</span><span class="nv">block</span>
+
+<span class="p">{</span>
+
+    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nf">init</span><span class="p">];</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+
+    <span class="p">}</span>
+
+
+    <span class="n">_block</span> <span class="o">=</span> <span class="n">block</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">dealloc</span>
+
+<span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">_block</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="n">_block</span><span class="p">();</span>
+
+    <span class="p">}</span>
+
+    <span class="n">_block</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="k">@end</span>
+
+<span class="c1">//测试的例子
+</span>
+<span class="o">-</span> <span class="p">(</span><span class="n">BOOL</span><span class="p">)</span><span class="n">application</span><span class="o">:</span><span class="p">(</span><span class="n">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">application</span> <span class="n">didFinishLaunchingWithOptions</span><span class="o">:</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="n">launchOptions</span>
+
+<span class="p">{</span>
+
+
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"/afile.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span>
+
+    <span class="n">DEFER</span><span class="p">(</span><span class="o">^</span><span class="p">{</span>
+
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"hello"</span><span class="p">);</span>
+
+        <span class="n">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+
+    <span class="p">});</span>
+
+
+    <span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIWindow</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithFrame</span><span class="p">:[[</span><span class="n">UIScreen</span> <span class="nf">mainScreen</span><span class="p">]</span> <span class="nf">bounds</span><span class="p">]];</span>
+
+    <span class="c1">// Override point for customization after application launch.
+</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">window</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">whiteColor</span><span class="p">];</span>
+
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">window</span> <span class="nf">makeKeyAndVisible</span><span class="p">];</span>
+
+    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+</code></pre>
+</div>
