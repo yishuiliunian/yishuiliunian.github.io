@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "mvvm-elementKit"
+title: "iOS架构设计系列之解耦的尝试之变异的MVVM"
 date: 2016-10-28T13:04:42+08:00
 categories: iOS
 ---
