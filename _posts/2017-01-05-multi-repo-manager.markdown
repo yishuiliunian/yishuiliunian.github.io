@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "iOS多模块管理"
+title: "iOS架构设计之多模块管理"
 date: 2017-01-05T13:10:32+08:00
 categories: iOS
 ---
