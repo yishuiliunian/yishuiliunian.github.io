@@ -1,0 +1,215 @@
+---
+layout: post
+title: "ARC(甚至是代码行数)与安装包体积之间的关系"
+date: 2015-11-11T19:23:40+08:00
+categories: iOS
+---
+
+此文的目的就是通过一些列的逻辑推理来推测出ARC语安装包体积之间的关系，或者说ARC对于安装包体积的一些影响。
+
+两个事物之间的关系主要存在两种关系：相关性和因果性。相关性，表现为当一个事物发生改变的时候，另外一个事物同时也会跟着发生改变。而因果性则表现为，一个事物的变化会引起另外一个事物的变化。
+
+如果我们决定因为安装包体积而抛弃ARC的话，我们就必须非常明确的确定，ARC与安装包增大之间有因果性关系。即，使用ARC是安装包体积增长的一个原因。而非使用ARC与否和安装包体积之间呈现出相关性，而且。
+
+在《ARC对安装包影响的分析（高清、多图》一文中，使用“单因变量“试验，确定了使用非ARC之后，安装包体积有下降的趋势。这种方法，存在的缺陷是，事先已经假定了ARC与安装包体积之间是线性相关的关系，即通过一个简单的f(x)=kx，这样的一个公式就能够表示ARC与安装包体积之间的关系。然后，在这个假设之上去找支撑这个观点的依据。很幸运的找到了。但是，其前提假设正确与否没有给出详细的说明。
+
+但是实际情况是，ARC与安装包体积之间绝对不是简单的线性关系。而是非线性的。ARC通过不同的层面在影响着安装包体积大小。也就是说我们要确定ARC是怎样影响安装包体积的，才能去讨论ARC与安装包体积之间的关系。
+
+在开篇我很明白的告诉读者，最后不会得出一个类似于f(x)=kx的公式来，不会有20行ARC对应1KB的结论。因为在以下阐述的ARC对于安装包体积的影响中，有很多因素是非线性且不可量化的。在手Q或者任何一个软件，这样一个复杂性系统中，很多原始的简单的基于线性可量化的理论已经显得捉襟见肘。我们应当无奈的而且坦诚的承认，在很多复杂性系统中，或者根本就没有微观规律可言。
+
+##直接影响，直接作用于安装包体积
+
+所谓直接影响就是代码是否使用ARC和安装包内二进制可执行文件间的具有直接关系（前提是代码行数与二进制文件大小存在直接关系）。首先我们先假定，上述结论成立。我们再来分析。
+
+###ARC与MRC之间指令差异
+
+参考Clang 3.5 documentation OBJECTIVE-C AUTOMATIC REFERENCE COUNTING (ARC)。我们了解到，Clang实现ARC的主要方式就是将内存管理转变成对象关系处理，并通过在runtime中增加了一些列的函数来支持这些关系处理：
+
+~~~
+id objc_autorelease(id value);
+void objc_autoreleasePoolPop(void *pool);
+void *objc_autoreleasePoolPush(void);
+id objc_autoreleaseReturnValue(id value);
+void objc_copyWeak(id *dest, id *src);
+void objc_destroyWeak(id *object);
+id objc_initWeak(id *object, id value);
+id objc_loadWeak(id *object);
+id objc_loadWeakRetained(id *object);
+void objc_moveWeak(id *dest, id *src);
+void objc_release(id value);
+id objc_retain(id value);
+id objc_retainAutorelease(id value);
+id objc_retainAutoreleaseReturnValue(id value);
+id objc_retainAutoreleasedReturnValue(id value);
+id objc_retainBlock(id value);
+id objc_storeStrong(id *object, id value);
+id objc_storeWeak(id *object, id value);
+~~~
+
+并且，在很多处理内存的方式上并像很多网上流传的材料所说的那样——在编译器帮助开发者插入retain与release这么简单。虽然他们的基础性技术都是retain count。但是在具体处理上所使用的模型已经发生改变。所以参照MRC的二进制文件，查找ARC的二进制文件指令的增长数量，或者参照ARC的二进制文件去查找MRC减少的指令。就不太靠谱了，他们使用的指令都不一样。怎么去对比。
+
+线性拟合
+
+通过与手Q基础侧的人了解到得出：
+
+~~~
+20行ARC = 1kb
+30行MRC = 1kb
+100行C++ = 1KB
+~~~
+
+这个结论时，采样的文件只有几个使用ARC更改过的文件。首先抛开结果是否正确不讲，第一采样空间的代表性值得怀疑，第二样本空间是否够大也是值得怀疑。有了怀疑于是就就用整个手Q中的.o文件的大小与代码行数之间进行多项式拟合。之所以采用.o文件是因为，直接测量当个文件对于安装包大小的影响非常困难。退而求其次，算单个文件与.o文件之间的关系。采样空间为手Q项目中的所有*.m文件。样本量约为1500+-。
+
+~~~
+import os
+from os.path import getsize, join
+import numpy as np
+import scipy as sp
+from scipy.optimize import leastsq
+import pylab as pl
+
+m = 9
+
+def fake_func(p, x):
+    f = np.poly1d(p)
+    return f(x)
+
+def residuals(p, y, x):
+    return y - fake_func(p, x)
+
+
+
+
+class OCFile:
+    def __init__(self, linescount, arc):
+        self.linescount = linescount
+        self.arc = arc
+
+def get_all_file(floder_path):
+    dic = {}
+    if floder_path is None:
+        raise Exception("floder_path is None")
+    for dirpath, dirnames, filenames in os.walk(floder_path):
+        if len(dirpath) >= 6:
+            if dirpath[0:6] == './.svn':
+                continue
+        for name in filenames:
+            p = dirpath + '/' + name
+            if name[-2:] == '.m':
+                arc = 0
+                if "[super dealloc]" in open(p).read():
+                    arc = 0
+                else:
+                    arc = 1
+                count = len(open(p,'rU').readlines())
+                tf = OCFile(count, arc)
+                key = name[0:-2]+".o"
+                dic[key] = tf
+
+    return dic
+
+rclinesDic = get_all_file('/Users/stonedong/Documents/TencentWork/master')
+
+
+arcf = open("arc.txt", "w")
+mrcf = open("mrc.txt", "w")
+
+
+arcx= []
+arcy = []
+mrcx = []
+mrcy = []
+
+for item in  os.listdir('.'):
+    if item[-2:] == '.o':
+        size = getsize(join(".", item))
+        if item in rclinesDic.keys():
+            of = rclinesDic[item]
+            fp = mrcf
+            if of.arc == 1:
+                fp =arcf
+                arcx.append(of.linescount)
+                arcy.append(size/1024)
+            else:
+                fp = mrcf
+                mrcx.append(of.linescount)
+                mrcy.append(size)
+            fp.write(item)
+            fp.write('\t')
+            fp.write(str(size))
+            fp.write('\t')
+            fp.write(str(of.linescount))
+            fp.write("\n")
+
+fp.close()
+
+
+
+x_show = np.linspace(0, 3000, 1000)
+
+p0 = np.random.randn(m)
+
+plsq = leastsq(residuals, p0, args=(mrcy, mrcx))
+print plsq[0]
+print "\n"
+pl.plot(x_show, fake_func(plsq[0], x_show), label='fitted curve')
+pl.plot(mrcx, mrcy, 'bo', label='with noise')
+pl.legend()
+pl.show()
+~~~
+
+###拟合结果：
+
+####ARC
+
+![](http://ww3.sinaimg.cn/large/7df22103jw1exx9bd2n76j20fk0bomxq.jpg)
+
+拟合的多项式参数为：
+
+![](http://ww4.sinaimg.cn/large/7df22103jw1exx9bupyuvj20ev02qjrw.jpg)
+
+####MRC
+
+![](http://ww4.sinaimg.cn/large/7df22103jw1exx9ciiwjtj20fk0bo3zc.jpg)
+
+
+拟合的多项式参数为：
+![](http://ww1.sinaimg.cn/large/7df22103jw1exx9ctbty7j20e10283yz.jpg)
+
+
+通过上图很明显看出，使用线性的多现实拟合的时候，结果极度欠拟合。拟合出的特征多项式完全没有意义。从而更加直观的可以看出，ARC或者MRC对于安装包大小的影响绝非线性关系。并且通过上述结果页可以看出，找不出一个合理的多项式用来表征ARC与安装包体积的关系，也找不出一个多项式来表征MRC与安装包体积的关系。最直接的结论就是，代码行数与安装包体积之间的关系不是线性关系。宏观上看，的确代码行数增加安装包体积增加。但是两者之间不存在线性关系。
+
+因而所得出上述ARC或者MRC与安装包体积之间存在20行ARC对应1KB是存疑的。可能这是一个均值，但是均值在很多情况下是不具有普适性的。不能将使用均值来断定，我们实际在编程中代码行数对于安装包体积的影响。
+
+同时计算了其均值和方差：
+
+![](http://ww4.sinaimg.cn/large/7df22103jw1exx9d9gwbbj20b502j3yo.jpg)
+
+
+在方差如此之大的情况下，均值的意义就非常小了。
+
+##间接影响，通过影响程序员来影响安装包体积的大小
+
+通过上面的讨论，我们已经初步得出结论，ARC对于安装包体积的影响绝不是一个简单的线性关系。在手Q这样一个复杂系统当中，ARC甚至是代码行数，对于安装包体积的影响绝对不是简单粗暴的，不是可以使用一个函数表达式就能说明的。
+
+《技术的本质》一书中指出，技术通过影响人然后影响一切。同样的道理，ARC设计出来之后，首先影响的是我们的编程方式。而后通过我们编程方式的改变去影响其他，包括安装包体积的大小。
+
+比如block的使用方式，在定义变量的时候使用strong关键字。甚至是设计模式的设计方式都会发生改变。
+
+这些都是不可量化的影响。试问当这些因素加入到我们考量ARC与安装包体积之间的关系的时候，你如何去用数值度量这种影响？谁有能说清楚一个设计模式设计方式的改变对于安装包体积的影响有多大？
+
+还有即使同样的一个算法，不同的编程人员也会写出不一样的代码来，这又如何去度量？
+
+人是在整个软件过程中最不稳定的因素。前辈们常说，出问题的时候首先怀疑自己，然后去怀疑工具，甚至你都不需要怀疑工具。在我们没有解决好自己的问题之前，去怀疑工具，避免有点过了。
+
+纯粹个人见解的是：对于安装包体积影响最大的可能就是编程人员了把。如果能够减少逻辑冗余，能够尽可能的抽出公共组件，控制安装包体积大小不是没有可能的。
+
+同时，在上述的论述中，我们还没有牵扯到，文件之间的引用，函数之间的调用，类之间的交互等更复杂的关系。将之考量进去之后，ARC与安装包体积之间的关系将会更加错综复杂不可度量。
+
+##结论
+
+通过上述，直接影响的定量分析手段和间接影响的定性分析的手段，我们初步得出了代码行数与安装包体积大小不存在线性关系。ARC对于安装包体积的影响也不是线性关系。代码行数、ARC、MRC以一种复杂且不可度量的方式影响着安装包体积大小。我们只能说有一个宏观趋势：代码增多，安装包体积增大。但是是如何影响安装包体积增大了，这个真的说不清楚了。太复杂了。已不是20arc->1kb这样简单。
+
+还有一点，ARC正在不断的变化之中，我们根据当前的ARC这种工具的的状态做出的判断，很可能只是因为Xcode和Clang的一次升级，就会变成谬误。语言和工具在发展，他们发展出了更多更好用的工具（包括ARC）在内，辅助我们控制整个软件过程中的复杂性。我们编程不止要实现产品的需求，同样也需要控制整个工程的复杂性，包括代码质量（可维护性和可阅读性等）、包括项目进度、包括安装包体积。。。。如果单纯因为一个简单的一个没有可靠理论依据的与安装包体积间线性相关性的现象就鲁莽的怀疑ARC，未免有点一叶障目不见泰山。
+
+当摩尔定律让机器的性能不断提升的时候，我们可能不像以前，机器资源紧缺的时候那么去关注优化机器的性能，优化CPU消耗，优化内存、优化IO、优化存储....这个时候，我们是否应该关注一下怎样去优化人的时间。优化我们苦逼的程序员那宝贵的时间。而ARC就是这么一个好东西能够优化，我们程序员的时间。强烈支持ARC。
